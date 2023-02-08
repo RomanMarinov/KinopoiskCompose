@@ -16,7 +16,7 @@ data class DocDTO(
     @SerializedName("votes")
     val votes: VotesDTO,
     @SerializedName("watchability")
-    val watchability: WatchabilityDTO,
+    val watchability: WatchabilityDTO?,
     @SerializedName("id")
     val id: Int,
     @SerializedName("type")
@@ -64,7 +64,7 @@ data class DocDTO(
             shortDescription = shortDescription,
             type = type,
             votes = votes.mapToDomain(),
-            watchability = watchability.mapToDomain(),
+            watchability = watchability?.mapToDomain(),
             year = year
         )
     }

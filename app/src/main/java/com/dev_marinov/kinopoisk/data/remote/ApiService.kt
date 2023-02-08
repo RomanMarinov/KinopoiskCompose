@@ -9,9 +9,10 @@ private val default_token: String = "H6FVA5Q-0BW47S8-GSX42CA-32G17EW"
 
 interface ApiService {
 
-    //    /movie?field=rating.kp&search=7-10&field=year&search=2017-2020&field=typeNumber&search=2
-    //    &sortField=year&sortType=1&sortField=votes.imdb&sortType=-1&token=ZQQ8GMN-TN54SGK-NB3MKEC-ZKB8V06
+    //https://kinopoisk.dev/movie?field=rating.kp&search=7-10&field=year&search=2017-2020&field=typeNumber&search=2&sortField=year&sortType=1&sortField=votes.imdb&sortType=-1&token=H6FVA5Q-0BW47S8-GSX42CA-32G17EW
 
+    //https://kinopoisk.dev/movie?field=rating.kp&search=7-10&field=year&search=2017-2020&field=typeNumber&search=2&sortField=year&sortType=1&sortField=votes.imdb&sortType=-1&token=ZQQ8GMN-TN54SGK-NB3MKEC-ZKB8V06
+    //https://kinopoisk.dev/movie?field=rating.kp&search=7-10&field=year&search=2017-2020&field=typeNumber&search=2&sortField=year&sortType=1&sortField=votes.imdb&sortType=-1&token=H6FVA5Q-0BW47S8-GSX42CA-32G17EW
     @GET("movie")
     suspend fun getData(
         @Query("field") field_rating_kp: String = "rating.kp",

@@ -7,12 +7,12 @@ data class WatchabilityDTO(
     @SerializedName("_id")
     val _id: String,
     @SerializedName("items")
-    val items: List<ItemDTO>
+    val items: List<ItemDTO>?
 ) {
     fun mapToDomain() : Watchability {
         return Watchability(
             _id = _id,
-            items = items.map {
+            items = items?.map {
                 it.mapToDomain()
             }
         )

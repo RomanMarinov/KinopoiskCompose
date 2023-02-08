@@ -25,7 +25,7 @@ class ListViewModel @Inject constructor(private val kinopoiskRepository: Kinopoi
 
     private fun getData() {
         viewModelScope.launch(Dispatchers.IO) {
-            val response = kinopoiskRepository.getData("7-10", "207-2020", "2", "1", "-1")
+            val response = kinopoiskRepository.getData("7-10", "2017-2020", "2", "1", "-1")
             Log.d("4444", " ListViewModel response=" + response)
             response?.let {
                 _viewState.value = it

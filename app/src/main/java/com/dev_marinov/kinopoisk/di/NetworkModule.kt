@@ -13,13 +13,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
 
-    @Singleton
     @Provides
+    @Singleton
     fun provideApiService(retrofit: Retrofit) : ApiService {
         return retrofit.create(ApiService::class.java)
     }
@@ -31,7 +30,7 @@ class NetworkModule {
         gsonBuilder.setLenient()
         val gson = gsonBuilder.create()
 
-        val base_url = "https://kinopoisk.dev/"
+        val base_url = "https://api.kinopoisk.dev/"
         return Retrofit.Builder()
             .baseUrl(base_url)
             .client(okHttpClient)
@@ -39,15 +38,13 @@ class NetworkModule {
             .build()
     }
 
-    @Singleton
     @Provides
-    fun provideOkHttpClient() : OkHttpClient {
+    @Singleton
+    fun provideHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             .connectTimeout(100, TimeUnit.SECONDS)
             .readTimeout(100, TimeUnit.SECONDS)
             .build()
     }
-
-
 }
