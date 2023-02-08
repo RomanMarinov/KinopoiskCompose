@@ -9,7 +9,7 @@ data class ExternalIdDTO(
     @SerializedName("imdb")
     val imdb: String,
     @SerializedName("kpHD")
-    val kpHD: String,
+    val kpHD: String?,
     @SerializedName("tmdb")
     val tmdb: Int
 ) {

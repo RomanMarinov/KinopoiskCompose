@@ -7,7 +7,7 @@ data class LogoDTO(
     @SerializedName("_id")
     val _id: String,
     @SerializedName("url")
-    val url: String
+    val url: String?
 ) {
     fun mapToDomain() : Logo {
         return Logo(
