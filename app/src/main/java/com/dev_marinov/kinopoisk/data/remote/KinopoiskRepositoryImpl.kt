@@ -1,6 +1,7 @@
 package com.dev_marinov.kinopoisk.data.remote
 
 import com.dev_marinov.kinopoisk.domain.model.Doc
+import com.dev_marinov.kinopoisk.domain.model.KinopoiskResponse
 import com.dev_marinov.kinopoisk.domain.repository.KinopoiskRepository
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,7 +15,7 @@ class KinopoiskRepositoryImpl @Inject constructor(private val apiService: ApiSer
         search_typeNumber: String,
         sortType_date: String,
         sortType_rating: String
-    ): List<Doc>? {
+    ): KinopoiskResponse? {
         val response = apiService.getData(
             search_rating = search_rating,
             search_date = search_date,
@@ -22,8 +23,6 @@ class KinopoiskRepositoryImpl @Inject constructor(private val apiService: ApiSer
             sortType_date = sortType_date,
             sortType_rating = sortType_rating
         )
-        return response.body()?.docs?.map { docDTO ->
-            docDTO.mapToDomain()
-        }
+        return response.body()?.mapToDomain()
     }
 }

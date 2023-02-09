@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun MainScreen(viewModel: ListViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
-    val viewState: List<Doc> by viewModel.viewState.collectAsState()
+//    val viewState: List<Doc> by viewModel.viewState.collectAsState()
 
 
 

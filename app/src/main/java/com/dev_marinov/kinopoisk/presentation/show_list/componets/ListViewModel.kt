@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dev_marinov.kinopoisk.domain.model.Doc
+import com.dev_marinov.kinopoisk.domain.model.KinopoiskResponse
 import com.dev_marinov.kinopoisk.domain.repository.KinopoiskRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,8 +17,8 @@ import javax.inject.Inject
 class ListViewModel @Inject constructor(private val kinopoiskRepository: KinopoiskRepository) :
     ViewModel() {
 
-    private val _viewState: MutableStateFlow<List<Doc>> = MutableStateFlow(emptyList())
-    val viewState = _viewState.asStateFlow()
+//    private val _viewState: MutableStateFlow<KinopoiskResponse> = MutableStateFlow()
+//    val viewState = _viewState.asStateFlow()
 
     init {
         getData()
@@ -27,9 +28,12 @@ class ListViewModel @Inject constructor(private val kinopoiskRepository: Kinopoi
         viewModelScope.launch(Dispatchers.IO) {
             val response = kinopoiskRepository.getData("7-10", "2017-2020", "2", "1", "-1")
             Log.d("4444", " ListViewModel response=" + response)
-            response?.let {
-                _viewState.value = it
-            }
+
+
+
+//            response?.let {
+//                _viewState.value = it
+//            }
         }
     }
 }
