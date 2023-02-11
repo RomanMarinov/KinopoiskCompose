@@ -6,10 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.dev_marinov.kinopoisk.domain.model.Doc
 import com.dev_marinov.kinopoisk.presentation.show_list.componets.ListViewModel
 import com.dev_marinov.kinopoisk.ui.theme.KinopoiskTheme
 import dagger.hilt.android.AndroidEntryPoint
