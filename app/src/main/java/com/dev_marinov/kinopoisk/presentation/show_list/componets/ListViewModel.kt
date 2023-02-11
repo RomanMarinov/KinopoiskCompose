@@ -35,6 +35,7 @@ class ListViewModel @Inject constructor(
     private val releaseYears: Flow<List<ReleaseYear>> = getReleaseYears()
     private val ratings: Flow<List<Rating>> = getRatings()
 
+    //    Items which we should show on screen
     val movieItems: Flow<List<MovieItem>> = getItems()
 
     init {
