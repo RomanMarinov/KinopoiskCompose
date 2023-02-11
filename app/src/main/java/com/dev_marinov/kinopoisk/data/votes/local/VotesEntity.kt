@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.dev_marinov.kinopoisk.data.movie.local.MovieEntity
+import com.dev_marinov.kinopoisk.domain.model.Votes
 
 @Entity(
     tableName = "votes",
@@ -27,4 +28,28 @@ data class VotesEntity(
     val russianFilmCritics: Int,
     @ColumnInfo(name = "movie_id")
     val movieId: Int
-)
+) {
+
+    companion object {
+
+        fun mapFromDomain(votes: Votes): VotesEntity = VotesEntity(
+            id = votes.id,
+            await = votes.await,
+            filmCritics = votes.filmCritics,
+            imdb = votes.imdb,
+            kp = votes.kp,
+            russianFilmCritics = votes.russianFilmCritics,
+            movieId = votes.movieId
+        )
+    }
+
+    fun mapToDomain(): Votes = Votes(
+        id = id,
+        await = await,
+        filmCritics = filmCritics,
+        imdb = imdb,
+        kp = kp,
+        russianFilmCritics = russianFilmCritics,
+        movieId = movieId
+    )
+}

@@ -6,6 +6,7 @@ import androidx.room.ForeignKey
 import androidx.room.ForeignKey.Companion.CASCADE
 import androidx.room.PrimaryKey
 import com.dev_marinov.kinopoisk.data.movie.local.MovieEntity
+import com.dev_marinov.kinopoisk.domain.model.ReleaseYear
 
 @Entity(
     tableName = "release_years",
@@ -25,4 +26,22 @@ data class ReleaseYearEntity(
     val start: Int,
     @ColumnInfo(name = "movie_id")
     val movieId: Int
-)
+) {
+
+    companion object {
+
+        fun mapFromDomain(releaseYear: ReleaseYear): ReleaseYearEntity = ReleaseYearEntity(
+            id = releaseYear.id,
+            end = releaseYear.end,
+            start = releaseYear.start,
+            movieId = releaseYear.movieId
+        )
+    }
+
+    fun mapToDomain(): ReleaseYear = ReleaseYear(
+        id = id,
+        end = end,
+        start = start,
+        movieId = movieId
+    )
+}

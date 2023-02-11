@@ -2,6 +2,7 @@ package com.dev_marinov.kinopoisk.data
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.dev_marinov.kinopoisk.data.common.local.CommonDao
 import com.dev_marinov.kinopoisk.data.movie.local.MovieDao
 import com.dev_marinov.kinopoisk.data.movie.local.MovieEntity
 import com.dev_marinov.kinopoisk.data.poster.local.PosterDao
@@ -34,4 +35,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun votesDao(): VotesDao
     abstract fun ratingDao(): RatingDao
     abstract fun posterDao(): PosterDao
+    abstract fun commonDao(): CommonDao
 }

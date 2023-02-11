@@ -3,5 +3,6 @@ package com.dev_marinov.kinopoisk.domain.model
 data class Poster(
     val id: String,
     val previewUrl: String,
-    val url: String
+    val url: String,
+    val movieId: Int
 )

@@ -5,10 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.dev_marinov.kinopoisk.data.StringListConverter
-import com.dev_marinov.kinopoisk.domain.model.Poster
-import com.dev_marinov.kinopoisk.domain.model.Rating
-import com.dev_marinov.kinopoisk.domain.model.ReleaseYear
-import com.dev_marinov.kinopoisk.domain.model.Votes
+import com.dev_marinov.kinopoisk.domain.model.Movie
 
 @Entity(tableName = "movies")
 data class MovieEntity(
@@ -33,4 +30,39 @@ data class MovieEntity(
     @ColumnInfo(name = "poster_id")
     val posterId: String?,
     val page: Int
-)
+) {
+
+    companion object {
+        fun mapFromDomain(movie: Movie): MovieEntity = MovieEntity(
+            alternativeName = movie.alternativeName,
+            description = movie.description,
+            id = movie.id,
+            length = movie.length,
+            name = movie.name,
+            shortDescription = movie.shortDescription,
+            type = movie.type,
+            year = movie.year,
+            releaseYearsIds = movie.releaseYearsIds,
+            votesId = movie.votesId,
+            ratingId = movie.ratingId,
+            posterId = movie.posterId,
+            page = movie.page
+        )
+    }
+
+    fun mapToDomain(): Movie = Movie(
+        alternativeName = alternativeName,
+        description = description,
+        id = id,
+        length = length,
+        name = name,
+        shortDescription = shortDescription,
+        type = type,
+        year = year,
+        releaseYearsIds = releaseYearsIds,
+        votesId = votesId,
+        ratingId = ratingId,
+        posterId = posterId,
+        page = page
+    )
+}
