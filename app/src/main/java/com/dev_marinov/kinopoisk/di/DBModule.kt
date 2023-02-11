@@ -4,6 +4,10 @@ import android.content.Context
 import androidx.room.Room.databaseBuilder
 import com.dev_marinov.kinopoisk.data.AppDatabase
 import com.dev_marinov.kinopoisk.data.movie.local.MovieDao
+import com.dev_marinov.kinopoisk.data.poster.local.PosterDao
+import com.dev_marinov.kinopoisk.data.rating.local.RatingDao
+import com.dev_marinov.kinopoisk.data.releaseYear.local.ReleaseYearDao
+import com.dev_marinov.kinopoisk.data.votes.local.VotesDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,6 +22,23 @@ class DBModule {
     @Provides
     @Singleton
     fun provideMovieDao(appDatabase: AppDatabase): MovieDao = appDatabase.movieDao()
+
+    @Provides
+    @Singleton
+    fun provideReleaseYearDao(appDatabase: AppDatabase): ReleaseYearDao =
+        appDatabase.releaseYearDao()
+
+    @Provides
+    @Singleton
+    fun provideVotesDao(appDatabase: AppDatabase): VotesDao = appDatabase.votesDao()
+
+    @Provides
+    @Singleton
+    fun provideRatingDao(appDatabase: AppDatabase): RatingDao = appDatabase.ratingDao()
+
+    @Provides
+    @Singleton
+    fun providePosterDao(appDatabase: AppDatabase): PosterDao = appDatabase.posterDao()
 
     @Provides
     @Singleton
