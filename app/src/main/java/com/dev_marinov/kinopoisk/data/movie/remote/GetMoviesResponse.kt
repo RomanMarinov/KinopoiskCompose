@@ -1,8 +1,8 @@
-package com.dev_marinov.kinopoisk.data.remote.dto
+package com.dev_marinov.kinopoisk.data.movie.remote
 
 import com.google.gson.annotations.SerializedName
 
-data class KinopoiskResponseDTO(
+data class GetMoviesResponse(
     @SerializedName("docs")
     val movies: List<MovieDTO>,
     @SerializedName("page")

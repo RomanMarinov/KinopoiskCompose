@@ -2,8 +2,8 @@ package com.dev_marinov.kinopoisk.di
 
 import android.content.Context
 import androidx.room.Room.databaseBuilder
-import com.dev_marinov.kinopoisk.data.local.db.AppDatabase
-import com.dev_marinov.kinopoisk.data.local.db.KinopoiskDao
+import com.dev_marinov.kinopoisk.data.AppDatabase
+import com.dev_marinov.kinopoisk.data.movie.local.MovieDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,18 +17,15 @@ class DBModule {
 
     @Provides
     @Singleton
-    fun provideKinopoiskDao(appDatabase: AppDatabase) : KinopoiskDao {
-        return appDatabase.kinopoiskDao()
-    }
+    fun provideMovieDao(appDatabase: AppDatabase): MovieDao = appDatabase.movieDao()
 
     @Provides
     @Singleton
-    fun provideDataBase(@ApplicationContext context: Context) : AppDatabase {
-        val db = databaseBuilder(
+    fun provideDataBase(@ApplicationContext context: Context): AppDatabase {
+        return databaseBuilder(
             context,
-            AppDatabase::class.java, "database-kinopoisk"
+            AppDatabase::class.java,
+            AppDatabase.NAME
         ).fallbackToDestructiveMigration().build()
-        return db
     }
-
 }

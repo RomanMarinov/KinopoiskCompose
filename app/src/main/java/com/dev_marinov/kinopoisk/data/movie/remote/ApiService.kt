@@ -1,11 +1,10 @@
-package com.dev_marinov.kinopoisk.data.remote
+package com.dev_marinov.kinopoisk.data.movie.remote
 
-import com.dev_marinov.kinopoisk.data.remote.dto.KinopoiskResponseDTO
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-private val default_token: String = "H6FVA5Q-0BW47S8-GSX42CA-32G17EW"
+private const val default_token: String = "H6FVA5Q-0BW47S8-GSX42CA-32G17EW"
 
 interface ApiService {
     // https://kinopoisk.dev/documentation.html // документация
@@ -31,6 +30,5 @@ interface ApiService {
         @Query("sortField") sortField_rating_imdb: String = "votes.imdb",
         @Query("sortType") sortType_rating: String,
         @Query("token") token: String = default_token,
-    ): Response<KinopoiskResponseDTO>
-
+    ): Response<GetMoviesResponse>
 }

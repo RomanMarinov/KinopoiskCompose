@@ -1,24 +1,24 @@
-package com.dev_marinov.kinopoisk.data.remote.dto
+package com.dev_marinov.kinopoisk.data.rating.remote
 
-import com.dev_marinov.kinopoisk.domain.model.Votes
+import com.dev_marinov.kinopoisk.domain.model.Rating
 import com.google.gson.annotations.SerializedName
 
-data class VotesDTO(
+data class RatingDTO(
     @SerializedName("_id")
     val _id: String,
     @SerializedName("await")
-    val await: Int,
+    val await: Double,
     @SerializedName("filmCritics")
     val filmCritics: Int,
     @SerializedName("imdb")
-    val imdb: Int,
+    val imdb: Double,
     @SerializedName("kp")
-    val kp: Int,
+    val kp: Double,
     @SerializedName("russianFilmCritics")
-    val russianFilmCritics: Int
+    val russianFilmCritics: Double
 ) {
-    fun mapToDomain() : Votes {
-        return Votes(
+    fun mapToDomain() : Rating{
+        return Rating(
             _id = _id,
             await = await,
             filmCritics = filmCritics,

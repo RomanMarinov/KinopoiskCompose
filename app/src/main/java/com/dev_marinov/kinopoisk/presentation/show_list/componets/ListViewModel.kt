@@ -3,14 +3,14 @@ package com.dev_marinov.kinopoisk.presentation.show_list.componets
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dev_marinov.kinopoisk.domain.repository.KinopoiskRepository
+import com.dev_marinov.kinopoisk.domain.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ListViewModel @Inject constructor(private val kinopoiskRepository: KinopoiskRepository) :
+class ListViewModel @Inject constructor(private val kinopoiskRepository: MovieRepository) :
     ViewModel() {
 
 //    private val _viewState: MutableStateFlow<KinopoiskResponse> = MutableStateFlow()

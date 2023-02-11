@@ -1,13 +1,16 @@
-package com.dev_marinov.kinopoisk.data.remote
+package com.dev_marinov.kinopoisk.data.movie
 
+import com.dev_marinov.kinopoisk.data.movie.remote.ApiService
 import com.dev_marinov.kinopoisk.domain.model.Movie
-import com.dev_marinov.kinopoisk.domain.repository.KinopoiskRepository
+import com.dev_marinov.kinopoisk.domain.repository.MovieRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class KinopoiskRepositoryImpl @Inject constructor(private val apiService: ApiService) :
-    KinopoiskRepository {
+class MovieRepositoryImpl @Inject constructor(
+    private val apiService: ApiService
+) : MovieRepository {
+
     override suspend fun getMovies(
         search_rating: String,
         search_date: String,

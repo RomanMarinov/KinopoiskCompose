@@ -1,4 +1,4 @@
-package com.dev_marinov.kinopoisk.data.remote.dto
+package com.dev_marinov.kinopoisk.data.poster.remote
 
 import com.dev_marinov.kinopoisk.domain.model.Poster
 import com.google.gson.annotations.SerializedName

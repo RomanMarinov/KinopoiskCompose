@@ -1,4 +1,4 @@
-package com.dev_marinov.kinopoisk.data.remote.dto
+package com.dev_marinov.kinopoisk.data.releaseYear.remote
 
 import com.dev_marinov.kinopoisk.domain.model.ReleaseYear
 import com.google.gson.annotations.SerializedName

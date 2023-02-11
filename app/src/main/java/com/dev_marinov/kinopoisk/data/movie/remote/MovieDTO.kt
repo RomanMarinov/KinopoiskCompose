@@ -1,5 +1,9 @@
-package com.dev_marinov.kinopoisk.data.remote.dto
+package com.dev_marinov.kinopoisk.data.movie.remote
 
+import com.dev_marinov.kinopoisk.data.poster.remote.PosterDTO
+import com.dev_marinov.kinopoisk.data.rating.remote.RatingDTO
+import com.dev_marinov.kinopoisk.data.releaseYear.remote.ReleaseYearDTO
+import com.dev_marinov.kinopoisk.data.votes.remote.VotesDTO
 import com.dev_marinov.kinopoisk.domain.model.*
 import com.google.gson.annotations.SerializedName
 

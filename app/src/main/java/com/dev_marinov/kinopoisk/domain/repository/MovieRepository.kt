@@ -2,7 +2,7 @@ package com.dev_marinov.kinopoisk.domain.repository
 
 import com.dev_marinov.kinopoisk.domain.model.Movie
 
-interface KinopoiskRepository {
+interface MovieRepository {
 
     suspend fun getMovies(
         search_rating: String,
@@ -11,5 +11,4 @@ interface KinopoiskRepository {
         sortType_date: String,
         sortType_rating: String
     ): List<Movie>?
-
 }
