@@ -3,21 +3,21 @@ package com.dev_marinov.kinopoisk.data.common.local
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Transaction
-import com.dev_marinov.kinopoisk.domain.model.Movie
-import com.dev_marinov.kinopoisk.domain.model.Poster
-import com.dev_marinov.kinopoisk.domain.model.Rating
-import com.dev_marinov.kinopoisk.domain.model.ReleaseYear
-import com.dev_marinov.kinopoisk.domain.model.Votes
+import com.dev_marinov.kinopoisk.data.movie.local.MovieEntity
+import com.dev_marinov.kinopoisk.data.poster.local.PosterEntity
+import com.dev_marinov.kinopoisk.data.rating.local.RatingEntity
+import com.dev_marinov.kinopoisk.data.releaseYear.local.ReleaseYearEntity
+import com.dev_marinov.kinopoisk.data.votes.local.VotesEntity
 
 interface CommonDao {
 
     @Transaction
     suspend fun insertData(
-        movie: Movie,
-        releaseYears: List<ReleaseYear>,
-        votes: Votes?,
-        rating: Rating?,
-        poster: Poster?
+        movie: MovieEntity,
+        releaseYears: List<ReleaseYearEntity>,
+        votes: VotesEntity?,
+        rating: RatingEntity?,
+        poster: PosterEntity?
     ) {
         insertMovie(movie)
         insertReleaseYears(releaseYears)
@@ -27,17 +27,17 @@ interface CommonDao {
     }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMovie(movie: Movie)
+    suspend fun insertMovie(movie: MovieEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertReleaseYears(releaseYears: List<ReleaseYear>)
+    suspend fun insertReleaseYears(releaseYears: List<ReleaseYearEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertVotes(votes: Votes?)
+    suspend fun insertVotes(votes: VotesEntity?)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRating(rating: Rating?)
+    suspend fun insertRating(rating: RatingEntity?)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPoster(poster: Poster?)
+    suspend fun insertPoster(poster: PosterEntity?)
 }

@@ -1,17 +1,20 @@
 package com.dev_marinov.kinopoisk.data.movie.local
 
 import androidx.room.*
-import com.dev_marinov.kinopoisk.domain.model.Movie
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MovieDao {
 
     @Query("SELECT * FROM movies WHERE page = :page")
-    suspend fun getAllByPage(page: String): List<Movie>
+    suspend fun getAllByPage(page: String): List<MovieEntity>
+
+    @Query("SELECT * FROM movies")
+    suspend fun getAllFlow(): Flow<List<MovieEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(movies: List<Movie>)
+    suspend fun insertAll(movies: List<MovieEntity>)
 
     @Delete
-    suspend fun delete(movie: Movie)
+    suspend fun delete(movie: MovieEntity)
 }
