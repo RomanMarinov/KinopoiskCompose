@@ -1,6 +1,8 @@
 package com.dev_marinov.kinopoisk.di
 
-import com.dev_marinov.kinopoisk.data.remote.ApiService
+import com.dev_marinov.kinopoisk.data.movie.remote.ApiService
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -19,20 +21,16 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideApiService(retrofit: Retrofit) : ApiService {
+    fun provideApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
     }
 
     @Singleton
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient) : Retrofit {
-        val gsonBuilder = GsonBuilder()
-        gsonBuilder.setLenient()
-        val gson = gsonBuilder.create()
-
-        val base_url = "https://api.kinopoisk.dev/"
+    fun provideRetrofit(okHttpClient: OkHttpClient, gson: Gson): Retrofit {
+        val baseUrl = "https://api.kinopoisk.dev/"
         return Retrofit.Builder()
-            .baseUrl(base_url)
+            .baseUrl(baseUrl)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
@@ -46,5 +44,13 @@ class NetworkModule {
             .connectTimeout(100, TimeUnit.SECONDS)
             .readTimeout(100, TimeUnit.SECONDS)
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCurrencyRateGsonConverter(): Gson {
+        return GsonBuilder()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .create()
     }
 }
