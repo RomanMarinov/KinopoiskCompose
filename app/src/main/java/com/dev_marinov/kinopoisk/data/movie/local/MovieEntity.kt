@@ -25,12 +25,12 @@ data class MovieEntity(
     val year: Int?,
     @ColumnInfo(name = "release_years_ids")
     @TypeConverters(StringListConverter::class)
-    val releaseYearsIds: List<ReleaseYear>?,
+    val releaseYearsIds: List<String>?,
     @ColumnInfo(name = "votes_id")
-    val votesId: Votes?,
+    val votesId: String?,
     @ColumnInfo(name = "rating_id")
-    val ratingId: Rating?,
+    val ratingId: String?,
     @ColumnInfo(name = "poster_id")
-    val posterId: Poster?,
+    val posterId: String?,
     val page: Int
 )

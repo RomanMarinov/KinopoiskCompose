@@ -40,14 +40,12 @@ data class MovieDTO(
             description = description,
             id = id,
             name = name,
-            poster = poster?.mapToDomain(),
-            rating = rating?.mapToDomain(),
-            releaseYears = releaseYears?.map {
-                it.mapToDomain()
-            },
+            posterId = poster?.id,
+            ratingId = rating?.id,
+            releaseYearsIds = releaseYears?.map { it.id },
             shortDescription = shortDescription,
             type = type,
-            votes = votes?.mapToDomain(),
+            votesId = votes?.id,
             year = year,
             page = page,
             length = length

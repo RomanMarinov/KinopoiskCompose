@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class RatingDTO(
     @SerializedName("_id")
-    val _id: String,
+    val id: String,
     @SerializedName("await")
     val await: Double,
     @SerializedName("filmCritics")
@@ -19,7 +19,7 @@ data class RatingDTO(
 ) {
     fun mapToDomain() : Rating{
         return Rating(
-            _id = _id,
+            id = id,
             await = await,
             filmCritics = filmCritics,
             imdb = imdb,

@@ -1,14 +1,15 @@
 package com.dev_marinov.kinopoisk.domain.repository
 
-import com.dev_marinov.kinopoisk.domain.model.Movie
-
 interface MovieRepository {
 
-    suspend fun getMovies(
-        search_rating: String,
-        search_date: String,
-        search_typeNumber: String,
-        sortType_date: String,
-        sortType_rating: String
-    ): List<Movie>?
+    //    TODO: uncomment search params
+    suspend fun updateMovies(
+//        searchRating: String,
+//        searchDate: String,
+//        searchTypeNumber: String,
+//        sortTypeDate: String,
+//        sortTypRating: String
+        page: String,
+        limit: String
+    )
 }

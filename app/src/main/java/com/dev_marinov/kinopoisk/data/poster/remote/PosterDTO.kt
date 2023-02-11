@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PosterDTO(
     @SerializedName("_id")
-    val _id: String,
+    val id: String,
     @SerializedName("previewUrl")
     val previewUrl: String,
     @SerializedName("url")
@@ -13,7 +13,7 @@ data class PosterDTO(
 ) {
     fun mapToDomain() : Poster {
         return Poster(
-            _id = _id,
+            id = id,
             previewUrl = previewUrl,
             url = url
         )

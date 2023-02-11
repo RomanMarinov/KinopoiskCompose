@@ -7,11 +7,11 @@ import com.dev_marinov.kinopoisk.domain.model.Movie
 interface MovieDao {
 
     @Query("SELECT * FROM movies WHERE page = :page")
-    fun getAllByPage(page: String): List<Movie>
+    suspend fun getAllByPage(page: String): List<Movie>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(movies: List<Movie>)
+    suspend fun insertAll(movies: List<Movie>)
 
     @Delete
-    fun delete(movie: Movie)
+    suspend fun delete(movie: Movie)
 }
