@@ -8,5 +8,5 @@ import kotlinx.coroutines.flow.Flow
 interface RatingDao {
 
     @Query("SELECT * FROM ratings")
-    suspend fun getAllFlow(): Flow<List<RatingEntity>>
+    fun getAllFlow(): Flow<List<RatingEntity>>
 }

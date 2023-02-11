@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface ReleaseYearDao {
 
     @Query("SELECT * FROM release_years")
-    suspend fun getAllFlow(): Flow<List<ReleaseYearEntity>>
+    fun getAllFlow(): Flow<List<ReleaseYearEntity>>
 }

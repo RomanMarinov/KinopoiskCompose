@@ -8,5 +8,5 @@ import kotlinx.coroutines.flow.Flow
 interface PosterDao {
 
     @Query("SELECT * FROM posters")
-    suspend fun getAllFlow(): Flow<List<PosterEntity>>
+    fun getAllFlow(): Flow<List<PosterEntity>>
 }

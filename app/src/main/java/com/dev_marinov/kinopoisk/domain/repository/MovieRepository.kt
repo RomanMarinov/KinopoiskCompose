@@ -1,6 +1,11 @@
 package com.dev_marinov.kinopoisk.domain.repository
 
+import com.dev_marinov.kinopoisk.domain.model.Movie
+import kotlinx.coroutines.flow.Flow
+
 interface MovieRepository {
+
+    val movies: Flow<List<Movie>>
 
     //    TODO: uncomment search params
     suspend fun updateMovies(

@@ -10,7 +10,7 @@ interface MovieDao {
     suspend fun getAllByPage(page: String): List<MovieEntity>
 
     @Query("SELECT * FROM movies")
-    suspend fun getAllFlow(): Flow<List<MovieEntity>>
+    fun getAllFlow(): Flow<List<MovieEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(movies: List<MovieEntity>)

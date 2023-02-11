@@ -8,5 +8,5 @@ import kotlinx.coroutines.flow.Flow
 interface VotesDao {
 
     @Query("SELECT * FROM votes")
-    suspend fun getAllFlow(): Flow<List<VotesEntity>>
+    fun getAllFlow(): Flow<List<VotesEntity>>
 }
