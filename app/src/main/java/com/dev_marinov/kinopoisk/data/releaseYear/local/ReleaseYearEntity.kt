@@ -13,7 +13,7 @@ import com.dev_marinov.kinopoisk.domain.model.ReleaseYear
     foreignKeys = [
         ForeignKey(
             entity = MovieEntity::class,
-            parentColumns = ["release_years_ids"],
+            parentColumns = ["id"],
             childColumns = ["movie_id"],
             onDelete = CASCADE
         )

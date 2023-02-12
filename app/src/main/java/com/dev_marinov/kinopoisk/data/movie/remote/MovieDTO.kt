@@ -7,7 +7,6 @@ import com.dev_marinov.kinopoisk.data.votes.remote.VotesDTO
 import com.dev_marinov.kinopoisk.domain.model.*
 import com.google.gson.annotations.SerializedName
 
-
 data class MovieDTO(
     @SerializedName("id")
     val id: Int,
@@ -40,12 +39,8 @@ data class MovieDTO(
             description = description,
             id = id,
             name = name,
-            posterId = poster?.id,
-            ratingId = rating?.id,
-            releaseYearsIds = releaseYears?.map { it.id },
             shortDescription = shortDescription,
             type = type,
-            votesId = votes?.id,
             year = year,
             page = page,
             length = length

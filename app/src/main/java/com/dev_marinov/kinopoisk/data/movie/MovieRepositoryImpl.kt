@@ -36,10 +36,10 @@ class MovieRepositoryImpl @Inject constructor(
         val movieDtos = response.movies
         movieDtos.forEach { dto ->
             val movie = dto.mapToDomain(response.page)
-            val releaseYears = dto.releaseYears?.map { it.mapToDomain() } ?: listOf()
-            val votes = dto.votes?.mapToDomain()
-            val rating = dto.rating?.mapToDomain()
-            val poster = dto.poster?.mapToDomain()
+            val releaseYears = dto.releaseYears?.map { it.mapToDomain(movie.id) } ?: listOf()
+            val votes = dto.votes?.mapToDomain(movie.id)
+            val rating = dto.rating?.mapToDomain(movie.id)
+            val poster = dto.poster?.mapToDomain(movie.id)
             mediator.saveData(movie, releaseYears, votes, rating, poster)
         }
     }

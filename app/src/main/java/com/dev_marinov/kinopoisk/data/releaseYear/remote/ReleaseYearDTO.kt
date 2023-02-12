@@ -11,11 +11,12 @@ data class ReleaseYearDTO(
     @SerializedName("start")
     val start: Int
 ) {
-    fun mapToDomain(): ReleaseYear {
+    fun mapToDomain(movieId: Int): ReleaseYear {
         return ReleaseYear(
             id = id,
             end = end,
-            start = start
+            start = start,
+            movieId = movieId
         )
     }
 }

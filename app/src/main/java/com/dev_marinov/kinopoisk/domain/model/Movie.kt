@@ -9,9 +9,5 @@ data class Movie(
     val shortDescription: String?,
     val type: String?,
     val year: Int?,
-    val releaseYearsIds: List<String>?,
-    val votesId: String?,
-    val ratingId: String?,
-    val posterId: String?,
     val page: Int
 )

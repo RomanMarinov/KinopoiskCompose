@@ -17,14 +17,15 @@ data class VotesDTO(
     @SerializedName("russianFilmCritics")
     val russianFilmCritics: Int
 ) {
-    fun mapToDomain() : Votes {
+    fun mapToDomain(movieId: Int): Votes {
         return Votes(
             id = id,
             await = await,
             filmCritics = filmCritics,
             imdb = imdb,
             kp = kp,
-            russianFilmCritics = russianFilmCritics
+            russianFilmCritics = russianFilmCritics,
+            movieId = movieId
         )
     }
 }

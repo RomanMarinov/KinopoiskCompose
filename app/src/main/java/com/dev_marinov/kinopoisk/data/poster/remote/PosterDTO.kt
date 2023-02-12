@@ -11,11 +11,12 @@ data class PosterDTO(
     @SerializedName("url")
     val url: String
 ) {
-    fun mapToDomain() : Poster {
+    fun mapToDomain(movieId:Int) : Poster {
         return Poster(
             id = id,
             previewUrl = previewUrl,
-            url = url
+            url = url,
+            movieId = movieId
         )
     }
 }

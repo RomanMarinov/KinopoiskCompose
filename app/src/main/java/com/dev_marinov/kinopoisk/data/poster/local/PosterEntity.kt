@@ -12,7 +12,7 @@ import com.dev_marinov.kinopoisk.domain.model.Poster
     foreignKeys = [
         ForeignKey(
             entity = MovieEntity::class,
-            parentColumns = ["poster_id"], // связь род таб с табл постер по айди (в муви айди и постер айди)
+            parentColumns = ["id"], // связь род таб с табл постер по айди (в муви айди и постер айди)
             childColumns = ["movie_id"], //
             onDelete = ForeignKey.CASCADE // когда удаляем фильм, то удаляем и постер
         // если я сам удалю фильм и все елементы тоже удаляться

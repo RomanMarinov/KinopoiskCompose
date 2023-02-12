@@ -12,7 +12,7 @@ import com.dev_marinov.kinopoisk.domain.model.Votes
     foreignKeys = [
         ForeignKey(
             entity = MovieEntity::class,
-            parentColumns = ["votes_id"],
+            parentColumns = ["id"],
             childColumns = ["movie_id"],
             onDelete = ForeignKey.CASCADE
         )
