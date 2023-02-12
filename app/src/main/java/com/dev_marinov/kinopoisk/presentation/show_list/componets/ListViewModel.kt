@@ -38,10 +38,10 @@ class ListViewModel @Inject constructor(
     //    Items which we should show on screen
     val movieItems: Flow<List<MovieItem>> = getItems()
 
+
     init {
         getData()
     }
-
 
     private fun getData() {
         viewModelScope.launch {

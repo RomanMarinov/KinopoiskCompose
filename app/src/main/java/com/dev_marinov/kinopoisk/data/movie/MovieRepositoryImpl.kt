@@ -31,6 +31,7 @@ class MovieRepositoryImpl @Inject constructor(
         page: String,
         limit: String
     ) {
+        // если данных по сети нет
         val response = remoteDataSource.getData(page, limit).body() ?: return
         val movieDtos = response.movies
         movieDtos.forEach { dto ->

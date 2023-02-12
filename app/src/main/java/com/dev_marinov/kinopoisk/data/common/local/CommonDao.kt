@@ -11,6 +11,7 @@ import com.dev_marinov.kinopoisk.data.votes.local.VotesEntity
 
 interface CommonDao {
 
+    // если я делал несколько операций  и одна не прошла, то все остальные откататься
     @Transaction
     suspend fun insertData(
         movie: MovieEntity,

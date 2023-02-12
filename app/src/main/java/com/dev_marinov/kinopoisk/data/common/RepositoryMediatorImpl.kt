@@ -26,6 +26,7 @@ class RepositoryMediatorImpl @Inject constructor(
         poster: Poster?
     ) {
         commonDao.insertData(
+            // перед записью в бд я должен смапить из домена в энтити
             movie = MovieEntity.mapFromDomain(movie),
             releaseYears = releaseYears.map { ReleaseYearEntity.mapFromDomain(it) },
             votes = votes?.let { VotesEntity.mapFromDomain(it) },

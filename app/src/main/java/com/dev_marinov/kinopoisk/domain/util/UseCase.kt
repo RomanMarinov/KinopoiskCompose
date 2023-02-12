@@ -5,7 +5,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
 abstract class UseCase<in P, R>(private val coroutineDispatcher: CoroutineDispatcher) {
-
+// р параметр
+    // r возращаемый рез (в моем слу список)
     private val TAG = "UseCase"
 
     /** Executes the use case asynchronously and returns a [Result].
