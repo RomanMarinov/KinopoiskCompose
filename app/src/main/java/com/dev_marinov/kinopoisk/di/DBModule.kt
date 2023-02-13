@@ -3,7 +3,7 @@ package com.dev_marinov.kinopoisk.di
 import android.content.Context
 import androidx.room.Room.databaseBuilder
 import com.dev_marinov.kinopoisk.data.AppDatabase
-import com.dev_marinov.kinopoisk.data.common.local.CommonDao
+import com.dev_marinov.kinopoisk.data.repositoryCoordinator.local.CoordinatorDao
 import com.dev_marinov.kinopoisk.data.movie.local.MovieDao
 import com.dev_marinov.kinopoisk.data.poster.local.PosterDao
 import com.dev_marinov.kinopoisk.data.rating.local.RatingDao
@@ -43,7 +43,7 @@ class DBModule {
 
     @Provides
     @Singleton
-    fun provideCommonDao(appDatabase: AppDatabase): CommonDao = appDatabase.commonDao()
+    fun provideCommonDao(appDatabase: AppDatabase): CoordinatorDao = appDatabase.commonDao()
 
     @Provides
     @Singleton

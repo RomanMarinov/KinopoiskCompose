@@ -6,7 +6,10 @@ import com.dev_marinov.kinopoisk.domain.model.Rating
 import com.dev_marinov.kinopoisk.domain.model.ReleaseYear
 import com.dev_marinov.kinopoisk.domain.model.Votes
 
-interface RepositoryMediator {
+/**
+ *
+ */
+interface RepositoryCoordinator {
 
     suspend fun saveData(
         movie: Movie,

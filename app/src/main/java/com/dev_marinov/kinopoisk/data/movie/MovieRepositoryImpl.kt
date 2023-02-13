@@ -9,7 +9,7 @@ import com.dev_marinov.kinopoisk.data.rating.remote.RatingDTO
 import com.dev_marinov.kinopoisk.data.releaseYear.remote.ReleaseYearDTO
 import com.dev_marinov.kinopoisk.data.votes.remote.VotesDTO
 import com.dev_marinov.kinopoisk.domain.model.Movie
-import com.dev_marinov.kinopoisk.domain.repository.RepositoryMediator
+import com.dev_marinov.kinopoisk.domain.repository.RepositoryCoordinator
 import com.dev_marinov.kinopoisk.domain.repository.MovieRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -20,7 +20,7 @@ import javax.inject.Singleton
 class MovieRepositoryImpl @Inject constructor(
     private val remoteDataSource: ApiService,
     private val localDataSource: MovieDao,
-    private val mediator: RepositoryMediator
+    private val mediator: RepositoryCoordinator
 ) : MovieRepository {
 
     override val movies: Flow<List<Movie>> = localDataSource.getAllFlow().map {

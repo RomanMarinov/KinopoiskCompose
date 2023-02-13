@@ -1,12 +1,12 @@
 package com.dev_marinov.kinopoisk.di
 
-import com.dev_marinov.kinopoisk.data.common.RepositoryMediatorImpl
+import com.dev_marinov.kinopoisk.data.repositoryCoordinator.RepositoryCoordinatorImpl
 import com.dev_marinov.kinopoisk.data.movie.MovieRepositoryImpl
 import com.dev_marinov.kinopoisk.data.poster.PosterRepositoryImpl
 import com.dev_marinov.kinopoisk.data.rating.RatingRepositoryImpl
 import com.dev_marinov.kinopoisk.data.releaseYear.ReleaseYearRepositoryImpl
 import com.dev_marinov.kinopoisk.data.votes.VotesRepositoryImpl
-import com.dev_marinov.kinopoisk.domain.repository.RepositoryMediator
+import com.dev_marinov.kinopoisk.domain.repository.RepositoryCoordinator
 import com.dev_marinov.kinopoisk.domain.repository.MovieRepository
 import com.dev_marinov.kinopoisk.domain.repository.PosterRepository
 import com.dev_marinov.kinopoisk.domain.repository.RatingRepository
@@ -43,5 +43,5 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindCommonRepository(commonRepositoryImpl: RepositoryMediatorImpl): RepositoryMediator
+    abstract fun bindCommonRepository(commonRepositoryImpl: RepositoryCoordinatorImpl): RepositoryCoordinator
 }

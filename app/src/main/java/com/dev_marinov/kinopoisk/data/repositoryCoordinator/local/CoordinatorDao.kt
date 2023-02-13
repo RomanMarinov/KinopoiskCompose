@@ -1,4 +1,4 @@
-package com.dev_marinov.kinopoisk.data.common.local
+package com.dev_marinov.kinopoisk.data.repositoryCoordinator.local
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -11,7 +11,7 @@ import com.dev_marinov.kinopoisk.data.releaseYear.local.ReleaseYearEntity
 import com.dev_marinov.kinopoisk.data.votes.local.VotesEntity
 
 @Dao
-interface CommonDao {
+interface CoordinatorDao {
 
     // если я делал несколько операций  и одна не прошла, то все остальные откататься
     @Transaction
