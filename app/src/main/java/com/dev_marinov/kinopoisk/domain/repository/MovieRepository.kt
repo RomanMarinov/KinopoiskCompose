@@ -17,4 +17,6 @@ interface MovieRepository {
         page: String,
         limit: String
     )
+
+    suspend fun deleteMovie(movie: Movie)
 }

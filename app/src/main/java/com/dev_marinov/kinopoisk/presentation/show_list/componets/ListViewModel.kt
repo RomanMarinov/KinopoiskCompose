@@ -10,6 +10,7 @@ import com.dev_marinov.kinopoisk.domain.repository.MovieRepository
 import com.dev_marinov.kinopoisk.domain.repository.PosterRepository
 import com.dev_marinov.kinopoisk.domain.repository.RatingRepository
 import com.dev_marinov.kinopoisk.domain.repository.ReleaseYearRepository
+import com.dev_marinov.kinopoisk.domain.usecase.DeleteMovieUseCase
 import com.dev_marinov.kinopoisk.domain.usecase.UpdateMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -21,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ListViewModel @Inject constructor(
     private val updateMoviesUseCase: UpdateMoviesUseCase,
+    private val deleteMovieUseCase: DeleteMovieUseCase,
     private val movieRepository: MovieRepository,
     private val posterRepository: PosterRepository,
     private val releaseYearRepository: ReleaseYearRepository,
@@ -41,6 +43,17 @@ class ListViewModel @Inject constructor(
 
     init {
         getData()
+    }
+
+    /**
+     * When we click on [Movie], we delete it from database.
+     * This should cause the removal of elements associated with this movie: [Rating], [ReleaseYear], [Poster] and [Votes].
+     * Removal is launched through a [DeleteMovieUseCase]
+     */
+    fun onMovieClicked(movieItem: MovieItem) {
+        viewModelScope.launch {
+            deleteMovieUseCase(DeleteMovieUseCase.DeleteMovieParams(movieItem.movie))
+        }
     }
 
     private fun getData() {
