@@ -22,7 +22,7 @@ import com.dev_marinov.kinopoisk.domain.model.ReleaseYear
 data class ReleaseYearEntity(
     @PrimaryKey
     val id: String,
-    val end: Int,
+    val end: Int?,
     val start: Int,
     @ColumnInfo(name = "movie_id")
     val movieId: Int

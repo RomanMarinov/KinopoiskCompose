@@ -7,7 +7,7 @@ data class ReleaseYearDTO(
     @SerializedName("_id")
     val id: String,
     @SerializedName("end")
-    val end: Int,
+    val end: Int?,
     @SerializedName("start")
     val start: Int
 ) {
