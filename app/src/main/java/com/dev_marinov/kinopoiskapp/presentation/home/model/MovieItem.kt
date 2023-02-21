@@ -1,4 +1,4 @@
-package com.dev_marinov.kinopoiskapp.presentation.home
+package com.dev_marinov.kinopoiskapp.presentation.home.model
 
 import com.dev_marinov.kinopoiskapp.domain.model.Movie
 import com.dev_marinov.kinopoiskapp.domain.model.Poster

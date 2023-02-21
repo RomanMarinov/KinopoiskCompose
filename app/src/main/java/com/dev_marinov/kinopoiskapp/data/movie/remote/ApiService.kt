@@ -7,7 +7,7 @@ import retrofit2.http.Query
 private  val default_fieldRatingKp: String = "rating.kp"
 private  val default_searchRating: String = "7-10"
 private  val default_fieldDate: String = "year"
-private  val default_search_date: String = "2017-2020"
+private  val default_search_date: String = "2016-2016"
 private  val default_field_typeNumber: String = "typeNumber"
 private  val default_search_typeNumber: String = "2"
 private  val default_sortField_date: String = "year"
@@ -16,7 +16,7 @@ private  val default_sortField_rating_imdb: String = "votes.imdb"
 private  val default_sortType_rating: String = "-1"
 private  val default_token: String = "H6FVA5Q-0BW47S8-GSX42CA-32G17EW"
 private  val defaultPage: String = "1"
-private  val defaultLimit: String = "3"
+private  val defaultLimit: String = "5"
 
 interface ApiService {
     // https://kinopoisk.dev/documentation.html // документация

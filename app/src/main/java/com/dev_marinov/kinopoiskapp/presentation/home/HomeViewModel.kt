@@ -12,6 +12,7 @@ import com.dev_marinov.kinopoiskapp.domain.repository.RatingRepository
 import com.dev_marinov.kinopoiskapp.domain.repository.ReleaseYearRepository
 import com.dev_marinov.kinopoiskapp.domain.usecase.DeleteMovieUseCase
 import com.dev_marinov.kinopoiskapp.domain.usecase.UpdateMoviesUseCase
+import com.dev_marinov.kinopoiskapp.presentation.home.model.MovieItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -20,7 +21,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ListViewModel @Inject constructor(
+class HomeViewModel @Inject constructor(
     private val updateMoviesUseCase: UpdateMoviesUseCase,
     private val deleteMovieUseCase: DeleteMovieUseCase,
     private val movieRepository: MovieRepository,
@@ -41,8 +42,11 @@ class ListViewModel @Inject constructor(
     val movieItems: Flow<List<MovieItem>> = getItems()
 
 
+
     init {
-        getData()
+
+
+        //getData()
     }
 
     /**
