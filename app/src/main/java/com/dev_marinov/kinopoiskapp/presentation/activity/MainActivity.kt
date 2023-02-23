@@ -5,14 +5,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -30,101 +30,60 @@ import com.dev_marinov.kinopoiskapp.presentation.settings.SettingsScreen
 import com.dev_marinov.kinopoiskapp.ui.theme.KinopoiskAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             KinopoiskAppTheme {
-                val navController = rememberNavController()
-                Scaffold(
-                    bottomBar = {
-                        BottomNavigationBar(
-                            items = listOf(
-                                BottomNavItem(
-                                    name = "Home",
-                                    route = "home",
-                                    icon = Icons.Default.Home,
-                                    badgeCount = 0
-                                ),
-                                BottomNavItem(
-                                    name = "Favorite",
-                                    route = "favorite",
-                                    icon = Icons.Default.Notifications,
-                                    badgeCount = 23
-                                ),
-                                BottomNavItem(
-                                    name = "Settings",
-                                    route = "settings",
-                                    icon = Icons.Default.Settings,
-                                    badgeCount = 214
-                                ),
-                            ),
-                            navController = navController,
-                            onItemClick = {
-                                navController.navigate(it.route)
-                            }
-                        )
-                    }
-                )
-                {
-                    Navigation(navHostController = navController)
-                }
+                StatusBar()
+                NavigationBar()
+                BottomNavigation()
             }
         }
     }
 }
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@Composable
+fun BottomNavigation() {
+    val navController = rememberNavController()
+    Scaffold(
+        bottomBar = {
+            BottomNavigationBar(
+                items = listOf(
+                    BottomNavItem(
+                        name = "Home",
+                        route = "home",
+                        icon = Icons.Default.Home,
+                        badgeCount = 0
+                    ),
+                    BottomNavItem(
+                        name = "Favorite",
+                        route = "favorite",
+                        icon = Icons.Default.Favorite,
+                        badgeCount = 23
+                    ),
+                    BottomNavItem(
+                        name = "Settings",
+                        route = "settings",
+                        icon = Icons.Default.Settings,
+                        badgeCount = 214
+                    ),
+                ),
+                navController = navController,
+                onItemClick = {
+                    navController.navigate(it.route)
+                }
+            )
+        }
+    )
+    {
+        Navigation(navHostController = navController)
+    }
+}
 
-//@Composable
-//private fun MainScreen(viewModel: HomeViewModel = hiltViewModel()) {
-//    val movieItems: List<MovieItem> by viewModel.movieItems.collectAsState(listOf())
-//
-//    LazyColumn(
-//        content = {
-//            itemsIndexed(movieItems) { index, item ->
-//                MovieItem(item, viewModel::onMovieClicked)
-//            }
-//        },
-//        contentPadding = PaddingValues(10.dp),
-//        verticalArrangement = Arrangement.spacedBy(10.dp)
-//    )
-//
-//}
-//
-//@Composable
-//fun MovieItem(
-//    movieItem: MovieItem,
-//    onClick: (MovieItem) -> Unit /*clickListener for item*/
-//) {
-//    Card(
-//        modifier = Modifier
-//            .wrapContentSize()
-//            .clip(RoundedCornerShape(8.dp))
-//            .clickable { onClick(movieItem) }
-//    ) {
-//        Row(
-//            modifier = Modifier
-//                .background(color = Color.LightGray, shape = RectangleShape)
-//                .padding(10.dp)
-//                .fillMaxWidth()
-//        ) {
-//            AsyncImage(
-//                model = movieItem.poster?.previewUrl,
-//                contentDescription = "Movie poster",
-//                placeholder = painterResource(id = R.drawable.id_poster_placehoolder)
-//            )
-//            Column(modifier = Modifier.padding(10.dp)) {
-//                Text(text = "name: ${movieItem.movie.name}")
-//                Text(text = "rating: ${movieItem.rating?.kp}")
-//                Text(text = "years: ${movieItem.releaseYears.joinToString(",") { "${it.start} - ${it.end}" }}")
-//            }
-//        }
-//    }
-//}
 
 @Composable
 fun Navigation(navHostController: NavHostController) {
@@ -135,7 +94,6 @@ fun Navigation(navHostController: NavHostController) {
     }
 }
 
-
 @Composable
 fun BottomNavigationBar(
     items: List<BottomNavItem>,
@@ -145,7 +103,9 @@ fun BottomNavigationBar(
 ) {
     val backStackEntry = navController.currentBackStackEntryAsState()
     BottomNavigation(
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(10.dp, 10.dp, 0.dp, 0.dp)),
         backgroundColor = Color.DarkGray,
         elevation = 5.dp
     ) {

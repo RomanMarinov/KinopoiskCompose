@@ -27,11 +27,20 @@ import com.dev_marinov.kinopoiskapp.presentation.home.model.MovieItem
 fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
     val movieItems: List<MovieItem> by viewModel.movieItems.collectAsState(listOf())
 
+    Column(modifier = Modifier.fillMaxSize()) {
+        TotBar()
+        Movies(movieItems, viewModel)
+    }
+}
+
+@Composable
+fun Movies(movieItems: List<MovieItem>, viewModel: HomeViewModel) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Text(text = "Home")
+
         LazyColumn(
             content = {
                 itemsIndexed(movieItems) { index, item ->
