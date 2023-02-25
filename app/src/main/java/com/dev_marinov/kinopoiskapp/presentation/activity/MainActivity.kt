@@ -26,20 +26,27 @@ import androidx.navigation.compose.rememberNavController
 import com.dev_marinov.kinopoiskapp.presentation.activity.model.BottomNavItem
 import com.dev_marinov.kinopoiskapp.presentation.favorite.FavoriteScreen
 import com.dev_marinov.kinopoiskapp.presentation.home.HomeScreen
+import com.dev_marinov.kinopoiskapp.presentation.home.ScreenNavigation
 import com.dev_marinov.kinopoiskapp.presentation.settings.SettingsScreen
 import com.dev_marinov.kinopoiskapp.ui.theme.KinopoiskAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             KinopoiskAppTheme {
+
                 StatusBar()
+                ScreenNavigation()
                 NavigationBar()
                 BottomNavigation()
+
+
+
             }
         }
     }
@@ -80,18 +87,21 @@ fun BottomNavigation() {
         }
     )
     {
-        Navigation(navHostController = navController)
+        Navigation(navHostController = navController, navController = navController)
     }
+
 }
 
 
 @Composable
-fun Navigation(navHostController: NavHostController) {
+fun Navigation(navHostController: NavHostController, navController: NavController) {
     NavHost(navController = navHostController, startDestination = "home") {
-        composable("home") { HomeScreen() }
+        composable("home") { HomeScreen(navController = navController) }
         composable("favorite") { FavoriteScreen() }
         composable("settings") { SettingsScreen() }
     }
+
+
 }
 
 @Composable
@@ -149,3 +159,6 @@ fun BottomNavigationBar(
         }
     }
 }
+
+
+// accompanist
