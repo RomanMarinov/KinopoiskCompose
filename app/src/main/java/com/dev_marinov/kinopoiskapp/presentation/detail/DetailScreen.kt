@@ -9,11 +9,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
+import androidx.hilt.navigation.compose.hiltViewModel
 
 
 @Composable
-fun DetailScreen(name: String?) {
+fun DetailScreen(
+    name: String?,
+    viewModel: DetailViewModel = hiltViewModel(),
+) {
+
+
+
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier

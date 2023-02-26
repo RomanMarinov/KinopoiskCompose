@@ -22,15 +22,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavDeepLink
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import coil.compose.AsyncImage
 import com.dev_marinov.kinopoiskapp.R
-import com.dev_marinov.kinopoiskapp.presentation.detail.DetailScreen
 import com.dev_marinov.kinopoiskapp.presentation.home.model.MovieItem
 import com.dev_marinov.kinopoiskapp.presentation.home.util.Screen
 

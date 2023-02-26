@@ -5,7 +5,7 @@ import com.dev_marinov.kinopoiskapp.domain.model.Poster
 import com.dev_marinov.kinopoiskapp.domain.model.Rating
 import com.dev_marinov.kinopoiskapp.domain.model.ReleaseYear
 
-class MovieItem(
+data class MovieItem(
     val movie: Movie,
     val releaseYears: List<ReleaseYear>,
     val rating: Rating?,
