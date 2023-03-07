@@ -5,7 +5,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.dev_marinov.kinopoiskapp.domain.model.Movie
 
-
 @Entity(tableName = "movies")
 data class MovieEntity(
     @PrimaryKey(autoGenerate = false)

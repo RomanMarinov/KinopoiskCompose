@@ -7,9 +7,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class RatingRepositoryImpl @Inject constructor(localDataSource: RatingDao) : RatingRepository {
+class RatingRepositoryImpl @Inject constructor(private val localDataSource: RatingDao) : RatingRepository {
 
     override val ratings: Flow<List<Rating>> = localDataSource.getAllFlow().map {
         it.map { entity -> entity.mapToDomain() }
     }
+
+    override suspend fun getRating(movieId: Int): Rating? {
+        return localDataSource.getRatingsForDetail(movieId)?.mapToDomain()
+    }
+
 }

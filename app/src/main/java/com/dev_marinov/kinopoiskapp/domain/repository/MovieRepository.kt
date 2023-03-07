@@ -7,6 +7,8 @@ interface MovieRepository {
 
     val movies: Flow<List<Movie>>
 
+
+
     //    TODO: uncomment search params
     suspend fun updateMovies(
         searchRating: String,
@@ -19,4 +21,7 @@ interface MovieRepository {
     )
 
     suspend fun deleteMovie(movie: Movie)
+
+    suspend fun getMovie(movieId: String?) : Movie//
+
 }

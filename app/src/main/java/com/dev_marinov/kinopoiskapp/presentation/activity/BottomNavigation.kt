@@ -135,9 +135,9 @@ fun Navigation(navHostController: NavHostController) {
         composable(
             // если бы было несколько аргументов то передавал бы один за другим "/{name}/{age}"
             // если мы вдруг не передадим стровое значение что запись будет такая "?name={name}"
-            route = Screen.DetailScreen.route + "/{name}",
+            route = Screen.DetailScreen.route + "/{id}",
             arguments = listOf(
-                navArgument("name") {
+                navArgument("id") {
                     type = NavType.StringType // тип передаваемого значения строка
                     defaultValue = "Manmario"
                     nullable = true // можно обнулить
@@ -145,7 +145,7 @@ fun Navigation(navHostController: NavHostController) {
             )
         ) { entry -> // запись
             DetailScreen( // получатель
-                name = entry.arguments?.getString("name")
+                movieId = entry.arguments?.getString("id")
             )
         }
         composable(route = Screen.FavoriteScreen.route) { FavoriteScreen() }

@@ -27,7 +27,7 @@ data class RatingEntity(
     val kp: Double,
     val russianFilmCritics: Double,
     @ColumnInfo(name = "movie_id")
-    val movieId: Int
+    val movieId: Int?
 ) {
     companion object {
 

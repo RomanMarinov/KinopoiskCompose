@@ -11,7 +11,7 @@ sealed class Screen(val route: String) {
     object SettingsScreen : Screen("settings")
 
     // функция будет работать только с обязательными аргументами
-    fun withArgs(vararg args: String?) : String {
+    fun withArgs(vararg args: Int?) : String {
         // возвращаем блок построителя строки
         return buildString {
             append(route) // хотим добавлять всегда общий маршрут экрана

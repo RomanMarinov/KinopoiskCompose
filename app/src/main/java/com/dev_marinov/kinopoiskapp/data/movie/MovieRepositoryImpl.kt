@@ -41,17 +41,26 @@ class MovieRepositoryImpl @Inject constructor(
         // если данных по сети нет
         val response = remoteDataSource.getData().body() ?: return // TODO: uncomment this line
 
+
+
         val movieDtos = response.movies // TODO: uncomment this line
        // val movieDtos = getData() // TODO: delete this line
         movieDtos.forEach { dto ->
             val movie = dto.mapToDomain(response.page) // TODO: uncomment this line
            // val movie = dto.mapToDomain(1) // TODO: delete this line
-            val releaseYears = dto.releaseYears?.map { it.mapToDomain(movie.id) } ?: listOf()
+            val releaseYears = dto.releaseYears?.map {
+                it.mapToDomain(movie.id)
+            } ?: listOf()
+
             val votes = dto.votes?.mapToDomain(movie.id)
             val rating = dto.rating?.mapToDomain(movie.id)
             val poster = dto.poster?.mapToDomain(movie.id)
             mediator.saveData(movie, releaseYears, votes, rating, poster)
         }
+    }
+
+    override suspend fun getMovie(movieId: String?): Movie {
+        return localDataSource.getMovieForDetail(id = movieId).mapToDomain()
     }
 
     override suspend fun deleteMovie(movie: Movie) {

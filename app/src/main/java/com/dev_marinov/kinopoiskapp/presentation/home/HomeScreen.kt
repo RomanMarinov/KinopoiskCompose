@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.dev_marinov.kinopoiskapp.R
@@ -32,7 +33,8 @@ fun HomeScreen(
     navController: NavController,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
-    val movieItems: List<MovieItem> by viewModel.movieItems.collectAsState(listOf())
+    val movieItems: List<MovieItem> by viewModel.movieItems.collectAsStateWithLifecycle(listOf())
+    //val movieItems: List<MovieItem> by viewModel. .collectAsStateWithLifecycle(listOf())
     Column(modifier = Modifier.fillMaxWidth()) {
         TotBar()
         Movies(movieItems, viewModel, navController)
@@ -59,7 +61,6 @@ fun Movies(movieItems: List<MovieItem>, viewModel: HomeViewModel, navController:
     Log.d("4444", " movies")
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MovieItem(
     movieItem: MovieItem,
@@ -71,7 +72,8 @@ fun MovieItem(
             .wrapContentSize()
             .clip(RoundedCornerShape(8.dp))
             .clickable {
-                navController.navigate(Screen.DetailScreen.withArgs(movieItem.movie.name))
+                //onClick.invoke(movieItem) // удаление movieItem
+                navController.navigate(Screen.DetailScreen.withArgs(movieItem.movie.id))
             },
     ) {
         Row(

@@ -8,10 +8,14 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ReleaseYearRepositoryImpl @Inject constructor(
-    localDataSource: ReleaseYearDao
+    private val localDataSource: ReleaseYearDao
 ) : ReleaseYearRepository {
 
     override val releaseYears: Flow<List<ReleaseYear>> = localDataSource.getAllFlow().map {
         it.map { entity -> entity.mapToDomain() }
+    }
+
+    override suspend fun getReleaseYear(movieId: Int): ReleaseYear? {
+       return localDataSource.getReleaseYearForDetail(movie_id = movieId)?.mapToDomain()
     }
 }

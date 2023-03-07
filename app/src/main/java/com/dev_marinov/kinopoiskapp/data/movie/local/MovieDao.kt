@@ -9,6 +9,12 @@ interface MovieDao {
     @Query("SELECT * FROM movies WHERE page = :page")
     suspend fun getAllByPage(page: String): List<MovieEntity>
 
+    @Query("SELECT * FROM movies WHERE id = :id")
+    fun getMovieForDetail(id: String?): MovieEntity
+
+    @Query("SELECT * FROM movies")
+    fun getMovies(): List<MovieEntity>
+
     @Query("SELECT * FROM movies")
     fun getAllFlow(): Flow<List<MovieEntity>>
 
