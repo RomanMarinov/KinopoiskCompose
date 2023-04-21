@@ -1,11 +1,11 @@
 package com.dev_marinov.kinopoiskapp.domain.model
 
 data class Rating(
-    val id: String,
-    val await: Double,
-    val filmCritics: Int,
-    val imdb: Double,
+    val id: Int, // in new api this value not found
     val kp: Double,
+    val imdb: Double,
+    val filmCritics: Int,
     val russianFilmCritics: Double,
+    val await: Double,
     val movieId: Int?
 )

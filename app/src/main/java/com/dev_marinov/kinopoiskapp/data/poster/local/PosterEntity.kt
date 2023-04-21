@@ -20,8 +20,8 @@ import com.dev_marinov.kinopoiskapp.domain.model.Poster
     ]
 )
 data class PosterEntity(
-    @PrimaryKey(autoGenerate = false)
-    val id: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
     @ColumnInfo(name = "preview_url")
     val previewUrl: String,
     val url: String,

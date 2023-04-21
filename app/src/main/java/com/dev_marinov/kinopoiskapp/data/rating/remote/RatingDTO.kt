@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class RatingDTO(
     @SerializedName("_id")
-    val id: String,
+    val id: Int,
     @SerializedName("await")
     val await: Double,
     @SerializedName("filmCritics")

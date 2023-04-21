@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PosterDTO(
     @SerializedName("_id")
-    val id: String,
+    val id: Int,
     @SerializedName("previewUrl")
     val previewUrl: String,
     @SerializedName("url")

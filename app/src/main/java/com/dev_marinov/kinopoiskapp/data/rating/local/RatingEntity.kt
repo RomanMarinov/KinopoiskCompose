@@ -19,8 +19,8 @@ import com.dev_marinov.kinopoiskapp.domain.model.Rating
     ]
 )
 data class RatingEntity(
-    @PrimaryKey(autoGenerate = false)
-    val id: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
     val await: Double,
     val filmCritics: Int,
     val imdb: Double,

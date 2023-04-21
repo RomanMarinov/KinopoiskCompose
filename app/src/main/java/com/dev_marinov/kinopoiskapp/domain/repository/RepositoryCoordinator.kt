@@ -12,6 +12,9 @@ interface RepositoryCoordinator {
         releaseYears: List<ReleaseYear>,
         votes: Votes?,
         rating: Rating?,
-        poster: Poster?
+        poster: Poster?,
+        genres: List<Genre>?,
+        persons: List<Person>?,
+        videos: Videos?
     )
 }

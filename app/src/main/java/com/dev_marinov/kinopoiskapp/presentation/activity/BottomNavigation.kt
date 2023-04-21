@@ -1,10 +1,9 @@
 package com.dev_marinov.kinopoiskapp.presentation.activity
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.size
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -12,6 +11,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,6 +19,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -33,18 +35,24 @@ import com.dev_marinov.kinopoiskapp.presentation.settings.SettingsScreen
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun BottomNavigation() {
+fun BottomNavigation(viewModel: MainViewModel = hiltViewModel()) {
     val navController = rememberNavController()
+    val countMovies = viewModel.countMovies.collectAsStateWithLifecycle(initialValue = 0)
+    val isHide by viewModel.isHide.collectAsStateWithLifecycle(initialValue = true)
+
     Scaffold(
         modifier = Modifier.navigationBarsPadding(),
         bottomBar = {
             BottomNavigationBar(
+                modifier = Modifier
+                    .animateContentSize(animationSpec = tween(durationMillis = 600))
+                    .height(height = if (isHide == true) 0.dp else 70.dp),
                 items = listOf(
                     BottomNavItem(
                         name = "Home",
                         route = "home",
                         icon = Icons.Default.Home,
-                        badgeCount = 0
+                        badgeCount = countMovies.value + 1
                     ),
                     BottomNavItem(
                         name = "Favorite",
@@ -65,8 +73,12 @@ fun BottomNavigation() {
                 }
             )
         }
-    ) {
-        Navigation(navHostController = navController)
+
+    ) { paddingValues ->
+        // передаем падинг чтобы список BottomNavigationBar не накладывался по поверх спика
+        Box(modifier = Modifier.padding(paddingValues = paddingValues)) {
+            NavigationGraph(navHostController = navController)
+        }
     }
 }
 
@@ -75,10 +87,10 @@ fun BottomNavigationBar(
     items: List<BottomNavItem>,
     navController: NavController,
     modifier: Modifier = Modifier,
-    onItemClick: (BottomNavItem) -> Unit
+    onItemClick: (BottomNavItem) -> Unit,
 ) {
     val backStackEntry = navController.currentBackStackEntryAsState()
-    androidx.compose.material.BottomNavigation(
+    BottomNavigation(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp, 10.dp, 0.dp, 0.dp)),
@@ -127,10 +139,11 @@ fun BottomNavigationBar(
 }
 
 @Composable
-fun Navigation(navHostController: NavHostController) {
+fun NavigationGraph(navHostController: NavHostController) {
     NavHost(navController = navHostController, startDestination = "home") {
         composable(route = Screen.HomeScreen.route) {
-            HomeScreen(navController = navHostController)
+            val isOnHome = navHostController.currentBackStackEntryAsState().value?.destination?.route == "home"
+            HomeScreen(navController = navHostController, isOnHome)
         }
         composable(
             // если бы было несколько аргументов то передавал бы один за другим "/{name}/{age}"

@@ -1,8 +1,8 @@
 package com.dev_marinov.kinopoiskapp.domain.usecase
 
-import com.dev_marinov.kinopoiskapp.domain.util.UseCase
 import com.dev_marinov.kinopoiskapp.domain.model.Movie
 import com.dev_marinov.kinopoiskapp.domain.repository.MovieRepository
+import com.dev_marinov.kinopoiskapp.domain.util.UseCase
 import javax.inject.Inject
 
 /**

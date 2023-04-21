@@ -3,12 +3,17 @@ package com.dev_marinov.kinopoiskapp.di
 import android.content.Context
 import androidx.room.Room.databaseBuilder
 import com.dev_marinov.kinopoiskapp.data.AppDatabase
+import com.dev_marinov.kinopoiskapp.data.genres.local.GenresDao
 import com.dev_marinov.kinopoiskapp.data.movie.local.MovieDao
+import com.dev_marinov.kinopoiskapp.data.movie.local.datastore.DataStoreRepositoryImpl
+import com.dev_marinov.kinopoiskapp.data.persons.local.PersonsDao
 import com.dev_marinov.kinopoiskapp.data.poster.local.PosterDao
 import com.dev_marinov.kinopoiskapp.data.rating.local.RatingDao
 import com.dev_marinov.kinopoiskapp.data.releaseYear.local.ReleaseYearDao
 import com.dev_marinov.kinopoiskapp.data.repositoryCoordinator.local.CoordinatorDao
+import com.dev_marinov.kinopoiskapp.data.video.local.VideosDao
 import com.dev_marinov.kinopoiskapp.data.votes.local.VotesDao
+import com.dev_marinov.kinopoiskapp.domain.repository.DataStoreRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,6 +48,18 @@ class DBModule {
 
     @Provides
     @Singleton
+    fun provideGenresDao(appDatabase: AppDatabase): GenresDao = appDatabase.genresDao()
+
+    @Provides
+    @Singleton
+    fun providePersonsDao(appDatabase: AppDatabase): PersonsDao = appDatabase.personsDao()
+
+    @Provides
+    @Singleton
+    fun provideVideosDao(appDatabase: AppDatabase): VideosDao = appDatabase.videosDao()
+
+    @Provides
+    @Singleton
     fun provideCommonDao(appDatabase: AppDatabase): CoordinatorDao = appDatabase.commonDao()
 
     @Provides
@@ -54,4 +71,5 @@ class DBModule {
             AppDatabase.NAME
         ).fallbackToDestructiveMigration().build()
     }
+
 }

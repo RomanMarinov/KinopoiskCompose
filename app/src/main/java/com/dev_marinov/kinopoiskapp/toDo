@@ -13,7 +13,16 @@
 - releaseYears start
 - releaseYears end
 
+CollapsingToolbar для уменьшения размеров бара при прокрутке, возможно поможет
 
+// скрыть бар
+https://stackoverflow.com/questions/69232738/how-to-hide-bottom-navigation-bar-while-scrolling-down-and-show-it-while-scrolli
+https://m2.material.io/components/bottom-navigation#behavior
+
+
+в Кадр есть pointerInput его можно функуию можно использовать для уладения элемента
+если если долгое нажатие/ посмотреть как можно это сделать со смахиванием
+или просто сделать на карточке фильма корзину нажатию на нее удалять элемент
 
  - написать условие если нет интернета и происходит запрос на получение данных
  то клиент получает тост что отстутвует интернет и данные взяты из бд
@@ -40,6 +49,11 @@
  - сделать шимер для списка
  - свайп рефреш акомпанист
 
+
+ сортировка https://www.youtube.com/watch?v=dd_Lv7AxqkY
+
+ для клика на лайк чтобы не пересоздавать объект copy()
+ https://kotlinlang.org/docs/data-classes.html#copying
 
  для шимера
  https://www.youtube.com/watch?v=SVY0qiMVIhc

@@ -1,5 +1,7 @@
 package com.dev_marinov.kinopoiskapp.presentation.home
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,13 +23,14 @@ import androidx.compose.ui.unit.dp
 import com.dev_marinov.kinopoiskapp.R
 
 @Composable
-fun TotBar() {
+fun TopBar(isHide: Boolean?) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
-            .padding(top = 10.dp, end = 10.dp)
             .fillMaxWidth()
+            .animateContentSize(animationSpec = tween(durationMillis = 600))
+            .height(height = if (isHide == true) 0.dp else 56.dp)
     ) {
         ChipSection(
             chips = listOf("Rating", "Year", "Abc")
@@ -42,6 +45,7 @@ fun FilterButton(
 ) {
     FloatingActionButton(
         modifier = modifier
+            .padding(end = 10.dp)
             .size(40.dp),
         backgroundColor = Color.Yellow,
         onClick = {

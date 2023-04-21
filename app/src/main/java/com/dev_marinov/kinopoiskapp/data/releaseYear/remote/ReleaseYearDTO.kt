@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class ReleaseYearDTO(
     @SerializedName("_id")
-    val id: String,
+    val id: Int,
     @SerializedName("end")
     val end: Int?,
     @SerializedName("start")

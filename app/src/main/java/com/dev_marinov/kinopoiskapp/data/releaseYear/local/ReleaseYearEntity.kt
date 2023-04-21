@@ -20,16 +20,14 @@ import com.dev_marinov.kinopoiskapp.domain.model.ReleaseYear
     ]
 )
 data class ReleaseYearEntity(
-    @PrimaryKey
-    val id: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
     val end: Int?,
     val start: Int,
     @ColumnInfo(name = "movie_id")
     val movieId: Int
 ) {
-
     companion object {
-
         fun mapFromDomain(releaseYear: ReleaseYear): ReleaseYearEntity = ReleaseYearEntity(
             id = releaseYear.id,
             end = releaseYear.end,

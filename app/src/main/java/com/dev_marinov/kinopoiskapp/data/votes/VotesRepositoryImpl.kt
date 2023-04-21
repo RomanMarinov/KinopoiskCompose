@@ -7,7 +7,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class VotesRepositoryImpl @Inject constructor(private val localDataSource: VotesDao) : VotesRepository {
+class VotesRepositoryImpl @Inject constructor(private val localDataSource: VotesDao) :
+    VotesRepository {
 
     override val votes: Flow<List<Votes>> = localDataSource.getAllFlow().map {
         it.map { entity -> entity.mapToDomain() }

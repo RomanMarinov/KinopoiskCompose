@@ -7,5 +7,8 @@ data class MovieItemDetail(
     val poster: Poster?,
     val rating: Rating?,
     val releaseYear: ReleaseYear?,
-    val vote: Votes?
+    val vote: Votes?,
+    val genres: List<Genres>,
+    val persons: List<Person>,
+    val videos: List<Trailer>?
 )

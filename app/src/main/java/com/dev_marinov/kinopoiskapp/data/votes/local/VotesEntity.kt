@@ -19,13 +19,13 @@ import com.dev_marinov.kinopoiskapp.domain.model.Votes
     ]
 )
 data class VotesEntity(
-    @PrimaryKey(autoGenerate = false)
-    val id: String,
-    val await: Int,
-    val filmCritics: Int,
-    val imdb: Int,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
     val kp: Int,
+    val imdb: Int,
+    val filmCritics: Int,
     val russianFilmCritics: Int,
+    val await: Int,
     @ColumnInfo(name = "movie_id")
     val movieId: Int
 ) {
@@ -34,22 +34,22 @@ data class VotesEntity(
 
         fun mapFromDomain(votes: Votes): VotesEntity = VotesEntity(
             id = votes.id,
-            await = votes.await,
-            filmCritics = votes.filmCritics,
-            imdb = votes.imdb,
             kp = votes.kp,
+            imdb = votes.imdb,
+            filmCritics = votes.filmCritics,
             russianFilmCritics = votes.russianFilmCritics,
+            await = votes.await,
             movieId = votes.movieId
         )
     }
 
     fun mapToDomain(): Votes = Votes(
         id = id,
-        await = await,
-        filmCritics = filmCritics,
-        imdb = imdb,
         kp = kp,
+        imdb = imdb,
+        filmCritics = filmCritics,
         russianFilmCritics = russianFilmCritics,
+        await = await,
         movieId = movieId
     )
 }
