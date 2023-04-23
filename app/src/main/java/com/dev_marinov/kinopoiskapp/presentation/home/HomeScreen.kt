@@ -145,7 +145,7 @@ fun MovieItem(
             .clickable {
                 onMovieClickedHideBar.invoke(true)
                 navController.navigate(Screen.DetailScreen.withArgs(movieItem.movie.id))
-            },
+            }
     ) {
 
         Box(modifier = Modifier

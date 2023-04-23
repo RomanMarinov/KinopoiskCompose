@@ -6,6 +6,7 @@ package com.dev_marinov.kinopoiskapp.presentation.home.util
 sealed class Screen(val route: String) {
     object HomeScreen : Screen("home")
     object DetailScreen : Screen("detail")
+    object PlayVideoScreen : Screen("play_video")
 
     object FavoriteScreen : Screen("favorite")
     object SettingsScreen : Screen("settings")

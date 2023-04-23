@@ -34,31 +34,30 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.dev_marinov.kinopoiskapp.R
 import com.dev_marinov.kinopoiskapp.domain.model.Genres
 import com.dev_marinov.kinopoiskapp.domain.model.Person
 import com.dev_marinov.kinopoiskapp.presentation.detail.model.MovieItemDetail
+import com.dev_marinov.kinopoiskapp.presentation.home.util.Screen
 
 
 @Composable
 fun DetailScreen(
     movieId: String?,
     viewModel: DetailViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     movieId?.let { viewModel.getMovie(it) }
     val movieItemDetail by viewModel.movie.observeAsState()
-
-    movieItemDetail?.let {
-        it.persons[0].photo
-        Log.d("4444", " movieItemDetail=" + it.persons[0].photo)
-    }
-    SetViews(movieItemDetail = movieItemDetail)
+    SetViews(movieItemDetail = movieItemDetail, navController = navController)
 }
 
 @Composable
 fun SetViews(
-    movieItemDetail: MovieItemDetail?
+    movieItemDetail: MovieItemDetail?,
+    navController: NavController
 ) {
     var imageHeight by remember {
         mutableStateOf(0)
@@ -139,13 +138,21 @@ fun SetViews(
         //contentPadding = PaddingValues(16.dp)
     ) {
         item {
-            DescriptionBlock(movieItemDetail = movieItemDetail, heightPoster = heightPoster)
+            DescriptionBlock(
+                movieItemDetail = movieItemDetail,
+                heightPoster = heightPoster,
+                navController = navController
+            )
         }
     }
 }
 
 @Composable
-fun DescriptionBlock(movieItemDetail: MovieItemDetail?, heightPoster: Dp) {
+fun DescriptionBlock(
+    movieItemDetail: MovieItemDetail?,
+    heightPoster: Dp,
+    navController: NavController
+) {
     Column(
         modifier = Modifier.fillMaxWidth(),
 
@@ -184,8 +191,6 @@ fun DescriptionBlock(movieItemDetail: MovieItemDetail?, heightPoster: Dp) {
                                 .background(color = Color.White)
                         )
                     }
-
-
                     Text(
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
@@ -393,11 +398,12 @@ fun DescriptionBlock(movieItemDetail: MovieItemDetail?, heightPoster: Dp) {
                     style = TextStyle(fontWeight = Bold)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
+                //Log.d("4444", " movieItemDetail.movie.id="+    movieItemDetail.movie.id)
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(Color.Black)
-                        .height(250.dp)
+                        .height(200.dp)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_play_video),
@@ -407,8 +413,10 @@ fun DescriptionBlock(movieItemDetail: MovieItemDetail?, heightPoster: Dp) {
                             .align(Alignment.Center)
                             .size(70.dp)
                             .clickable(onClick = {
-                                // обработчик клика
-                                // переход на экран видео
+                                navController.navigate(
+                                    Screen.PlayVideoScreen.withArgs(
+                                        movieItemDetail.movie.id
+                                    ))
                             })
                     )
 
@@ -432,7 +440,7 @@ fun DescriptionBlock(movieItemDetail: MovieItemDetail?, heightPoster: Dp) {
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     itemsIndexed(movieItemDetail.persons) { index, item ->
                         Card(
@@ -455,9 +463,7 @@ fun DescriptionBlock(movieItemDetail: MovieItemDetail?, heightPoster: Dp) {
                                     contentDescription = "Movie person",
                                     placeholder = painterResource(id = R.drawable.id_poster_placehoolder),
                                 )
-                                Log.d("4444", " text it=" + item.name)
                                 Spacer(modifier = Modifier.height(4.dp))
-
                                 if (item.name != null) {
                                     SetNamePerson(name = item.name)
                                 } else {

@@ -31,6 +31,7 @@ import com.dev_marinov.kinopoiskapp.presentation.detail.DetailScreen
 import com.dev_marinov.kinopoiskapp.presentation.favorite.FavoriteScreen
 import com.dev_marinov.kinopoiskapp.presentation.home.HomeScreen
 import com.dev_marinov.kinopoiskapp.presentation.home.util.Screen
+import com.dev_marinov.kinopoiskapp.presentation.play_video.PlayVideoScreen
 import com.dev_marinov.kinopoiskapp.presentation.settings.SettingsScreen
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -158,9 +159,30 @@ fun NavigationGraph(navHostController: NavHostController) {
             )
         ) { entry -> // запись
             DetailScreen( // получатель
-                movieId = entry.arguments?.getString("id")
+                movieId = entry.arguments?.getString("id"),
+                navController = navHostController
             )
         }
+        //////
+        composable(
+            // если бы было несколько аргументов то передавал бы один за другим "/{name}/{age}"
+            // если мы вдруг не передадим стровое значение что запись будет такая "?name={name}"
+            route = Screen.PlayVideoScreen.route + "/{id}",
+            arguments = listOf(
+                navArgument("id") {
+                    type = NavType.StringType // тип передаваемого значения строка
+                    defaultValue = "Manmario"
+                    nullable = true // можно обнулить
+                }
+            )
+        ) { entry -> // запись
+            PlayVideoScreen( // получатель
+                movieId = entry.arguments?.getString("id"),
+               // navController = navHostController
+            )
+        }
+        //////
+
         composable(route = Screen.FavoriteScreen.route) { FavoriteScreen() }
         composable(route = Screen.SettingsScreen.route) { SettingsScreen() }
     }
