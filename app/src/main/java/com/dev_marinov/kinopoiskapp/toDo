@@ -1,19 +1,25 @@
 
-
-
-какие поля выведу в детали
-- poster url
-- rating kp
-- rating imdb
-- votes kp
-- votes imdb
-- name
-- description
-- year
-- releaseYears start
-- releaseYears end
-
 CollapsingToolbar для уменьшения размеров бара при прокрутке, возможно поможет
+
+0. переместить dao в repos
+
+
+3. i need create favorite icon and make realization for it
+4. i need create pagination for scroll for chossed item genre
+
+5.1. i need create for setting delete all movie
+5.2. i need create choose three gradient color for app
+
+6. modules
+7. test case
+8. scheme for diagram
+9. if i have not internet
+
+
+
+
+
+
 
 // скрыть бар
 https://stackoverflow.com/questions/69232738/how-to-hide-bottom-navigation-bar-while-scrolling-down-and-show-it-while-scrolli
@@ -28,26 +34,14 @@ https://m2.material.io/components/bottom-navigation#behavior
  то клиент получает тост что отстутвует интернет и данные взяты из бд
  и если в бд нет данных, то так же об этом сообщить в этом тосте
 
-как это должно работать
-в бд записываются все фильмы с любыми параметрами
-но показывается только то, что выбрано в фильтре
-
-
- - изменить цвет строки состояния
- - исправить убрать нижнее подч
- - изменить пакеты камелкейс
- - сделать экран детали по клику
  - сделать пагинацию
- - сделать ботом шит для выбора дат, рейтинга,
  - установить иконку удаления в главном списке
  - установить функцию удаления элемента из списка по этой иконке
- - тоже самое для экрана детали
- - сделать сортировку рейтингу, алфавиту, году на верху страницы
+
+ - сделать показ только по типу жанра в топ бар
  - сделать навигацию с первым экраном анимации
- - сделать авторизацию с сохранением данных клиента, разлогиниванием
- - сделать отправку фильма как файл по блютуз
  - сделать шимер для списка
- - свайп рефреш акомпанист
+ - свайп рефреш акомпанист ?
 
 
  сортировка https://www.youtube.com/watch?v=dd_Lv7AxqkY
@@ -63,3 +57,10 @@ https://m2.material.io/components/bottom-navigation#behavior
 
  material design
  https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary#outlinedbutton
+
+
+
+
+
+
+

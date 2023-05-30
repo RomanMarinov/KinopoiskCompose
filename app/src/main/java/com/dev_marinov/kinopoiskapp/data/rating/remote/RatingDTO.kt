@@ -9,7 +9,7 @@ data class RatingDTO(
     @SerializedName("await")
     val await: Double,
     @SerializedName("filmCritics")
-    val filmCritics: Int,
+    val filmCritics: Double,
     @SerializedName("imdb")
     val imdb: Double,
     @SerializedName("kp")

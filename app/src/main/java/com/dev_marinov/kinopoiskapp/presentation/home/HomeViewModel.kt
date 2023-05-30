@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dev_marinov.kinopoiskapp.data.movie.local.MovieDao
 import com.dev_marinov.kinopoiskapp.data.video.local.VideosDao
 import com.dev_marinov.kinopoiskapp.domain.model.*
 import com.dev_marinov.kinopoiskapp.domain.repository.*
@@ -13,10 +14,8 @@ import com.dev_marinov.kinopoiskapp.presentation.home.util.CombineFlows
 import com.dev_marinov.kinopoiskapp.presentation.home.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,21 +31,26 @@ class HomeViewModel @Inject constructor(
     private val personsRepository: PersonsRepository,
     private val videosRepository: VideosRepository,
     private val dataStoreRepository: DataStoreRepository,
-    private val videosDao: VideosDao
+    private val videosDao: VideosDao,
+
+    val movieDao: MovieDao
 ) : ViewModel() {
-    //
+
     private val page = 1
     private var previousScrollPosition = 0
 
-    // private val _flagShow: MutableLiveData<Boolean> = MutableLiveData()
-    var isHide: Flow<Boolean?> = dataStoreRepository.getHide
+    private val _isHideTopBar: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    var isHideTopBar: StateFlow<Boolean> = _isHideTopBar
 
-    private val flowMovies: Flow<List<Movie>> = getMovies()
+    private val _isShowBottomSheet: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    var isShowBottomSheet: StateFlow<Boolean> = _isShowBottomSheet
+
+    private var flowMovies: Flow<List<Movie>> = getMovies()
     private val flowMoviesIds: Flow<Set<Int>> =
         flowMovies.map { it.map { movie -> movie.id }.toSet() }
     private val flowPosters: Flow<List<Poster>> = getPosters()
-    private val flowReleaseYears: Flow<List<ReleaseYear>> = getReleaseYears()
-    private val flowRatings: Flow<List<Rating>> = getRatings()
+    private var flowReleaseYears: Flow<List<ReleaseYear>> = getReleaseYears()
+    private var flowRatings: Flow<List<Rating>> = getRatings()
     private val flowVotes: Flow<List<Votes>> = getVotes()
     private val flowGenres: Flow<List<Genres>> = getGenres()
     private val flowPersons: Flow<List<Person>> = getPersons()
@@ -58,44 +62,66 @@ class HomeViewModel @Inject constructor(
 ////    //    Items which we should show on screen
 ////    val movieItems: Flow<List<MovieItem>> = getItems()
 
+    private var _selectChipIndex: MutableStateFlow<Int> = MutableStateFlow(0)
+    val selectChipIndex: StateFlow<Int> = _selectChipIndex
+    private var _selectGenres: MutableStateFlow<String> = MutableStateFlow("")
+    val selectGenres: StateFlow<String> = _selectGenres
+
+    private val sortParamsChipSelection: MutableStateFlow<SortingParamsChipSelection> =
+        MutableStateFlow(SortingParamsChipSelection.RATING)
+
     init {
-       // getData()
+        initViewAction()
+
+        //  getData()
         viewModelScope.launch(Dispatchers.IO) {
-            topBottomBarHide(false)
+            topBottomBarHide(false) // показать бар навигации
+        }
+//        viewModelScope.launch(Dispatchers.IO) {
+//            movieRepository.getMoviesMethod()
+//        }
+    }
+
+    private fun initViewAction() {
+        val genre = "movie"
+        sortMoviesGenresSelection(genresSelection = genre)
+        getCountGenreTypeForBottomSheet(typeGenre = genre)
+        getCountGenreTypeForBottomNavigationBar(typeGenre = genre)
+    }
+
+    fun saveScroll(currentScrollPosition: MutableState<Int>) {
+        if (currentScrollPosition.value > previousScrollPosition) {
+            _isHideTopBar.value = true
+            previousScrollPosition = currentScrollPosition.value
+        } else {
+            _isHideTopBar.value = false
+            previousScrollPosition = currentScrollPosition.value
         }
     }
 
-//    private fun getV() : Flow<List<Videos>> {
-//        return videosRepository.videos
-//    }
-
-    suspend fun saveScroll(currentScrollPosition: MutableState<Int>) {
-        val isHide: Boolean = previousScrollPosition < currentScrollPosition.value
-        previousScrollPosition = currentScrollPosition.value
-        dataStoreRepository.saveScroll(Constants.SCROLL_DOWN_KEY, isHide)
+    suspend fun topBottomBarHide(isHide: Boolean?) {
+        isHide?.let {
+            dataStoreRepository.saveScroll(Constants.SCROLL_DOWN_KEY, isHide = isHide)
+        }
     }
 
-    suspend fun topBottomBarHide(isHide: Boolean) {
-        dataStoreRepository.saveScroll(Constants.SCROLL_DOWN_KEY, isHide = isHide)
-    }
-
-//    suspend fun getScroll() : Flow<Boolean> {
-//        return dataStoreRepository.getScroll(Constants.SCROLL_DOWN_KEY)
-//    }
-
-//    fun scrollPosition(currentScrollPosition: MutableState<Int>) {
-//        _flagShow.value = previousScrollPosition >= currentScrollPosition.value
-//        previousScrollPosition = currentScrollPosition.value
-//    }
 
     //    /**
 //     * When we click on [Movie], we delete it from database.
 //     * This should cause the removal of elements associated with this movie: [Rating], [ReleaseYear], [Poster] and [Votes].
 //     * Removal is launched through a [DeleteMovieUseCase]
 //     */
-    fun onMovieClickedHideBar(isHide: Boolean) {
+    fun onMovieClickedHideNavigationBar(isHide: Boolean) {
         viewModelScope.launch {
             topBottomBarHide(isHide = isHide)
+        }
+    }
+
+    fun onClickedShowBottomSheet() {
+        viewModelScope.launch {
+            dataStoreRepository.saveClickedFilter(Constants.SHOW_BOTTOM_SHEET_KEY, true)
+            delay(1000L)
+            dataStoreRepository.saveClickedFilter(Constants.SHOW_BOTTOM_SHEET_KEY, false)
         }
     }
 
@@ -110,26 +136,12 @@ class HomeViewModel @Inject constructor(
     private fun getData() {
         viewModelScope.launch {
             updateMoviesUseCase.invoke(
-                UpdateMoviesUseCase.UpdateMoviesParams("", "")
+                UpdateMoviesUseCase.UpdateMoviesParams("", "", "")
 //              UpdateMoviesUseCase.UpdateMoviesParams(page.toString(), "20")
             )
         }
     }
 
-    //
-////    TODO: maybe delete or edit
-////    private fun getData() {
-////        viewModelScope.launch(Dispatchers.IO) {
-////            val response = movieRepository.updateMovies("7-10", "2017-2020", "2", "1", "-1")
-////            Log.d("4444", " ListViewModel response=" + response)
-////
-////
-//////            response?.let {
-//////                _viewState.value = it
-//////            }
-////        }
-////    }
-//
     private fun getMovies(): Flow<List<Movie>> = movieRepository.movies.map { movies ->
         movies.filter { movie ->
             movie.page == page
@@ -184,7 +196,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-     fun getVideos(): Flow<List<Videos>> {
+    private fun getVideos(): Flow<List<Videos>> {
         return videosRepository.videos.combine(flowMoviesIds) { videos, ids ->
             videos.filter {
                 it.movieId in ids
@@ -192,7 +204,57 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    var movie = CombineFlows.combine(
+    fun sortMoviesChipSelection(selectChipIndex: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _selectChipIndex.value = selectChipIndex
+            if (selectChipIndex == 0) {
+                sortParamsChipSelection.update { SortingParamsChipSelection.RATING }
+            }
+            if (selectChipIndex == 1) {
+                sortParamsChipSelection.update { SortingParamsChipSelection.YEAR }
+            }
+            if (selectChipIndex == 2) {
+                sortParamsChipSelection.update { SortingParamsChipSelection.NAME }
+            }
+        }
+    }
+
+    fun sortMoviesGenresSelection(genresSelection: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _selectGenres.value = genresSelection
+            movieRepository.sortByGenres(genre = genresSelection.lowercase())
+        }
+    }
+
+    fun getCountGenreTypeForBottomSheet(typeGenre: String) {
+        saveClickedGenreType(typeGenre)
+        viewModelScope.launch(Dispatchers.IO) {
+            val res = movieRepository.hasGenreDataForBottomSheet(selectGenres = typeGenre)
+            res.collect {
+                Log.d("4444", " getCountType res=" + it)
+                if (it == 0) {
+                    onClickedShowBottomSheet()
+                }
+            }
+        }
+    }
+
+    fun getCountGenreTypeForBottomNavigationBar(typeGenre: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            movieRepository.hasGenreDataForBottomNavigationBar(selectGenres = typeGenre)
+        }
+    }
+
+    private fun saveClickedGenreType(typeGenre: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            dataStoreRepository.saveGenreType(
+                Constants.CLICKED_GENRE_TYPE_KEY,
+                typeGenre = typeGenre
+            )
+        }
+    }
+
+    val movie = CombineFlows.combine(
         flowMovies,
         flowReleaseYears,
         flowPosters,
@@ -200,12 +262,13 @@ class HomeViewModel @Inject constructor(
         flowVotes,
         flowPersons,
         flowGenres,
-        flowVideos
-    ) { listMovies, listYears, listPosters, listRatings, listVotes, listPersons, listGenres, listVideos ->
-        listMovies.map { movie ->
+        flowVideos,
+        sortParamsChipSelection
+    ) { listMovies, listReleaseYears, listPosters, listRatings, listVotes, listPersons, listGenres, listVideos, sortParams ->
+        val movies = listMovies.map { movie ->
             MovieItem(
                 movie = movie,
-                releaseYears = listYears.filter {
+                releaseYears = listReleaseYears.filter {
                     it.movieId == movie.id
                 },
                 poster = listPosters.firstOrNull {
@@ -227,6 +290,21 @@ class HomeViewModel @Inject constructor(
                     it.movieId == movie.id
                 }
             )
+        }
+        when (sortParams) {
+            SortingParamsChipSelection.RATING -> movies.sortedBy { it.rating?.kp }
+            SortingParamsChipSelection.YEAR -> movies.sortedBy { it.movie.year }
+            SortingParamsChipSelection.NAME -> movies.sortedBy { it.movie.name }
+        }
+
+        // не получаю данные для all из за того что нет такого типа all
+    }.map {
+        it.filter { movieItem ->
+            if (_selectGenres.value.lowercase() == "all") {
+                movieItem.movie == movieItem.movie // выбрать все фильмы
+            } else {
+                movieItem.movie.type == _selectGenres.value.lowercase() // выбрать по genre
+            }
         }
     }
 
@@ -266,4 +344,8 @@ class HomeViewModel @Inject constructor(
 //////        }
 //////    }
 //
+}
+
+enum class SortingParamsChipSelection {
+    RATING, YEAR, NAME
 }

@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">KinopoiskApp</string>
+    <string name="notificationYears">Start year cannot be greater than end year</string>
+    <string name="notificationRatings">Start rating cannot be greater than end rating</string>
+    <string-array name="genresBottomSheet">
+        <item>Movie</item>
+        <item>TV-Series</item>
+        <item>Cartoon</item>
+        <item>Anime</item>
+        <item>Animated-Series</item>
+    </string-array>
+    <string-array name="genresTopBar">
+        <item>All</item>
+        <item>Movie</item>
+        <item>TV-Series</item>
+        <item>Cartoon</item>
+        <item>Anime</item>
+        <item>Animated-Series</item>
+    </string-array>
 </resources>

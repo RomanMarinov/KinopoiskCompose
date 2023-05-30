@@ -17,4 +17,9 @@ class RatingRepositoryImpl @Inject constructor(private val localDataSource: Rati
         return localDataSource.getRatingsForDetail(movieId)?.mapToDomain()
     }
 
+//    override val sortingRating: Flow<List<Rating>> = localDataSource.sortingASCKp().map {
+//        it.map { ratingEntity -> ratingEntity.mapToDomain() }
+//    }
+
+
 }

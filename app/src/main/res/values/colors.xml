@@ -8,4 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="color1">#8D7D9DFF</color>
+    <color name="color2">#8DFFFD65</color>
+
+    <color name="superLightGrey">#8DDDDDDD</color>
+
+    <color name="customTransparent">#11CC0A0A</color>
+    <color name="bottomSheetTransparent">#6B816C6C</color>
+
 </resources>

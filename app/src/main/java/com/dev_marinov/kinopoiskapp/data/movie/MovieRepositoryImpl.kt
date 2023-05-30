@@ -4,13 +4,12 @@ import android.util.Log
 import com.dev_marinov.kinopoiskapp.data.movie.local.MovieDao
 import com.dev_marinov.kinopoiskapp.data.movie.local.MovieEntity
 import com.dev_marinov.kinopoiskapp.data.movie.remote.ApiService
-import com.dev_marinov.kinopoiskapp.data.video.remote.VideosDTO
-import com.dev_marinov.kinopoiskapp.domain.model.Genre
 import com.dev_marinov.kinopoiskapp.domain.model.Movie
-import com.dev_marinov.kinopoiskapp.domain.model.Videos
 import com.dev_marinov.kinopoiskapp.domain.repository.MovieRepository
 import com.dev_marinov.kinopoiskapp.domain.repository.RepositoryCoordinator
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -22,33 +21,123 @@ class MovieRepositoryImpl @Inject constructor(
     val repositoryCoordinator: RepositoryCoordinator
 ) : MovieRepository {
 
-    override val movies: Flow<List<Movie>> = localDataSource.getAllFlow().map {
-        it.map { entity ->
-            entity.mapToDomain()
+    ///////////////
+    override val countSelectGenre: MutableStateFlow<Int> = MutableStateFlow(0)
+
+    val filteredMoviesFlow: MutableStateFlow<List<Movie>> = MutableStateFlow(emptyList())
+
+    // проверить возможно комбайн не нужен и не нужен movies
+    override var movies: Flow<List<Movie>> = localDataSource.getAllFlow()
+        .map { entityList ->
+            entityList.map { entity ->
+                (entity).mapToDomain() // явное приведение к типу MovieEntity
+            }
         }
-    }
+        .combine(filteredMoviesFlow) { allMovies, filteredMovies ->
+            if (filteredMovies.isEmpty()) {
+                allMovies
+            } else {
+                filteredMovies
+            }
+        }
+    ////////////////
+
+    private val _movies: MutableStateFlow<List<Movie>> = MutableStateFlow(emptyList())
+    // override var movies: Flow<List<Movie>> = _movies
+
+//    override var movies: Flow<List<Movie>> = localDataSource.getAllFlow().map {
+//        it.map { entity ->
+//            entity.mapToDomain()
+//        }
+//    }
+
+//    override suspend fun getMoviesMethod() {
+//        localDataSource.getAllFlow().collect { entityList ->
+//            val movieList = entityList.map { it.mapToDomain() }
+//            _movies.value = movieList
+//        }
+//    }
 
     override val countMovies: Flow<Int> = localDataSource.getRowCount()
 
+//    override suspend fun sortByGenres(genre: String) {
+//        movies = localDataSource.sortingGenre(genre = genre).map {
+//            it.map { movieEntity ->
+//                movieEntity.mapToDomain()
+//            }
+//        }
+//    }
+
+    override suspend fun sortByGenres(genre: String) {
+        Log.d("4444", " MovieRepositoryImpl sortByGenres genre=" + genre.uppercase())
+        if (genre == "all") { //  проверить возожно не работает
+            localDataSource.getAllFlow().collect { entityList ->
+                Log.d("4444", " MovieRepositoryImpl sortByGenres entityList=" + entityList)
+                val movieList = entityList.map { it.mapToDomain() }
+                filteredMoviesFlow.value = movieList
+            }
+        } else {
+            localDataSource.sortingGenre(genre = genre).collect { entityList ->
+                val movieList = entityList.map { it.mapToDomain() }
+                filteredMoviesFlow.value = movieList
+            }
+        }
+    }
+
+    override suspend fun hasGenreDataForBottomSheet(selectGenres: String): Flow<Int> {
+       return if (selectGenres.lowercase() == "all") {
+           localDataSource.getRowCount()
+        } else {
+           localDataSource.hasGenreData(selectGenres = selectGenres)
+        }
+    }
+
+    override suspend fun hasGenreDataForBottomNavigationBar(selectGenres: String) {
+        if (selectGenres.lowercase() == "all") {
+            localDataSource.getRowCount().collect {
+                countSelectGenre.value = it
+            }
+        } else {
+            localDataSource.hasGenreData(selectGenres = selectGenres).collect {
+                countSelectGenre.value = it
+            }
+        }
+    }
+
     //    TODO: uncomment search params
     override suspend fun updateMovies(
-        searchRating: String,
+        //searchRating: String,
         searchDate: String,
-        searchTypeNumber: String,
-        sortTypeDate: String,
-        sortTypRating: String,
-        page: String,
-        limit: String,
+        searchRating: String,
+        searchType: String,
+//        sortTypRating: String,
+//        page: String,
+//        limit: String,
+
+
     ) {
-        // Log.d("4444", " MovieRepositoryImplNew response")
+        //Log.d("4444", " MovieRepositoryImplNew updateMovies search_date=" + search_date + " searchRating=" + searchRating + " search_type=" + search_type)
+
 
         // если данных по сети нет
-        val response = remoteDataSource.getData().body() ?: return // TODO: uncomment this line
-
+        val response = remoteDataSource.getData(
+            selectFields = listOf(
+                "poster", "rating", "genres", "externalId", "movieLength",
+                "persons", "videos.trailers", "votes", "id", "type", "description", "year",
+                "releaseYears", "name"
+            ),
+            type = searchType,
+            field = listOf("rating.kp", "year"),
+//            search = listOf("6-10", "2017-2020"),
+            search = listOf(searchRating, searchDate),
+            videosTrailers = "!null",
+            page = 1,
+            limit = 20
+        ).body() ?: return // TODO: uncomment this line
 
         val movieDtos = response.movies //  uncomment this line
         // val movieDtos = getData() //  delete this line
-        //Log.d("4444", " MovieRepositoryImplNew movieDtos=" + movieDtos)
+        Log.d("4444", " MovieRepositoryImplNew movieDtos=" + movieDtos)
         movieDtos.forEach { dto ->
 
             try {
@@ -69,12 +158,12 @@ class MovieRepositoryImpl @Inject constructor(
                     it.mapToDomain(movieId = movie.id)
                 }
 
-               // val videos = dto.videos.trailers.map { it.mapToDomain(movieId = movie.id) }
+                // val videos = dto.videos.trailers.map { it.mapToDomain(movieId = movie.id) }
                 val videos = dto.videos.mapToDomain(movieId = movie.id)
 
 
-               // val videos = dto.videos.mapToDomain(movieId = movie.id)
-              //  Log.d("4444", " MovieRepositoryImplNew videos=" + videos)
+                // val videos = dto.videos.mapToDomain(movieId = movie.id)
+                //  Log.d("4444", " MovieRepositoryImplNew videos=" + videos)
 
                 repositoryCoordinator.saveData(
                     movie,
@@ -104,4 +193,12 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun deleteMovie(movieNew: Movie) {
         localDataSource.delete(MovieEntity.mapFromDomain(movieNew))
     }
+
+//    override val sortingYear: Flow<List<Movie>> = localDataSource.sortingASCYear().map {
+//        it.map { movieEntity -> movieEntity.mapToDomain() }
+//    }
+
+//    override val sortingName: Flow<List<Movie>> = localDataSource.sortingASCName().map {
+//        it.map { movieEntity -> movieEntity.mapToDomain() }
+//    }
 }

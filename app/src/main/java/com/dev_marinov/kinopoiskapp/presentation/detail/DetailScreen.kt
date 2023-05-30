@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -38,7 +39,6 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.dev_marinov.kinopoiskapp.R
 import com.dev_marinov.kinopoiskapp.domain.model.Genres
-import com.dev_marinov.kinopoiskapp.domain.model.Person
 import com.dev_marinov.kinopoiskapp.presentation.detail.model.MovieItemDetail
 import com.dev_marinov.kinopoiskapp.presentation.home.util.Screen
 
@@ -59,13 +59,17 @@ fun SetViews(
     movieItemDetail: MovieItemDetail?,
     navController: NavController
 ) {
+
+
     var imageHeight by remember {
         mutableStateOf(0)
     }
     val heightPoster = with(LocalDensity.current) { imageHeight.toDp() }
 
-    /////////
     val listState = rememberLazyListState()
+
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenLayout.dp
     var imageSize by remember {
         mutableStateOf(600.dp)
     }
@@ -101,41 +105,34 @@ fun SetViews(
         //.padding(horizontal = 30.dp)
     ) {
         // поле для центрирования текста
+
+        Log.d("4444", " detail movieItemDetail?.poster?.url=" + movieItemDetail?.poster?.url)
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.Yellow)
-            //.clip(RoundedCornerShape(8.dp))
         ) {
             AsyncImage(
-
                 modifier = Modifier
-                    //.fillMaxWidth()
+                    .statusBarsPadding()
+                    .systemBarsPadding()
                     .onSizeChanged { size ->
                         imageHeight = size.height
                     }
                     .size(size),
-
-//                contentScale = ContentScale.Crop,
-
                 model = movieItemDetail?.poster?.url,
                 contentDescription = "Movie poster",
                 placeholder = painterResource(id = R.drawable.id_poster_placehoolder),
-
-                )
+            )
         }
     }
 
-
-    //val scrollState = rememberScrollState()
     LazyColumn(
         state = listState,
         modifier = Modifier
+            .statusBarsPadding()
+            .systemBarsPadding()
             .fillMaxSize()
-
-        //.verticalScroll(scrollState)
-//            .background(Color.White),
-        //contentPadding = PaddingValues(16.dp)
     ) {
         item {
             DescriptionBlock(
@@ -155,9 +152,7 @@ fun DescriptionBlock(
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-
-
-        ) {
+    ) {
         movieItemDetail?.let { movieItemDetail ->
             Box(
                 modifier = Modifier
@@ -174,7 +169,6 @@ fun DescriptionBlock(
                     .background(Color.White)
                     .padding(start = 4.dp, end = 4.dp)
             ) {
-
                 movieItemDetail.movie.name?.let {
                     Box(
                         modifier = Modifier.fillMaxSize()
@@ -223,21 +217,19 @@ fun DescriptionBlock(
                 Spacer(modifier = Modifier.height(4.dp))
                 val genres: String = getToString(movieItemDetail.genres)
 
-                // Row(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = "жанр: ",
                     fontFamily = FontFamily(Font(R.font.robotoserif_28pt_black)),
                     fontSize = 16.sp
                 )
-//                        modifier = Modifier.alignByBaseline())
+
                 Text(
                     text = genres,
                     fontFamily = FontFamily(Font(R.font.opensans_lightltalic)),
                     fontSize = 20.sp,
                     style = TextStyle(fontWeight = Bold)
                 )
-                //      modifier = Modifier.alignByBaseline())
-                //}
+
                 Spacer(modifier = Modifier.height(4.dp))
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Text(
@@ -416,7 +408,8 @@ fun DescriptionBlock(
                                 navController.navigate(
                                     Screen.PlayVideoScreen.withArgs(
                                         movieItemDetail.movie.id
-                                    ))
+                                    )
+                                )
                             })
                     )
 

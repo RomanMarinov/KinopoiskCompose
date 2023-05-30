@@ -24,7 +24,6 @@ class VideosRepositoryImpl @Inject constructor(private val videosDao: VideosDao)
 
     override val videos: Flow<List<Videos>> = videosDao.getAllFlow().map {
 
-        Log.d("4444", " VideosRepositoryImpl it" + it)
         it.map { videosEntity ->
             videosEntity.mapToDomain()
 

@@ -28,7 +28,7 @@ class NetworkModule {
     @Singleton
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient, gson: Gson): Retrofit {
-        val baseUrl = "https://api.kinopoisk.dev/"
+        val baseUrl = "http://api.kinopoisk.dev/"
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(okHttpClient)

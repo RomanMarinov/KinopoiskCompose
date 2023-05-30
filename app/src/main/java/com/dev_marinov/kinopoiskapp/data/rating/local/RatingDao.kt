@@ -12,4 +12,7 @@ interface RatingDao {
 
     @Query("SELECT * FROM ratings WHERE movie_id = :movie_id")
     fun getRatingsForDetail(movie_id: Int): RatingEntity?
+
+//    @Query("SELECT * FROM ratings ORDER BY kp ASC")
+//    fun sortingASCKp() : Flow<List<RatingEntity>>
 }
