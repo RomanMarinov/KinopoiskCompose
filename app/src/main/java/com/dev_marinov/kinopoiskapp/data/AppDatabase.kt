@@ -3,6 +3,8 @@ package com.dev_marinov.kinopoiskapp.data
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.dev_marinov.kinopoiskapp.data.favorite.FavoriteEntity
+import com.dev_marinov.kinopoiskapp.data.favorite.FavoriteDao
 import com.dev_marinov.kinopoiskapp.data.genres.local.GenresDao
 import com.dev_marinov.kinopoiskapp.data.genres.local.GenresEntity
 import com.dev_marinov.kinopoiskapp.data.movie.local.MovieDao
@@ -31,6 +33,7 @@ import com.dev_marinov.kinopoiskapp.data.votes.local.VotesEntity
         GenresEntity::class,
         PersonsEntity::class,
         VideosEntity::class,
+        FavoriteEntity::class
     ],
     version = 1
 )
@@ -51,4 +54,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun personsDao(): PersonsDao
     abstract fun videosDao(): VideosDao
     abstract fun commonDao(): CoordinatorDao
+    abstract fun favoriteDao(): FavoriteDao
 }

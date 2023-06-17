@@ -7,9 +7,6 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MovieDao {
 
-//    @Query("SELECT * FROM movies WHERE page = :page")
-//    suspend fun getAllByPage(page: String): List<MovieEntity>
-
     @Query("SELECT * FROM movies WHERE id = :id")
     fun getMovieForDetail(id: String?): MovieEntity
 
@@ -37,13 +34,22 @@ interface MovieDao {
     @Query("SELECT * FROM movies WHERE type = :genre")
     fun sortingGenre(genre: String) : Flow<List<MovieEntity>>
 
-
-
-    /////////////////
     @Query("SELECT COUNT(*) FROM movies WHERE type = :selectGenres")
-
-
     fun hasGenreData(selectGenres: String): Flow<Int>
-//    @Query("SELECT COUNT(*) FROM movies WHERE type = 'movie'")
-//    fun hasMovieData(): Flow<Int>
+
+    @Query("DELETE FROM movies")
+    fun clearAllMovies()
+
+    @Query("SELECT COUNT(id) FROM movies")
+    fun getCountStatAll(): Flow<Int>
+    @Query("SELECT COUNT(*) FROM movies WHERE type = :selectGenres")
+    fun getCountStatMovie(selectGenres: String): Flow<Int>
+    @Query("SELECT COUNT(*) FROM movies WHERE type = :selectGenres")
+    fun getCountStatTvSeries(selectGenres: String): Flow<Int>
+    @Query("SELECT COUNT(*) FROM movies WHERE type = :selectGenres")
+    fun getCountStatCartoon(selectGenres: String): Flow<Int>
+    @Query("SELECT COUNT(*) FROM movies WHERE type = :selectGenres")
+    fun getCountStatAnime(selectGenres: String): Flow<Int>
+    @Query("SELECT COUNT(*) FROM movies WHERE type = :selectGenres")
+    fun getCountStatAnimatedSeries(selectGenres: String): Flow<Int>
 }

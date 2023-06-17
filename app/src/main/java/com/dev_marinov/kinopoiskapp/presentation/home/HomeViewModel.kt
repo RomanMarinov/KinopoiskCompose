@@ -2,16 +2,20 @@ package com.dev_marinov.kinopoiskapp.presentation.home
 
 import android.util.Log
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dev_marinov.kinopoiskapp.ConnectivityObserver
 import com.dev_marinov.kinopoiskapp.data.movie.local.MovieDao
-import com.dev_marinov.kinopoiskapp.data.video.local.VideosDao
 import com.dev_marinov.kinopoiskapp.domain.model.*
 import com.dev_marinov.kinopoiskapp.domain.repository.*
 import com.dev_marinov.kinopoiskapp.domain.usecase.UpdateMoviesUseCase
 import com.dev_marinov.kinopoiskapp.presentation.home.model.MovieItem
 import com.dev_marinov.kinopoiskapp.presentation.home.util.CombineFlows
 import com.dev_marinov.kinopoiskapp.presentation.home.util.Constants
+import com.dev_marinov.kinopoiskapp.presentation.model.PagingParams
+import com.dev_marinov.kinopoiskapp.presentation.model.SelectableFavoriteMovie
+import com.dev_marinov.kinopoiskapp.presentation.util.SortingParamsChipSelection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -31,19 +35,23 @@ class HomeViewModel @Inject constructor(
     private val personsRepository: PersonsRepository,
     private val videosRepository: VideosRepository,
     private val dataStoreRepository: DataStoreRepository,
-    private val videosDao: VideosDao,
-
-    val movieDao: MovieDao
+    private val favoriteRepository: FavoriteRepository,
+    val movieDao: MovieDao,
+    connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
 
-    private val page = 1
+    val connectivity = connectivityObserver.observe()
+
+    val isPlayingLottie: Flow<Boolean> = movieRepository.isPlayingLottie
+
+    val getGradientColorApp: Flow<List<Color>> = dataStoreRepository.getGradientColorApp
+    private val getGradientColorIndexApp: Flow<Int> = dataStoreRepository.getGradientColorIndexApp
+
+    var page = 1
     private var previousScrollPosition = 0
 
     private val _isHideTopBar: MutableStateFlow<Boolean> = MutableStateFlow(false)
     var isHideTopBar: StateFlow<Boolean> = _isHideTopBar
-
-    private val _isShowBottomSheet: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    var isShowBottomSheet: StateFlow<Boolean> = _isShowBottomSheet
 
     private var flowMovies: Flow<List<Movie>> = getMovies()
     private val flowMoviesIds: Flow<Set<Int>> =
@@ -56,23 +64,19 @@ class HomeViewModel @Inject constructor(
     private val flowPersons: Flow<List<Person>> = getPersons()
     private val flowVideos: Flow<List<Videos>> = getVideos()
 
-    private var _result: MutableStateFlow<List<Videos>> = MutableStateFlow(emptyList())
-    //val result: Flow<List<Videos>> = getV()
-    ////
-////    //    Items which we should show on screen
-////    val movieItems: Flow<List<MovieItem>> = getItems()
-
     private var _selectChipIndex: MutableStateFlow<Int> = MutableStateFlow(0)
     val selectChipIndex: StateFlow<Int> = _selectChipIndex
     private var _selectGenres: MutableStateFlow<String> = MutableStateFlow("")
-    val selectGenres: StateFlow<String> = _selectGenres
+
+    private var _pagingParams = MutableStateFlow<PagingParams?>(null)
+    val pagingParams: StateFlow<PagingParams?> = _pagingParams
 
     private val sortParamsChipSelection: MutableStateFlow<SortingParamsChipSelection> =
         MutableStateFlow(SortingParamsChipSelection.RATING)
 
     init {
         initViewAction()
-
+        setFirstGradient()
         //  getData()
         viewModelScope.launch(Dispatchers.IO) {
             topBottomBarHide(false) // показать бар навигации
@@ -80,12 +84,37 @@ class HomeViewModel @Inject constructor(
 //        viewModelScope.launch(Dispatchers.IO) {
 //            movieRepository.getMoviesMethod()
 //        }
+        getParams("movie")
+    }
+
+    private fun setFirstGradient() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getGradientColorIndexApp.collect {
+                setGradientColorApp(it)
+            }
+        }
+    }
+
+    private fun setGradientColorApp(selectedBoxIndex: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            dataStoreRepository.setGradientColorApp(selectedBoxIndex = selectedBoxIndex)
+        }
+        saveGradientColorIndexApp(selectedBoxIndex = selectedBoxIndex)
+    }
+
+    private fun saveGradientColorIndexApp(selectedBoxIndex: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            dataStoreRepository.saveGradientColorIndexApp(
+                Constants.CLICKED_GRADIENT_INDEX,
+                selectedBoxIndex
+            )
+        }
     }
 
     private fun initViewAction() {
         val genre = "movie"
         sortMoviesGenresSelection(genresSelection = genre)
-        getCountGenreTypeForBottomSheet(typeGenre = genre)
+        getShowBottomSheet(typeGenre = genre)
         getCountGenreTypeForBottomNavigationBar(typeGenre = genre)
     }
 
@@ -125,18 +154,19 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-//    // потом для удаления пользовать или для лайка
-//    fun onMovieClicked(movieItem: MovieItem) {
-//        viewModelScope.launch {
-//            //deleteMovieUseCase(DeleteMovieUseCase.DeleteMovieParams(movieItem.movie))
-//        }
-//    }
-//
-
-    private fun getData() {
+    fun getData(pagingParams: PagingParams) {
+        Log.d("4444", " HomeViewModel getData выполнился новый запрос + 20")
         viewModelScope.launch {
+            val fromToYears = pagingParams.yearPickerFrom.plus("-").plus(pagingParams.yearPickerTo)
+            val fromToRatings =
+                pagingParams.ratingPickerFrom.plus("-").plus(pagingParams.ratingPickerTo)
             updateMoviesUseCase.invoke(
-                UpdateMoviesUseCase.UpdateMoviesParams("", "", "")
+                UpdateMoviesUseCase.UpdateMoviesParams(
+                    fromToYears = fromToYears,
+                    fromToRatings = fromToRatings,
+                    genre = pagingParams.genre.lowercase(),
+                    page = pagingParams.page
+                )
 //              UpdateMoviesUseCase.UpdateMoviesParams(page.toString(), "20")
             )
         }
@@ -223,17 +253,21 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _selectGenres.value = genresSelection
             movieRepository.sortByGenres(genre = genresSelection.lowercase())
+
+           // getParams(selectGenres = genresSelection) // пока не нужно
         }
     }
 
-    fun getCountGenreTypeForBottomSheet(typeGenre: String) {
+    private var flagTempClosure = true
+    fun getShowBottomSheet(typeGenre: String) {
+        flagTempClosure = true
         saveClickedGenreType(typeGenre)
         viewModelScope.launch(Dispatchers.IO) {
-            val res = movieRepository.hasGenreDataForBottomSheet(selectGenres = typeGenre)
+            val res: Flow<Int> = movieRepository.hasGenreDataForBottomSheet(selectGenres = typeGenre)
             res.collect {
-                Log.d("4444", " getCountType res=" + it)
-                if (it == 0) {
+                if (it == 0 && flagTempClosure) {
                     onClickedShowBottomSheet()
+                    flagTempClosure = false
                 }
             }
         }
@@ -254,6 +288,8 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    val favoriteMovies: Flow<List<SelectableFavoriteMovie>> =
+        favoriteRepository.favoriteMoviesForHome
     val movie = CombineFlows.combine(
         flowMovies,
         flowReleaseYears,
@@ -309,6 +345,22 @@ class HomeViewModel @Inject constructor(
     }
 
 
+    val newFavoriteMovies: Flow<List<SelectableFavoriteMovie>> =
+        combine(movie, favoriteMovies) { movie, favoriteMovies ->
+            movie.map {
+                SelectableFavoriteMovie(
+                    movie = it,
+                    isFavorite = favoriteMovies.contains(
+                        SelectableFavoriteMovie(
+                            movie = it,
+                            isFavorite = it.isFavorite
+                        )
+                    )
+                )
+            }
+        }
+
+
 //
 //
 ////    /**
@@ -344,8 +396,31 @@ class HomeViewModel @Inject constructor(
 //////        }
 //////    }
 //
-}
 
-enum class SortingParamsChipSelection {
-    RATING, YEAR, NAME
+
+    fun isPlayingLottie(isPlaying: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            movieRepository.playingLottieAnimation(isPlaying = isPlaying)
+        }
+    }
+
+    fun onClickFavorite(movie: SelectableFavoriteMovie) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            Log.d("4444", " movie=" + movie)
+            if (movie.isFavorite) {
+                favoriteRepository.saveFavoriteMovie(movie = movie)
+            } else {
+                favoriteRepository.deleteFavoriteMovie(movie = movie)
+            }
+        }
+    }
+
+    fun getParams(genresSelection: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val pagingParams = dataStoreRepository.getPagingParams(key = genresSelection)
+            Log.d("4444", " getParams pagingParams=" + pagingParams)
+            _pagingParams.value = pagingParams
+        }
+    }
 }

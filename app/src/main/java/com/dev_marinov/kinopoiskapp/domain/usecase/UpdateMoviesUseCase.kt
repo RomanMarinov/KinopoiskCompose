@@ -11,14 +11,15 @@ class UpdateMoviesUseCase @Inject constructor(
 
 
     override suspend fun execute(parameters: UpdateMoviesParams) {
-        movieRepository.updateMovies(parameters.fromToYears, parameters.fromToRatings, parameters.genre)
+        movieRepository.updateMovies(parameters.fromToYears, parameters.fromToRatings, parameters.genre, parameters.page)
 //        movieRepository.updateMovies(parameters.page, parameters.limit)
     }
 
     class UpdateMoviesParams(
         val fromToYears: String,
         val fromToRatings: String,
-        val genre: String
+        val genre: String,
+        val page: Int
     )
 
     // было до передачи параметров из боттом щит

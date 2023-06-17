@@ -9,7 +9,6 @@ interface GenresDao {
     @Query("SELECT * FROM genres")
     fun getAllFlow(): Flow<List<GenresEntity>>
 
-    // my fun
     @Query("SELECT * FROM genres WHERE movie_id = :movie_id")
     fun getGenresForDetail(movie_id: Int): List<GenresEntity>
 }

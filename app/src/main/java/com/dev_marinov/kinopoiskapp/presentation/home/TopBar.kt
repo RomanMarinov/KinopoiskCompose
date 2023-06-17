@@ -25,20 +25,15 @@ import com.dev_marinov.kinopoiskapp.R
 @Composable
 fun TopBar(
     isHide: Boolean?,
-    //isVisibleBottomSheet: Boolean,
     viewModel: HomeViewModel
 ) {
-    val movies by viewModel.movie.collectAsState(listOf())
-   // val hasData by viewModel.hasData.collectAsState(initial = 1)
-   // val hasDataForSelectedType by viewModel.hasDataForSelectedType.observeAsState()
-
 
     val context = LocalContext.current
 
     val list = remember {
         context.resources.getStringArray(R.array.genresTopBar)
     }
-    // Конвертация массива в список
+
     val listGenres = remember { list.toList() }
     var selectedGenre by remember { mutableStateOf(listGenres[1]) }
 
@@ -84,6 +79,7 @@ fun ChipSection(
         mutableStateOf(0)
     }
     viewModel.sortMoviesChipSelection(selectedChipIndex)
+
     // ленивая строка которая прокручивается и загружает составные элементы которые поместим в нее
     LazyRow {
         items(chips.size) { // кол-во элементов которое соответсвует размеру списка
@@ -162,6 +158,7 @@ fun GenresSection(
 
     var genresSelection by remember { mutableStateOf("") }
 
+    //viewModel.getParams(genresSelection = genresSelection)
     LazyRow(
         modifier = modifier.padding(start = 4.dp),
        // contentPadding = PaddingValues(horizontal = 50.dp, vertical = 1.dp)
@@ -177,7 +174,7 @@ fun GenresSection(
                             onGenreSelected(item)
                             genresSelection = item
                             viewModel.sortMoviesGenresSelection(item)
-                            viewModel.getCountGenreTypeForBottomSheet(item.lowercase())
+                            viewModel.getShowBottomSheet(item.lowercase())
                             viewModel.getCountGenreTypeForBottomNavigationBar(item.lowercase())
                         }
                         .background(

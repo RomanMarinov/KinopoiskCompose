@@ -4,40 +4,47 @@ package com.dev_marinov.kinopoiskapp.presentation.home
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.airbnb.lottie.LottieComposition
+import com.airbnb.lottie.compose.*
+import com.dev_marinov.kinopoiskapp.ConnectivityObserver
 import com.dev_marinov.kinopoiskapp.R
-import com.dev_marinov.kinopoiskapp.presentation.home.model.MovieItem
 import com.dev_marinov.kinopoiskapp.presentation.home.util.Screen
+import com.dev_marinov.kinopoiskapp.presentation.model.PagingParams
+import com.dev_marinov.kinopoiskapp.presentation.model.SelectableFavoriteMovie
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 
@@ -45,27 +52,31 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     navController: NavController,
-    isOnHome: Boolean,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val coroutineScope = rememberCoroutineScope()
+
+    val connectivity by viewModel.connectivity.collectAsStateWithLifecycle(initialValue = ConnectivityObserver.Status.UnAvailable)
+
+
     val currentScrollPosition = remember {
         mutableStateOf(0)
     }
-    val movie by viewModel.movie.collectAsState(listOf())
+
     val isHideTopBar by viewModel.isHideTopBar.collectAsStateWithLifecycle(initialValue = true)
     val selectChipIndex by viewModel.selectChipIndex.collectAsStateWithLifecycle()
-    val selectGenres by viewModel.selectGenres.collectAsStateWithLifecycle()
-    //val isShowBottomSheet by viewModel.isShowBottomSheet.collectAsStateWithLifecycle(false)
+    val isPlayingLottie by viewModel.isPlayingLottie.collectAsState(initial = false)
+    val gradientColorApp by viewModel.getGradientColorApp.collectAsState(listOf())
+    val getPagingParams by viewModel.pagingParams.collectAsStateWithLifecycle()
 
-    Log.d("4444", " movie=" + movie)
-////////////
-//    val uploadData by viewModel.uploadData.observeAsState()
-//    if (uploadData == 0) {
-//        viewModel.onClickedShowBottomSheet()
-//    }
-//
-        ///////////
+    val movies by viewModel.newFavoriteMovies.collectAsStateWithLifecycle(initialValue = listOf())
+
+    if (isPlayingLottie && movies.isEmpty()) {
+        LottieExample(isPlaying = true)
+    } else {
+        LottieExample(isPlaying = false)
+        viewModel.isPlayingLottie(isPlaying = false)
+    }
 
     LaunchedEffect(Unit) {
         coroutineScope.launch(Dispatchers.IO) {
@@ -82,98 +93,130 @@ fun HomeScreen(
         }
     }
 
-    val color1 = ContextCompat.getColor(LocalContext.current, R.color.color1)
-    val color2 = ContextCompat.getColor(LocalContext.current, R.color.color2)
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color(color1),
-                        Color(color2)
-                    ),
-                    startY = 0f,
-                    endY = Float.POSITIVE_INFINITY
-                )
-            )
-    ) {
-        Column(
+    if (gradientColorApp.isNotEmpty()) {
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
-                .background(Color.Transparent)
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = gradientColorApp,
+                        startY = 0f,
+                        endY = Float.POSITIVE_INFINITY
+                    )
+                )
         ) {
-            TopBar(
-                isHide = isHideTopBar,
-               // isVisibleBottomSheet = isVisibleBottomSheet,
-                viewModel = viewModel
-            )
-            Movies(
-                movie,
-                viewModel,
-                navController,
-                nestedScrollConnection,
-                currentScrollPosition,
-                selectChipIndex,
-                selectGenres
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .statusBarsPadding()
+                    .background(Color.Transparent)
+            ) {
+
+                TopBar(
+                    isHide = isHideTopBar,
+                    // isVisibleBottomSheet = isVisibleBottomSheet,
+                    viewModel = viewModel
+                )
+                Movies(
+                    movies,
+                    viewModel,
+                    navController,
+                    nestedScrollConnection,
+                    currentScrollPosition,
+                    selectChipIndex,
+                    getPagingParams
+                )
+            }
+            InternetStatus(connectivity = connectivity)
         }
     }
 }
 
 @Composable
 fun Movies(
-    movieItems: List<MovieItem>,
+    movieItems: List<SelectableFavoriteMovie>,
     viewModel: HomeViewModel,
     navController: NavController,
     nestedScrollConnection: NestedScrollConnection,
     currentScrollPosition: MutableState<Int>,
     selectChipIndex: Int,
-    selectGenres: String
+    pagingParams: PagingParams?,
 ) {
 
-    if (movieItems.isNotEmpty()) {
-//        if (movieItems[0].movie.type == selectGenres.lowercase()) {
-//            Log.d("4444", " movieItems=" + movieItems)
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                LazyVerticalGrid(
-                    content = {
-                        itemsIndexed(movieItems) { index, item ->
-                            MovieItem(
-                                item,
-                                viewModel::onMovieClickedHideNavigationBar,
-                                navController,
-                                selectChipIndex,
-                                viewModel
-                            )
-                            currentScrollPosition.value = index
-                        }
-                    },
-                    columns = GridCells.Adaptive(150.dp),
-                    //contentPadding = PaddingValues((10.dp)),
-                    //verticalArrangement = Arrangement.spacedBy(10.dp)
-                    modifier = Modifier
-                        .padding(start = 4.dp, end = 4.dp)
-                        .nestedScroll(nestedScrollConnection),
-                    // verticalArrangement = Arrangement.spacedBy(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(5.dp)
-                )
+
+    var num = 15
+
+    val moviesSize = remember { mutableStateOf(0) }
+    val gridState = rememberLazyGridState()
+    val lastVisibleIndexState = remember { mutableStateOf<Int?>(null) }
+
+    if (num == lastVisibleIndexState.value) { // lastVisibleIndexState должен срабатывать на 15 -> 35 -> 55 -> 75 -> 95
+        Log.d("4444", " HomeScreen num=" + num)
+        num += 20
+        // новый запрос + 20 элементов
+        // здесь я должен получать объект с параметрами по типу genre в котором делаю скролл
+//        viewModel.getParams(selectGenres = selectGenres)
+        Log.d("4444", " HomeScreen pagingParams=" + pagingParams)
+        pagingParams?.let {
+            Log.d("4444", " HomeScreen getPagingParams not NULL")
+            //viewModel.page = it.page + 1
+            viewModel.getData(pagingParams = it)
+        }
+    }
+
+    LaunchedEffect(gridState) { // LaunchedEffect перезаупскается когда меняется значение gridState
+        snapshotFlow { gridState.layoutInfo.visibleItemsInfo } // получает информацию о видимых элементах из gridState
+            .distinctUntilChanged() // фильтрует поток данных, чтобы обрабатывать только уникальные последовательности значений.
+            .collectLatest { visibleItems -> // сбор данных из потока
+                val lastVisibleIndex = visibleItems.lastOrNull()?.index
+                if (lastVisibleIndex != lastVisibleIndexState.value) {
+                    lastVisibleIndexState.value = lastVisibleIndex
+                    //   Log.d("4444", "lastVisibleIndex = $lastVisibleIndex")
+                }
             }
-        //}
+    }
+
+    if (movieItems.isNotEmpty()) {
+        moviesSize.value = movieItems.size
+
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            LazyVerticalGrid(
+                content = {
+                    itemsIndexed(movieItems) { index, item ->
+                        MovieItem(
+                            item,
+                            viewModel::onMovieClickedHideNavigationBar,
+                            navController,
+                            selectChipIndex,
+                            viewModel
+                        )
+                        currentScrollPosition.value = index
+                    }
+                },
+                columns = GridCells.Adaptive(150.dp),
+                //contentPadding = PaddingValues((10.dp)),
+                //verticalArrangement = Arrangement.spacedBy(10.dp)
+                modifier = Modifier
+                    .padding(start = 4.dp, end = 4.dp)
+                    .nestedScroll(nestedScrollConnection),
+                // verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(5.dp),
+                state = gridState,
+            )
+        }
     }
 }
 
 @Composable
 fun MovieItem(
-    movieItem: MovieItem,
+    movieItem: SelectableFavoriteMovie,
     onMovieClickedHideBar: (Boolean) -> Unit, /*clickListener for item*/
     navController: NavController,
     selectChipIndex: Int,
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel,
 ) {
     Card(
         modifier = Modifier
@@ -182,7 +225,7 @@ fun MovieItem(
             .clip(RoundedCornerShape(10.dp))
             .clickable {
                 onMovieClickedHideBar.invoke(true)
-                navController.navigate(Screen.DetailScreen.withArgs(movieItem.movie.id))
+                navController.navigate(Screen.DetailScreen.withArgs(movieItem.movie.movie.id))
             }
     ) {
         Box(
@@ -199,11 +242,61 @@ fun MovieItem(
                 AsyncImage(
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize(),
-                    model = movieItem.poster?.previewUrl,
+                    model = movieItem.movie.poster?.previewUrl,
                     contentDescription = "Movie poster",
                     alignment = Alignment.Center,
                     placeholder = painterResource(id = R.drawable.id_poster_placehoolder),
                 )
+
+                ////////////
+                Box(
+                    modifier = Modifier
+                        .offset(x = (150).dp)
+                        .size(40.dp)
+                        .clip(RoundedCornerShape(30))
+                        .background(Color.Transparent)
+                        .clickable {
+                            if (movieItem.isFavorite) {
+                                viewModel.onClickFavorite(
+                                    SelectableFavoriteMovie(
+                                        movie = movieItem.movie,
+                                        isFavorite = false
+                                    )
+                                )
+                            } else {
+                                viewModel.onClickFavorite(
+                                    SelectableFavoriteMovie(
+                                        movie = movieItem.movie,
+                                        isFavorite = true
+                                    )
+                                )
+                            }
+                        },
+                    contentAlignment = Alignment.TopEnd,
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(30))
+                            .size(50.dp)
+                            .background(
+                                colorResource(id = R.color.backgroundFavorite),
+                                shape = RoundedCornerShape(8.dp)
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Image(
+                            modifier = Modifier.size(34.dp),
+                            //painter = painterResource(id = R.drawable.ic_star_off),
+                            painter = painterResource(
+                                if (movieItem.isFavorite) R.drawable.ic_star_on
+                                else R.drawable.ic_star_off
+                            ),
+                            contentDescription = "Icon star"
+                        )
+                    }
+                }
+                /////////////////////
+
             }
             Box(
                 modifier = Modifier
@@ -227,7 +320,7 @@ fun MovieItem(
             ) {
                 if (selectChipIndex == 0) {
                     Text(
-                        text = movieItem.rating?.kp.toString().substring(0, 3),
+                        text = movieItem.movie.rating?.kp.toString().substring(0, 3),
                         style = TextStyle(
                             color = Color.Yellow, fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
@@ -235,7 +328,7 @@ fun MovieItem(
                     )
                 } else {
                     Text(
-                        text = movieItem.rating?.kp.toString().substring(0, 3),
+                        text = movieItem.movie.rating?.kp.toString().substring(0, 3),
                         style = TextStyle(color = Color.White, fontSize = 16.sp)
                     )
                 }
@@ -249,13 +342,13 @@ fun MovieItem(
             ) {
                 if (selectChipIndex == 1) {
                     Text(
-                        text = movieItem.movie.year.toString(),
+                        text = movieItem.movie.movie.year.toString(),
                         style = TextStyle(color = Color.Yellow, fontSize = 16.sp),
                         fontWeight = FontWeight.Bold
                     )
                 } else {
                     Text(
-                        text = movieItem.movie.year.toString(),
+                        text = movieItem.movie.movie.year.toString(),
                         style = TextStyle(color = Color.White, fontSize = 16.sp)
                     )
                 }
@@ -267,7 +360,7 @@ fun MovieItem(
                     .padding(10.dp),
                 contentAlignment = Alignment.BottomStart
             ) {
-                movieItem.movie.name?.let {
+                movieItem.movie.movie.name?.let {
                     var movieName = ""
                     val indexMax = it.length
                     if (indexMax >= 16) {
@@ -292,6 +385,97 @@ fun MovieItem(
                         )
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun LottieExample(isPlaying: Boolean) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.progress_lottie_animation))
+
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        iterations = LottieConstants.IterateForever, // бесконечно
+        isPlaying = isPlaying, // пауза/воспроизведение
+        speed = 2.0f,
+        restartOnPlay = false // передать false, чтобы продолжить анимацию на котором он был приостановлен
+    )
+
+    if (isPlaying) {
+        IsLottieAnimationVisibility(
+            composition = composition,
+            progress = progress,
+            visibility = 1.0f
+        )
+    } else {
+        IsLottieAnimationVisibility(
+            composition = composition,
+            progress = progress,
+            visibility = 0.0f
+        )
+    }
+}
+
+@Composable
+fun IsLottieAnimationVisibility(
+    composition: LottieComposition?,
+    progress: Float,
+    visibility: Float
+) {
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        LottieAnimation(
+            composition = composition,
+            progress = progress,
+            modifier = Modifier
+                .size(100.dp)
+                .alpha(visibility)
+        )
+    }
+
+}
+
+@Composable
+fun InternetStatus(
+    connectivity: ConnectivityObserver.Status) {
+    when (connectivity) {
+        ConnectivityObserver.Status.UnAvailable -> {
+            StartSnackBar("internet connection unavailable")
+        }
+        ConnectivityObserver.Status.Available -> {
+           // StartSnackBar("internet connection available")
+        }
+        ConnectivityObserver.Status.Losing -> {
+            StartSnackBar("internet connection losing")
+        }
+        ConnectivityObserver.Status.Lost -> {
+            StartSnackBar("internet connection lost")
+        }
+    }
+}
+
+@Composable
+fun StartSnackBar(status: String) {
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Column(
+            modifier = Modifier
+                .padding(bottom = 16.dp)
+                .fillMaxWidth()
+                .align(Alignment.BottomEnd),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+
+            Snackbar(
+                modifier = Modifier.fillMaxWidth(),
+                action = { /* Handle action */ }
+            ) {
+                Text(text = status)
             }
         }
     }

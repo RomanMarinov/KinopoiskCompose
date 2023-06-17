@@ -10,5 +10,6 @@ data class MovieItem(
     val votes: Votes?,
     val genres: List<Genres>,
     val persons: List<Person>,
-    val videos: Videos?
+    val videos: Videos?,
+    val isFavorite: Boolean = true
 )

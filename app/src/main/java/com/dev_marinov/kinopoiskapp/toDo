@@ -1,14 +1,7 @@
-
-CollapsingToolbar для уменьшения размеров бара при прокрутке, возможно поможет
-
-0. переместить dao в repos
-
-
-3. i need create favorite icon and make realization for it
-4. i need create pagination for scroll for chossed item genre
-
-5.1. i need create for setting delete all movie
-5.2. i need create choose three gradient color for app
+1. доделать пагинацию
+остановился на передаче индекса загрузки
+надо еще сохранять текущий page для каждого текущего genre
+учитывая фильтр потока в homeViewModel
 
 6. modules
 7. test case

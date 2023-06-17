@@ -23,7 +23,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -68,8 +67,6 @@ fun SetViews(
 
     val listState = rememberLazyListState()
 
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenLayout.dp
     var imageSize by remember {
         mutableStateOf(600.dp)
     }
@@ -427,7 +424,7 @@ fun DescriptionBlock(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "в ролях: ",
+                    text = "актеры, режиссеры, съемочная группа: ",
                     fontFamily = FontFamily(Font(R.font.robotoserif_28pt_black)),
                     fontSize = 16.sp
                 )

@@ -18,11 +18,21 @@ import javax.inject.Singleton
 class MovieRepositoryImpl @Inject constructor(
     private val remoteDataSource: ApiService,
     private val localDataSource: MovieDao,
-    val repositoryCoordinator: RepositoryCoordinator
+    val repositoryCoordinator: RepositoryCoordinator,
+
 ) : MovieRepository {
 
-    ///////////////
+
+
+    override val countStatAll: Flow<Int> = localDataSource.getCountStatAll()
+    override val countStatMovies: Flow<Int> = localDataSource.getCountStatMovie("movie")
+    override val countStatTvSeries: Flow<Int> = localDataSource.getCountStatTvSeries("tv-series")
+    override val countStatCartoon: Flow<Int> = localDataSource.getCountStatCartoon("cartoon")
+    override val countStatAnime: Flow<Int> = localDataSource.getCountStatAnime("anime")
+    override val countStatAnimatedSeries: Flow<Int> = localDataSource.getCountStatAnimatedSeries("animated-series")
+
     override val countSelectGenre: MutableStateFlow<Int> = MutableStateFlow(0)
+    override val isPlayingLottie: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     val filteredMoviesFlow: MutableStateFlow<List<Movie>> = MutableStateFlow(emptyList())
 
@@ -40,39 +50,12 @@ class MovieRepositoryImpl @Inject constructor(
                 filteredMovies
             }
         }
-    ////////////////
-
-    private val _movies: MutableStateFlow<List<Movie>> = MutableStateFlow(emptyList())
-    // override var movies: Flow<List<Movie>> = _movies
-
-//    override var movies: Flow<List<Movie>> = localDataSource.getAllFlow().map {
-//        it.map { entity ->
-//            entity.mapToDomain()
-//        }
-//    }
-
-//    override suspend fun getMoviesMethod() {
-//        localDataSource.getAllFlow().collect { entityList ->
-//            val movieList = entityList.map { it.mapToDomain() }
-//            _movies.value = movieList
-//        }
-//    }
 
     override val countMovies: Flow<Int> = localDataSource.getRowCount()
 
-//    override suspend fun sortByGenres(genre: String) {
-//        movies = localDataSource.sortingGenre(genre = genre).map {
-//            it.map { movieEntity ->
-//                movieEntity.mapToDomain()
-//            }
-//        }
-//    }
-
     override suspend fun sortByGenres(genre: String) {
-        Log.d("4444", " MovieRepositoryImpl sortByGenres genre=" + genre.uppercase())
-        if (genre == "all") { //  проверить возожно не работает
+        if (genre == "all") {
             localDataSource.getAllFlow().collect { entityList ->
-                Log.d("4444", " MovieRepositoryImpl sortByGenres entityList=" + entityList)
                 val movieList = entityList.map { it.mapToDomain() }
                 filteredMoviesFlow.value = movieList
             }
@@ -85,10 +68,10 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun hasGenreDataForBottomSheet(selectGenres: String): Flow<Int> {
-       return if (selectGenres.lowercase() == "all") {
-           localDataSource.getRowCount()
+        return if (selectGenres.lowercase() == "all") {
+            localDataSource.getRowCount()
         } else {
-           localDataSource.hasGenreData(selectGenres = selectGenres)
+            localDataSource.hasGenreData(selectGenres = selectGenres)
         }
     }
 
@@ -104,19 +87,35 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun clearAllMovies() {
+        localDataSource.clearAllMovies()
+    }
+
+    override suspend fun playingLottieAnimation(isPlaying: Boolean) {
+        isPlayingLottie.value = isPlaying
+    }
+
     //    TODO: uncomment search params
     override suspend fun updateMovies(
         //searchRating: String,
         searchDate: String,
         searchRating: String,
         searchType: String,
+        page: Int,
 //        sortTypRating: String,
 //        page: String,
 //        limit: String,
 
 
     ) {
-        //Log.d("4444", " MovieRepositoryImplNew updateMovies search_date=" + search_date + " searchRating=" + searchRating + " search_type=" + search_type)
+        Log.d("4444", " MovieRepositoryImplNew updateMovies search_date=" + searchDate
+                + " searchRating=" + searchRating + " searchType=" + searchType + " page=" + page)
+
+
+        // тут сохранить в дата стор
+
+
+
 
 
         // если данных по сети нет
@@ -128,10 +127,9 @@ class MovieRepositoryImpl @Inject constructor(
             ),
             type = searchType,
             field = listOf("rating.kp", "year"),
-//            search = listOf("6-10", "2017-2020"),
             search = listOf(searchRating, searchDate),
             videosTrailers = "!null",
-            page = 1,
+            page = page,
             limit = 20
         ).body() ?: return // TODO: uncomment this line
 
