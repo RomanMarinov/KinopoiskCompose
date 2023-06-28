@@ -149,15 +149,18 @@ class MainViewModel @Inject constructor(
         indexLoad: Int
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            dataStoreRepository.savePagingParams(key = genre.lowercase(), pagingParams = PagingParams(
-                yearPickerFrom = yearPickerFrom.toString(),
-                yearPickerTo = yearPickerTo.toString(),
-                ratingPickerFrom = ratingPickerFrom.toString(),
-                ratingPickerTo = ratingPickerTo.toString(),
-                genre = genre,
-                page = page,
-                indexLoad = indexLoad
-            ))
+            dataStoreRepository.savePagingParams(
+                key = genre.lowercase(),
+                pagingParams = PagingParams(
+                    yearPickerFrom = yearPickerFrom.toString(),
+                    yearPickerTo = yearPickerTo.toString(),
+                    ratingPickerFrom = ratingPickerFrom.toString(),
+                    ratingPickerTo = ratingPickerTo.toString(),
+                    genre = genre,
+                    page = page,
+                    indexLoad = indexLoad
+                )
+            )
         }
     }
 

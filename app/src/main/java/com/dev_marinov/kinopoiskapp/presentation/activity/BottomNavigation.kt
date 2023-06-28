@@ -41,7 +41,6 @@ import com.dev_marinov.kinopoiskapp.presentation.play_video.PlayVideoScreen
 import com.dev_marinov.kinopoiskapp.presentation.settings.SettingsScreen
 import kotlinx.coroutines.launch
 
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BottomNavigation(viewModel: MainViewModel = hiltViewModel()) {
@@ -57,7 +56,8 @@ fun BottomNavigation(viewModel: MainViewModel = hiltViewModel()) {
 
     val currentRoute by viewModel.currentRoute.collectAsStateWithLifecycle(initialValue = "")
 
-    val modalSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden,
+    val modalSheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
         confirmValueChange = { it != ModalBottomSheetValue.HalfExpanded }
     )
 
@@ -263,7 +263,7 @@ fun BottomNavigation(viewModel: MainViewModel = hiltViewModel()) {
                                         genre = clickedTypeGenre,
                                         page = 1,
                                         indexLoad = 15
-                                        )
+                                    )
                                     coroutineScope.launch { modalSheetState.hide() }
                                 },
                                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
@@ -414,7 +414,7 @@ fun BottomNavigationBar(
 fun NavigationGraph(navHostController: NavHostController) {
     NavHost(navController = navHostController, startDestination = "home") {
         composable(route = Screen.HomeScreen.route) {
-           // val isOnHome = navHostController.currentBackStackEntryAsState().value?.destination?.route == "home"
+            // val isOnHome = navHostController.currentBackStackEntryAsState().value?.destination?.route == "home"
             HomeScreen(navController = navHostController)
         }
         composable(
@@ -459,4 +459,3 @@ fun NavigationGraph(navHostController: NavHostController) {
         composable(route = Screen.SettingsScreen.route) { SettingsScreen() }
     }
 }
-

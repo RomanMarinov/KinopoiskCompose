@@ -1,6 +1,5 @@
 package com.dev_marinov.kinopoiskapp.presentation.favorite
 
-
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -21,8 +20,8 @@ class FavoriteScreenViewModel @Inject constructor(
     private val favoriteRepository: FavoriteRepository,
     private val dataStoreRepository: DataStoreRepository,
     connectivityObserver: ConnectivityObserver
-)
-: ViewModel() {
+) :
+    ViewModel() {
 
     val connectivity = connectivityObserver.observe()
 

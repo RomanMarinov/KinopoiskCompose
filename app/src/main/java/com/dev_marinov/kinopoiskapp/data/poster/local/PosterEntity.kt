@@ -15,7 +15,7 @@ import com.dev_marinov.kinopoiskapp.domain.model.Poster
             parentColumns = ["id"], // связь род таб с табл постер по айди (в муви айди и постер айди)
             childColumns = ["movie_id"], //
             onDelete = ForeignKey.CASCADE // когда удаляем фильм, то удаляем и постер
-        // если я сам удалю фильм и все елементы тоже удаляться
+            // если я сам удалю фильм и все елементы тоже удаляться
         )
     ]
 )
@@ -29,7 +29,7 @@ data class PosterEntity(
     val movieId: Int
 ) {
     companion object {
- // когда доменную модель надо перенести в энтити
+        // когда доменную модель надо перенести в энтити
         fun mapFromDomain(poster: Poster): PosterEntity = PosterEntity(
             id = poster.id,
             previewUrl = poster.previewUrl,

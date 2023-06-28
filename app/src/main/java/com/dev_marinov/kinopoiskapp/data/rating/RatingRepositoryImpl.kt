@@ -20,6 +20,4 @@ class RatingRepositoryImpl @Inject constructor(private val localDataSource: Rati
 //    override val sortingRating: Flow<List<Rating>> = localDataSource.sortingASCKp().map {
 //        it.map { ratingEntity -> ratingEntity.mapToDomain() }
 //    }
-
-
 }

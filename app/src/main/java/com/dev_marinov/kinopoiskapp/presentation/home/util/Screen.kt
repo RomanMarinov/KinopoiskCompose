@@ -12,7 +12,7 @@ sealed class Screen(val route: String) {
     object SettingsScreen : Screen("settings")
 
     // функция будет работать только с обязательными аргументами
-    fun withArgs(vararg args: Int?) : String {
+    fun withArgs(vararg args: Int?): String {
         // возвращаем блок построителя строки
         return buildString {
             append(route) // хотим добавлять всегда общий маршрут экрана
@@ -21,7 +21,7 @@ sealed class Screen(val route: String) {
             }
         }
     }
-    fun withArgsUrlTrailer(vararg args: String) : String {
+    fun withArgsUrlTrailer(vararg args: String): String {
         // возвращаем маршрут с аргументом
         return "$route/${args.joinToString("/")}"
     }

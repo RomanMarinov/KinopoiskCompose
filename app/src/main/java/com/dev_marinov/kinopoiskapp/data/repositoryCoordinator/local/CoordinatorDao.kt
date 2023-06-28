@@ -13,7 +13,6 @@ import com.dev_marinov.kinopoiskapp.data.releaseYear.local.ReleaseYearEntity
 import com.dev_marinov.kinopoiskapp.data.video.local.VideosEntity
 import com.dev_marinov.kinopoiskapp.data.votes.local.VotesEntity
 
-
 @Dao
 interface CoordinatorDao {
     // если я делал несколько операций  и одна не прошла, то все остальные откататься
@@ -79,6 +78,4 @@ interface CoordinatorDao {
 //
 //    @Insert(onConflict = OnConflictStrategy.IGNORE)
 //    suspend fun insert(videosEntity: VideosEntity): Long
-
-
 }

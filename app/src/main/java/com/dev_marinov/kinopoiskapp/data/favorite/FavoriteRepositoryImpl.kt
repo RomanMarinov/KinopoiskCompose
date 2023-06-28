@@ -1,6 +1,5 @@
 package com.dev_marinov.kinopoiskapp.data.favorite
 
-
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.asFlow
@@ -32,7 +31,6 @@ class FavoriteRepositoryImpl @Inject constructor(private val favoriteDao: Favori
 
     override val favoriteMoviesForDetail: LiveData<List<SelectableFavoriteMovie>>
         get() = _favoriteMovies
-
 
     override val countFavorite: Flow<Int> = favoriteDao.getCountFavorite()
 

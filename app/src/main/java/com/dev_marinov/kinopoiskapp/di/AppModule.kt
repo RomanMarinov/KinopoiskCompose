@@ -16,5 +16,3 @@ object AppModule {
         return NetworkConnectivityObserver(application)
     }
 }
-
-

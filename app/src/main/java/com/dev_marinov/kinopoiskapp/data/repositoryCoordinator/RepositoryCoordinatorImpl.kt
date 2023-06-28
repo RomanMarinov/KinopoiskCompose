@@ -1,6 +1,5 @@
 package com.dev_marinov.kinopoiskapp.data.repositoryCoordinator
 
-import android.util.Log
 import com.dev_marinov.kinopoiskapp.data.genres.local.GenresEntity
 import com.dev_marinov.kinopoiskapp.data.movie.local.MovieEntity
 import com.dev_marinov.kinopoiskapp.data.persons.local.PersonsEntity

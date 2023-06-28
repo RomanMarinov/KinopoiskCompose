@@ -45,7 +45,6 @@ import com.dev_marinov.kinopoiskapp.domain.model.Genres
 import com.dev_marinov.kinopoiskapp.presentation.detail.model.MovieItemDetail
 import com.dev_marinov.kinopoiskapp.presentation.home.util.Screen
 
-
 @Composable
 fun DetailScreen(
     movieId: String?,
@@ -206,7 +205,7 @@ fun DescriptionBlock(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .size(40.dp)
-                                //.clip(CircleShape)
+                                // .clip(CircleShape)
                                 .background(color = Color.White)
                         )
                     }
@@ -458,8 +457,7 @@ fun DescriptionBlock(
                                 .padding(0.dp)
                                 .width(150.dp),
                             elevation = 6.dp
-                        )
-                        {
+                        ) {
                             Column(
                                 modifier = Modifier.fillMaxSize(),
                                 horizontalAlignment = Alignment.CenterHorizontally

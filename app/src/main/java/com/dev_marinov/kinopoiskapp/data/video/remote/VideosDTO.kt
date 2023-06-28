@@ -7,7 +7,7 @@ data class VideosDTO(
     @SerializedName("trailers")
     val trailers: List<TrailerDTO>
 ) {
-    fun mapToDomain(movieId: Int) : Videos {
+    fun mapToDomain(movieId: Int): Videos {
         return Videos(
             trailers = trailers.map { it.mapToDomain(movieId = movieId) },
             movieId = movieId

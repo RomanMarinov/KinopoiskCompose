@@ -74,5 +74,4 @@ class DBModule {
             AppDatabase.NAME
         ).fallbackToDestructiveMigration().build()
     }
-
 }

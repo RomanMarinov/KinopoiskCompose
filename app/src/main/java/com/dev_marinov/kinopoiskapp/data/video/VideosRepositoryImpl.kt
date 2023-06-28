@@ -16,7 +16,6 @@ class VideosRepositoryImpl @Inject constructor(private val videosDao: VideosDao)
 
         it.map { videosEntity ->
             videosEntity.mapToDomain()
-
         }
     }
 

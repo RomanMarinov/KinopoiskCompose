@@ -172,5 +172,4 @@ class DataConvertersForList {
         val type: Type = object : TypeToken<List<Trailer?>?>() {}.type
         return gson.fromJson<List<Trailer>>(trailer, type)
     }
-
 }

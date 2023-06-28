@@ -1,6 +1,5 @@
 package com.dev_marinov.kinopoiskapp.di
 
-
 import com.dev_marinov.kinopoiskapp.data.favorite.FavoriteRepositoryImpl
 import com.dev_marinov.kinopoiskapp.data.genres.GenresRepositoryImpl
 import com.dev_marinov.kinopoiskapp.data.movie.MovieRepositoryImpl
@@ -55,7 +54,7 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindFavoriteRepository(favoriteRepositoryImpl: FavoriteRepositoryImpl) : FavoriteRepository
+    abstract fun bindFavoriteRepository(favoriteRepositoryImpl: FavoriteRepositoryImpl): FavoriteRepository
 
     @Binds
     @Singleton

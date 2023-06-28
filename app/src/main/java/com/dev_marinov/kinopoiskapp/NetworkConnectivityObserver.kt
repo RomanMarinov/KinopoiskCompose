@@ -11,12 +11,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @Singleton
 class NetworkConnectivityObserver @Inject constructor(context: Context) : ConnectivityObserver {
 
     private val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
 
     // если сворачиваем или переходим на другой экран то перестает налюдать за статусами подключения
     // и будет объявлено о закрытии awaitClose и отменяем регистрацию по сети

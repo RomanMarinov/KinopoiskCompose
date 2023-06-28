@@ -1,11 +1,10 @@
 package com.dev_marinov.kinopoiskapp.data.movie.remote
 
 import com.dev_marinov.kinopoiskapp.data.genres.remote.GenreDTO
-import com.dev_marinov.kinopoiskapp.data.persons.remote.PersonDTO
+import com.dev_marinov.kinopoiskapp.data.persons.remote.PersonsDTO
 import com.dev_marinov.kinopoiskapp.data.poster.remote.PosterDTO
 import com.dev_marinov.kinopoiskapp.data.rating.remote.RatingDTO
 import com.dev_marinov.kinopoiskapp.data.releaseYear.remote.ReleaseYearDTO
-import com.dev_marinov.kinopoiskapp.data.video.remote.TrailerDTO
 import com.dev_marinov.kinopoiskapp.data.video.remote.VideosDTO
 import com.dev_marinov.kinopoiskapp.data.votes.remote.VotesDTO
 import com.dev_marinov.kinopoiskapp.domain.model.*
@@ -34,9 +33,9 @@ data class MovieDTO(
     @SerializedName("poster")
     val poster: PosterDTO?,
     @SerializedName("genres")
-    val genres: List<GenreDTO>?, //только GenreDTO
+    val genres: List<GenreDTO>?, // только GenreDTO
     @SerializedName("persons")
-    val persons: List<PersonDTO>?,
+    val persons: List<PersonsDTO>?,
 //    @SerializedName("videos")
 //    val videos: List<TrailerDTO>?,
     @SerializedName("videos")

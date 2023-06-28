@@ -5,7 +5,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-abstract class UseCase<in P, R>(private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO) {
+abstract class UseCase<in P, R>(
+    private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
+) {
     // р параметр
     // r возращаемый рез (в моем слу список)
     private val TAG = "UseCase"
@@ -34,5 +36,4 @@ abstract class UseCase<in P, R>(private val coroutineDispatcher: CoroutineDispat
      */
     @Throws(RuntimeException::class)
     protected abstract suspend fun execute(parameters: P): R
-
 }

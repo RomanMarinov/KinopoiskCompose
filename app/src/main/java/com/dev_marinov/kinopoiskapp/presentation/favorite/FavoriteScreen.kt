@@ -37,7 +37,6 @@ import com.dev_marinov.kinopoiskapp.presentation.model.SelectableFavoriteMovie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun FavoriteScreen(
     viewModel: FavoriteScreenViewModel = hiltViewModel(),
@@ -102,7 +101,6 @@ fun FavoriteScreen(
     }
 }
 
-
 @Composable
 fun FavoriteMovies(
     movieItems: List<SelectableFavoriteMovie>,
@@ -110,7 +108,7 @@ fun FavoriteMovies(
     navController: NavController,
 //    nestedScrollConnection: NestedScrollConnection,
 //    currentScrollPosition: MutableState<Int>,
- //   selectChipIndex: Int,
+    //   selectChipIndex: Int,
 //    selectGenres: String
 ) {
 
@@ -126,23 +124,22 @@ fun FavoriteMovies(
                             item,
                             viewModel::onMovieClickedHideNavigationBar,
                             navController,
-     //                       selectChipIndex,
+                            //                       selectChipIndex,
                             viewModel
                         )
                         //  currentScrollPosition.value = index
                     }
                 },
                 columns = GridCells.Adaptive(150.dp),
-                //contentPadding = PaddingValues((10.dp)),
-                //verticalArrangement = Arrangement.spacedBy(10.dp)
+                // contentPadding = PaddingValues((10.dp)),
+                // verticalArrangement = Arrangement.spacedBy(10.dp)
                 modifier = Modifier
-                    .padding(start = 4.dp, end = 4.dp)
+                    .padding(start = 4.dp, end = 4.dp),
                 // .nestedScroll(nestedScrollConnection),
-                ,
                 horizontalArrangement = Arrangement.spacedBy(5.dp)
             )
         }
-        //}
+        // }
     }
 }
 
@@ -151,7 +148,7 @@ fun FavoriteMovieItem(
     movieItem: SelectableFavoriteMovie,
     onMovieClickedHideBar: (Boolean) -> Unit, /*clickListener for item*/
     navController: NavController,
-   // selectChipIndex: Int,
+    // selectChipIndex: Int,
     viewModel: FavoriteScreenViewModel
 ) {
     Card(
@@ -160,7 +157,7 @@ fun FavoriteMovieItem(
             .padding(bottom = 5.dp)
             .clip(RoundedCornerShape(10.dp))
             .clickable {
-                 onMovieClickedHideBar.invoke(true)
+                onMovieClickedHideBar.invoke(true)
                 navController.navigate(Screen.DetailScreen.withArgs(movieItem.movie.movie.id))
             }
     ) {
@@ -184,7 +181,7 @@ fun FavoriteMovieItem(
                     placeholder = painterResource(id = R.drawable.id_poster_placehoolder),
                 )
 
-                ////////////
+                // //////////
                 Box(
                     modifier = Modifier
                         .offset(x = (150).dp)
@@ -192,7 +189,6 @@ fun FavoriteMovieItem(
                         .clip(RoundedCornerShape(30))
                         .background(Color.Transparent)
                         .clickable {
-
 
                             viewModel.onClickFavorite(
                                 SelectableFavoriteMovie(
@@ -203,7 +199,7 @@ fun FavoriteMovieItem(
                         },
                     contentAlignment = Alignment.TopEnd,
 
-                    ) {
+                ) {
                     Box(
                         modifier = Modifier
                             .clip(RoundedCornerShape(30))
@@ -224,8 +220,7 @@ fun FavoriteMovieItem(
                         )
                     }
                 }
-                /////////////////////
-
+                // ///////////////////
             }
             Box(
                 modifier = Modifier
@@ -256,11 +251,11 @@ fun FavoriteMovieItem(
 //                        )
 //                    )
 //                } else {
-                    Text(
-                        text = movieItem.movie.rating?.kp.toString().substring(0, 3),
-                        style = TextStyle(color = Color.White, fontSize = 16.sp)
-                    )
-            //    }
+                Text(
+                    text = movieItem.movie.rating?.kp.toString().substring(0, 3),
+                    style = TextStyle(color = Color.White, fontSize = 16.sp)
+                )
+                //    }
             }
 
             Box( // year
@@ -276,11 +271,11 @@ fun FavoriteMovieItem(
 //                        fontWeight = FontWeight.Bold
 //                    )
 //                } else {
-                    Text(
-                        text = movieItem.movie.movie.year.toString(),
-                        style = TextStyle(color = Color.White, fontSize = 16.sp)
-                    )
-               // }
+                Text(
+                    text = movieItem.movie.movie.year.toString(),
+                    style = TextStyle(color = Color.White, fontSize = 16.sp)
+                )
+                // }
             }
 
             Box( // name
@@ -308,11 +303,11 @@ fun FavoriteMovieItem(
 //                            )
 //                        )
 //                    } else {
-                        Text(
-                            text = movieName,
-                            style = TextStyle(color = Color.White, fontSize = 16.sp)
-                        )
-                   // }
+                    Text(
+                        text = movieName,
+                        style = TextStyle(color = Color.White, fontSize = 16.sp)
+                    )
+                    // }
                 }
             }
         }

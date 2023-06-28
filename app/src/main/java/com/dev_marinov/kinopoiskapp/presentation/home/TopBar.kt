@@ -41,10 +41,12 @@ fun TopBar(
     isHide?.let {
         visible = it
     }
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .animateContentSize(animationSpec = tween(durationMillis = 800))
-        .height(height = if (isHide == true) 0.dp else 100.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .animateContentSize(animationSpec = tween(durationMillis = 800))
+            .height(height = if (isHide == true) 0.dp else 100.dp)
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -187,6 +189,5 @@ fun GenresSection(
                 }
             }
         }
-
     }
 }

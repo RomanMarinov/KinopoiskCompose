@@ -47,7 +47,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
-
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun HomeScreen(
@@ -156,7 +155,6 @@ fun SetShimmer() {
     ) {}
 }
 
-
 @Composable
 fun Movies(
     movieItems: List<SelectableFavoriteMovie>,
@@ -179,7 +177,7 @@ fun Movies(
         // здесь я должен получать объект с параметрами по типу genre в котором делаю скролл
 //        viewModel.getParams(selectGenres = selectGenres)
         pagingParams?.let {
-            //viewModel.page = it.page + 1
+            // viewModel.page = it.page + 1
             viewModel.getData(pagingParams = it)
         }
     }
@@ -216,8 +214,8 @@ fun Movies(
                     }
                 },
                 columns = GridCells.Adaptive(150.dp),
-                //contentPadding = PaddingValues((10.dp)),
-                //verticalArrangement = Arrangement.spacedBy(10.dp)
+                // contentPadding = PaddingValues((10.dp)),
+                // verticalArrangement = Arrangement.spacedBy(10.dp)
                 modifier = Modifier
                     .padding(start = 4.dp, end = 4.dp)
                     .nestedScroll(nestedScrollConnection),
@@ -267,7 +265,7 @@ fun MovieItem(
                     placeholder = painterResource(id = R.drawable.id_poster_placehoolder),
                 )
 
-                ////////////
+                // //////////
                 Box(
                     modifier = Modifier
                         .offset(x = (150).dp)
@@ -305,7 +303,7 @@ fun MovieItem(
                     ) {
                         Image(
                             modifier = Modifier.size(34.dp),
-                            //painter = painterResource(id = R.drawable.ic_star_off),
+                            // painter = painterResource(id = R.drawable.ic_star_off),
                             painter = painterResource(
                                 if (movieItem.isFavorite) R.drawable.ic_star_on
                                 else R.drawable.ic_star_off
@@ -314,8 +312,7 @@ fun MovieItem(
                         )
                     }
                 }
-                /////////////////////
-
+                // ///////////////////
             }
             Box(
                 modifier = Modifier

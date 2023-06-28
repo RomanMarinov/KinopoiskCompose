@@ -1,6 +1,5 @@
 package com.dev_marinov.kinopoiskapp.data.video.local
 
-
 import androidx.room.*
 import androidx.room.ForeignKey.Companion.CASCADE
 import com.dev_marinov.kinopoiskapp.data.DataConvertersForList
@@ -22,8 +21,8 @@ import com.dev_marinov.kinopoiskapp.domain.model.Videos
 
 @TypeConverters(DataConvertersForList::class)
 data class VideosEntity(
-   // @PrimaryKey(autoGenerate = false)
-    //val id: Int?,
+    // @PrimaryKey(autoGenerate = false)
+    // val id: Int?,
     val trailers: List<Trailer>?,
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "movie_id")
@@ -32,7 +31,7 @@ data class VideosEntity(
     companion object {
         fun mapFromDomain(videos: Videos): VideosEntity {
             return VideosEntity(
-                //id = videos.id,
+                // id = videos.id,
                 trailers = videos.trailers,
                 movieId = videos.movieId
             )
@@ -41,7 +40,7 @@ data class VideosEntity(
 
     fun mapToDomain(): Videos {
         return Videos(
-           // id = id,
+            // id = id,
             trailers = trailers,
             movieId = movieId
         )

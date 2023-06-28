@@ -22,8 +22,6 @@ class MovieRepositoryImpl @Inject constructor(
 
 ) : MovieRepository {
 
-
-
     override val countStatAll: Flow<Int> = localDataSource.getCountStatAll()
     override val countStatMovies: Flow<Int> = localDataSource.getCountStatMovie("movie")
     override val countStatTvSeries: Flow<Int> = localDataSource.getCountStatTvSeries("tv-series")
@@ -97,7 +95,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     //    TODO: uncomment search params
     override suspend fun updateMovies(
-        //searchRating: String,
+        // searchRating: String,
         searchDate: String,
         searchRating: String,
         searchType: String,
@@ -159,7 +157,6 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun getMovie(movieId: String?): Movie {
         return localDataSource.getMovieForDetail(id = movieId).mapToDomain()
     }
-
 
 //    override fun getCountMovies(): Flow<Int> {
 //        return localDataSource.getRowCount()

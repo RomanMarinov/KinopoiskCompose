@@ -3,7 +3,6 @@ package com.dev_marinov.kinopoiskapp.data.movie.local
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
-
 @Dao
 interface MovieDao {
 
@@ -26,13 +25,13 @@ interface MovieDao {
     fun getRowCount(): Flow<Int>
 
     @Query("SELECT * FROM movies ORDER BY year ASC")
-    fun sortingASCYear() : Flow<List<MovieEntity>>
+    fun sortingASCYear(): Flow<List<MovieEntity>>
 
     @Query("SELECT * FROM movies ORDER BY name ASC")
-    fun sortingASCName() : Flow<List<MovieEntity>>
+    fun sortingASCName(): Flow<List<MovieEntity>>
 
     @Query("SELECT * FROM movies WHERE type = :genre")
-    fun sortingGenre(genre: String) : Flow<List<MovieEntity>>
+    fun sortingGenre(genre: String): Flow<List<MovieEntity>>
 
     @Query("SELECT COUNT(*) FROM movies WHERE type = :selectGenres")
     fun hasGenreData(selectGenres: String): Flow<Int>

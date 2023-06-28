@@ -7,5 +7,5 @@ interface PosterRepository {
 
     val posters: Flow<List<Poster>>
 
-    suspend fun getPoster(movieId: Int) : Poster?
+    suspend fun getPoster(movieId: Int): Poster?
 }

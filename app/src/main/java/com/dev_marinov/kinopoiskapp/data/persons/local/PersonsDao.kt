@@ -2,7 +2,6 @@ package com.dev_marinov.kinopoiskapp.data.persons.local
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.dev_marinov.kinopoiskapp.data.poster.local.PosterEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

@@ -19,11 +19,11 @@ interface DataStoreRepository {
     val getGradientColorApp: Flow<List<Color>>
     suspend fun setGradientColorApp(selectedBoxIndex: Int)
 
-    val getGradientColorIndexApp : Flow<Int>
+    val getGradientColorIndexApp: Flow<Int>
     suspend fun saveGradientColorIndexApp(key: String, selectedBoxIndex: Int)
 
 //    val getPagingParams : Flow<PagingParams>
     suspend fun savePagingParams(key: String, pagingParams: PagingParams)
 
-    suspend fun getPagingParams(key: String) : PagingParams?
+    suspend fun getPagingParams(key: String): PagingParams?
 }

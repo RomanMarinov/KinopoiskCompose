@@ -144,7 +144,6 @@ fun BoxList(
                             if (selectedBoxIndex == i) 250.dp else 248.dp
                         )
                 ) {
-
                 }
             }
         }
@@ -257,9 +256,11 @@ fun BoxStatistic(
             )
         }
 
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+        ) {
             Text(
                 text = "favorites - ",
                 fontFamily = FontFamily(Font(R.font.robotoserif_28pt_black)),
@@ -275,8 +276,6 @@ fun BoxStatistic(
             )
         }
     }
-
-
 }
 
 @Composable
@@ -308,9 +307,9 @@ fun BoxButton(
                 .padding(16.dp)
                 .width(200.dp),
             shape = RoundedCornerShape(12.dp),
-            onClick = { showDialog = true
-
-                      },
+            onClick = {
+                showDialog = true
+            },
             colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
         ) {
             Text(
@@ -340,8 +339,6 @@ fun MyDialog(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp)
-
-
                 .clip(RoundedCornerShape(24.dp))
                 .background(Color.White),
             verticalArrangement = Arrangement.Center,

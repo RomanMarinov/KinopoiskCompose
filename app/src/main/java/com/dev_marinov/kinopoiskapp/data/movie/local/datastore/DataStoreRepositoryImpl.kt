@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 private const val PREFERENCES_NAME = "FLAG"
 private val Context.dataStore by preferencesDataStore(name = PREFERENCES_NAME)
 
@@ -39,7 +38,8 @@ class DataStoreRepositoryImpl @Inject constructor(private val context: Context) 
         listOf(
             gradientColors1.map { color -> Color(color) }, // преобразование списка Int в список Color
             gradientColors2.map { color -> Color(color) },
-            gradientColors3.map { color -> Color(color) })
+            gradientColors3.map { color -> Color(color) }
+        )
     )
 
     override val getGradientColorApp: MutableStateFlow<List<Color>> = MutableStateFlow(emptyList())

@@ -23,7 +23,7 @@ import com.dev_marinov.kinopoiskapp.domain.model.Person
 data class PersonsEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val photo : String,
+    val photo: String,
     val person: String?,
     @ColumnInfo(name = "movie_id")
     val movieId: Int,

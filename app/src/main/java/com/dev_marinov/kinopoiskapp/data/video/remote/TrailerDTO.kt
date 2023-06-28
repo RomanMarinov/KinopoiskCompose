@@ -4,8 +4,8 @@ import com.dev_marinov.kinopoiskapp.domain.model.Trailer
 import com.google.gson.annotations.SerializedName
 
 data class TrailerDTO(
-   // @SerializedName("_id")
-    //val id: Int,
+    // @SerializedName("_id")
+    // val id: Int,
     @SerializedName("url")
     val url: String,
     @SerializedName("name")
@@ -23,15 +23,14 @@ data class TrailerDTO(
     }
 }
 
-
-//data class TrailerDTO(
+// data class TrailerDTO(
 //    val url: String,
 //    val name: String
-//) {
+// ) {
 //    fun mapToDomain(): Trailer {
 //        return Trailer(
 //            url = url,
 //            name = name
 //        )
 //    }
-//}
+// }

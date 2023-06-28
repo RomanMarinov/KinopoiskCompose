@@ -157,7 +157,7 @@ object CombineFlows {
         flow6,
         flow7,
         flow8,
-    flow9
+        flow9
     ) { args: Array<*> ->
         transform(
             args[0] as T1,

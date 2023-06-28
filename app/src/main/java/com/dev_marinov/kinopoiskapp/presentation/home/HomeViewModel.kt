@@ -129,7 +129,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-
     //    /**
 //     * When we click on [Movie], we delete it from database.
 //     * This should cause the removal of elements associated with this movie: [Rating], [ReleaseYear], [Poster] and [Votes].
@@ -248,7 +247,7 @@ class HomeViewModel @Inject constructor(
             _selectGenres.value = genresSelection
             movieRepository.sortByGenres(genre = genresSelection.lowercase())
 
-           // getParams(selectGenres = genresSelection) // пока не нужно
+            // getParams(selectGenres = genresSelection) // пока не нужно
         }
     }
 
@@ -337,7 +336,6 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
-
 
     val newFavoriteMovies: Flow<List<SelectableFavoriteMovie>> =
         combine(movie, favoriteMovies) { movie, favoriteMovies ->

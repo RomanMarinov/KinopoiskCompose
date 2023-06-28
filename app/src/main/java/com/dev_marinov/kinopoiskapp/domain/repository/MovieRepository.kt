@@ -26,7 +26,7 @@ interface MovieRepository {
 
     suspend fun deleteMovie(movieNew: Movie)
 
-    suspend fun getMovie(movieId: String?) : Movie
+    suspend fun getMovie(movieId: String?): Movie
 
     suspend fun sortByGenres(genre: String)
 
