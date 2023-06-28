@@ -1,11 +1,11 @@
 package com.dev_marinov.kinopoiskapp.presentation.favorite
 
 
-import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dev_marinov.kinopoiskapp.ConnectivityObserver
 import com.dev_marinov.kinopoiskapp.domain.repository.DataStoreRepository
 import com.dev_marinov.kinopoiskapp.domain.repository.FavoriteRepository
 import com.dev_marinov.kinopoiskapp.presentation.home.util.Constants
@@ -19,19 +19,18 @@ import javax.inject.Inject
 @HiltViewModel
 class FavoriteScreenViewModel @Inject constructor(
     private val favoriteRepository: FavoriteRepository,
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
+    connectivityObserver: ConnectivityObserver
 )
 : ViewModel() {
+
+    val connectivity = connectivityObserver.observe()
 
     val getGradientColorApp: Flow<List<Color>> = dataStoreRepository.getGradientColorApp
     val favoriteMovies: LiveData<List<SelectableFavoriteMovie>> = favoriteRepository.favoriteMoviesForDetail
 
-    val favoriteMoviesForHome = favoriteRepository.favoriteMoviesForHome
-
     fun onClickFavorite(movie: SelectableFavoriteMovie) {
         viewModelScope.launch(Dispatchers.IO) {
-
-            Log.d("4444", " movie=" + movie)
             if (movie.isFavorite) {
                 favoriteRepository.saveFavoriteMovie(movie = movie)
             } else {

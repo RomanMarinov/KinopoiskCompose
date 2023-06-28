@@ -1,9 +1,15 @@
 package com.dev_marinov.kinopoiskapp.presentation.settings
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,20 +23,23 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.dev_marinov.kinopoiskapp.ConnectivityObserver
 import com.dev_marinov.kinopoiskapp.R
+import com.dev_marinov.kinopoiskapp.presentation.home.SetShimmer
+import com.dev_marinov.kinopoiskapp.presentation.home.StartSnackBar
 
 @Composable
 fun SettingsScreen(
-    modifier: Modifier = Modifier.fillMaxSize(),
     viewModel: SettingsScreenViewModel = hiltViewModel()
 ) {
+    val connectivity by viewModel.connectivity.collectAsStateWithLifecycle(initialValue = ConnectivityObserver.Status.UnAvailable)
+
     val gradientColorsApp by viewModel.gradientColorsApp.collectAsState(listOf())
     val gradientColorApp by viewModel.getGradientColorApp.collectAsState(listOf())
     val gradientColorIndexApp by viewModel.getGradientColorIndexApp.collectAsState(initial = 0)
@@ -43,39 +52,55 @@ fun SettingsScreen(
     val getCountStatAnimatedSeries by viewModel.getCountStatAnimatedSeries.collectAsState(initial = 0)
     val countFavorite = viewModel.countFavorite.collectAsStateWithLifecycle(initialValue = 0)
 
-    if (gradientColorApp.isNotEmpty()) {
-        Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = gradientColorApp,
-                        startY = 0f,
-                        endY = Float.POSITIVE_INFINITY // наибольшее возможное значение
+    when (connectivity) {
+        ConnectivityObserver.Status.UnAvailable -> {
+            StartSnackBar("internet connection unavailable")
+            SetShimmer()
+        }
+        ConnectivityObserver.Status.Available -> {
+            // StartSnackBar("internet connection available")
+            if (gradientColorApp.isNotEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = gradientColorApp,
+                                startY = 0f,
+                                endY = Float.POSITIVE_INFINITY // наибольшее возможное значение
+                            )
+                        ),
+                    verticalArrangement = Arrangement.SpaceAround,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    BoxList(
+                        viewModel = viewModel,
+                        gradientColorsApp = gradientColorsApp,
+                        gradientColorIndexApp = gradientColorIndexApp
                     )
-                ),
-            verticalArrangement = Arrangement.SpaceAround,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            BoxList(
-                viewModel = viewModel,
-                gradientColorsApp = gradientColorsApp,
-                gradientColorIndexApp = gradientColorIndexApp
-            )
-            BoxStatistic(
-                getCountStatAll = getCountStatAll,
-                getCountStatMovies = getCountStatMovies,
-                getCountStatTvSeries = getCountStatTvSeries,
-                getCountStatCartoon = getCountStatCartoon,
-                getCountStatAnime = getCountStatAnime,
-                getCountStatAnimatedSeries = getCountStatAnimatedSeries,
-                countFavorite = countFavorite.value
-            )
-            BoxButton(gradientColorApp = gradientColorApp, viewModel = viewModel)
+                    BoxStatistic(
+                        getCountStatAll = getCountStatAll,
+                        getCountStatMovies = getCountStatMovies,
+                        getCountStatTvSeries = getCountStatTvSeries,
+                        getCountStatCartoon = getCountStatCartoon,
+                        getCountStatAnime = getCountStatAnime,
+                        getCountStatAnimatedSeries = getCountStatAnimatedSeries,
+                        countFavorite = countFavorite.value
+                    )
+                    BoxButton(gradientColorApp = gradientColorApp, viewModel = viewModel)
+                }
+            }
+        }
+        ConnectivityObserver.Status.Losing -> {
+            StartSnackBar("internet connection losing")
+            SetShimmer()
+        }
+        ConnectivityObserver.Status.Lost -> {
+            StartSnackBar("internet connection lost")
+            SetShimmer()
         }
     }
 }
-
 
 @Composable
 fun BoxList(
@@ -232,7 +257,9 @@ fun BoxStatistic(
             )
         }
 
-        Row(modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp)) {
             Text(
                 text = "favorites - ",
                 fontFamily = FontFamily(Font(R.font.robotoserif_28pt_black)),
@@ -260,16 +287,17 @@ fun BoxButton(
     var showDialog by remember { mutableStateOf(false) }
     if (showDialog) {
         MyDialog(
-            gradientColorApp = gradientColorApp,
             onDismiss = { showDialog = false },
             onConfirm = {
                 // тут результат клика на ок
                 viewModel.onClearMoviesClicked()
                 // закрыть
                 showDialog = false
-            }
+            },
+            gradientColorApp = gradientColorApp
         )
     }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceEvenly,
@@ -299,9 +327,6 @@ fun BoxButton(
 
 @Composable
 fun MyDialog(
-    modifier: Modifier = Modifier
-        .fillMaxWidth()
-        .height(200.dp),
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
     gradientColorApp: List<Color>

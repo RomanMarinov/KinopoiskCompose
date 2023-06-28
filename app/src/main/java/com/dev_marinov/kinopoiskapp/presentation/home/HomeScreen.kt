@@ -3,7 +3,6 @@
 package com.dev_marinov.kinopoiskapp.presentation.home
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,6 +41,7 @@ import com.dev_marinov.kinopoiskapp.R
 import com.dev_marinov.kinopoiskapp.presentation.home.util.Screen
 import com.dev_marinov.kinopoiskapp.presentation.model.PagingParams
 import com.dev_marinov.kinopoiskapp.presentation.model.SelectableFavoriteMovie
+import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -57,7 +57,6 @@ fun HomeScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val connectivity by viewModel.connectivity.collectAsStateWithLifecycle(initialValue = ConnectivityObserver.Status.UnAvailable)
-
 
     val currentScrollPosition = remember {
         mutableStateOf(0)
@@ -80,7 +79,7 @@ fun HomeScreen(
 
     LaunchedEffect(Unit) {
         coroutineScope.launch(Dispatchers.IO) {
-            viewModel.topBottomBarHide(isHide = false) // показать бар навигации
+            viewModel.topBottomBarHide(isHide = false)
         }
     }
 
@@ -93,44 +92,70 @@ fun HomeScreen(
         }
     }
 
-    if (gradientColorApp.isNotEmpty()) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = gradientColorApp,
-                        startY = 0f,
-                        endY = Float.POSITIVE_INFINITY
-                    )
-                )
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .statusBarsPadding()
-                    .background(Color.Transparent)
-            ) {
+    when (connectivity) {
+        ConnectivityObserver.Status.UnAvailable -> {
+            StartSnackBar("internet connection unavailable")
+            SetShimmer()
+        }
+        ConnectivityObserver.Status.Available -> {
+            // StartSnackBar("internet connection available")
+            if (gradientColorApp.isNotEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = gradientColorApp,
+                                startY = 0f,
+                                endY = Float.POSITIVE_INFINITY
+                            )
+                        )
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .statusBarsPadding()
+                            .background(Color.Transparent)
+                    ) {
 
-                TopBar(
-                    isHide = isHideTopBar,
-                    // isVisibleBottomSheet = isVisibleBottomSheet,
-                    viewModel = viewModel
-                )
-                Movies(
-                    movies,
-                    viewModel,
-                    navController,
-                    nestedScrollConnection,
-                    currentScrollPosition,
-                    selectChipIndex,
-                    getPagingParams
-                )
+                        TopBar(
+                            isHide = isHideTopBar,
+                            viewModel = viewModel
+                        )
+                        Movies(
+                            movies,
+                            viewModel,
+                            navController,
+                            nestedScrollConnection,
+                            currentScrollPosition,
+                            selectChipIndex,
+                            getPagingParams
+                        )
+                    }
+                }
             }
-            InternetStatus(connectivity = connectivity)
+        }
+        ConnectivityObserver.Status.Losing -> {
+            StartSnackBar("internet connection losing")
+            SetShimmer()
+        }
+        ConnectivityObserver.Status.Lost -> {
+            StartSnackBar("internet connection lost")
+            SetShimmer()
         }
     }
 }
+
+@Composable
+fun SetShimmer() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .shimmer()
+            .background(Color.Gray)
+    ) {}
+}
+
 
 @Composable
 fun Movies(
@@ -142,8 +167,6 @@ fun Movies(
     selectChipIndex: Int,
     pagingParams: PagingParams?,
 ) {
-
-
     var num = 15
 
     val moviesSize = remember { mutableStateOf(0) }
@@ -151,14 +174,11 @@ fun Movies(
     val lastVisibleIndexState = remember { mutableStateOf<Int?>(null) }
 
     if (num == lastVisibleIndexState.value) { // lastVisibleIndexState должен срабатывать на 15 -> 35 -> 55 -> 75 -> 95
-        Log.d("4444", " HomeScreen num=" + num)
         num += 20
         // новый запрос + 20 элементов
         // здесь я должен получать объект с параметрами по типу genre в котором делаю скролл
 //        viewModel.getParams(selectGenres = selectGenres)
-        Log.d("4444", " HomeScreen pagingParams=" + pagingParams)
         pagingParams?.let {
-            Log.d("4444", " HomeScreen getPagingParams not NULL")
             //viewModel.page = it.page + 1
             viewModel.getData(pagingParams = it)
         }
@@ -171,7 +191,6 @@ fun Movies(
                 val lastVisibleIndex = visibleItems.lastOrNull()?.index
                 if (lastVisibleIndex != lastVisibleIndexState.value) {
                     lastVisibleIndexState.value = lastVisibleIndex
-                    //   Log.d("4444", "lastVisibleIndex = $lastVisibleIndex")
                 }
             }
     }
@@ -436,26 +455,6 @@ fun IsLottieAnimationVisibility(
                 .size(100.dp)
                 .alpha(visibility)
         )
-    }
-
-}
-
-@Composable
-fun InternetStatus(
-    connectivity: ConnectivityObserver.Status) {
-    when (connectivity) {
-        ConnectivityObserver.Status.UnAvailable -> {
-            StartSnackBar("internet connection unavailable")
-        }
-        ConnectivityObserver.Status.Available -> {
-           // StartSnackBar("internet connection available")
-        }
-        ConnectivityObserver.Status.Losing -> {
-            StartSnackBar("internet connection losing")
-        }
-        ConnectivityObserver.Status.Lost -> {
-            StartSnackBar("internet connection lost")
-        }
     }
 }
 

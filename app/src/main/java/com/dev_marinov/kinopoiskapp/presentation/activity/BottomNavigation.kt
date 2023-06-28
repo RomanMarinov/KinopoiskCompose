@@ -1,6 +1,5 @@
 package com.dev_marinov.kinopoiskapp.presentation.activity
 
-import android.util.Log
 import android.widget.NumberPicker
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
@@ -73,11 +72,6 @@ fun BottomNavigation(viewModel: MainViewModel = hiltViewModel()) {
     val ratingPickerTo by viewModel.ratingPickerTo.collectAsStateWithLifecycle(10)
     val ratingPickerStateFrom = remember { mutableStateOf(ratingPickerFrom) }
     val ratingPickerStateTo = remember { mutableStateOf(ratingPickerTo) }
-
-//    // Конвертация массива в список
-//    val genres = remember { genresBottomSheet.toList() }
-//    var selectedGenreBottomSheet by remember { mutableStateOf(genres[0]) }
-//
 
     // если убрать systemBarsPadding то щит будет под
     ModalBottomSheetLayout(
@@ -252,7 +246,7 @@ fun BottomNavigation(viewModel: MainViewModel = hiltViewModel()) {
                                 // .height(60.dp),
                                 shape = RoundedCornerShape(12.dp),
                                 onClick = {
-                                    viewModel.isPlayingLottie(isPlaying = true)
+                                    viewModel.setPlayingLottie(isPlaying = true)
                                     viewModel.bottomSheetParams(
                                         yearPickerFrom = yearPickerFrom,
                                         yearPickerTo = yearPickerTo,
@@ -289,7 +283,6 @@ fun BottomNavigation(viewModel: MainViewModel = hiltViewModel()) {
             }
         }
     ) {
-        Log.d("4444", " bottomnav isHideBottomBar=" + isHideBottomBar)
         if (gradientColorApp.isNotEmpty()) {
             Scaffold(
                 modifier = Modifier.navigationBarsPadding(),
@@ -337,10 +330,8 @@ fun BottomNavigation(viewModel: MainViewModel = hiltViewModel()) {
     }
 
     LaunchedEffect(clickedFilter) {
-        Log.d("4444", " clickedFilter=" + clickedFilter)
         modalSheetState.let {
             if (clickedFilter && (currentRoute == "home")) {
-
                 it.show()
             }
         }
@@ -437,18 +428,19 @@ fun NavigationGraph(navHostController: NavHostController) {
                     nullable = true // можно обнулить
                 }
             )
-        ) { entry -> // запись
-            DetailScreen( // получатель
+        ) { entry ->
+            DetailScreen(
                 movieId = entry.arguments?.getString("id"),
                 navController = navHostController
             )
         }
+
         composable(
             // если бы было несколько аргументов то передавал бы один за другим "/{name}/{age}"
             // если мы вдруг не передадим стровое значение что запись будет такая "?name={name}"
-            route = Screen.PlayVideoScreen.route + "/{id}",
+            route = "${Screen.PlayVideoScreen.route}/{urlTrailer}",
             arguments = listOf(
-                navArgument("id") {
+                navArgument("urlTrailer") {
                     type = NavType.StringType // тип передаваемого значения строка
                     defaultValue = "Manmario"
                     nullable = true // можно обнулить
@@ -457,7 +449,7 @@ fun NavigationGraph(navHostController: NavHostController) {
         ) { entry -> // запись
             PlayVideoScreen(
                 // получатель
-                movieId = entry.arguments?.getString("id"),
+                urlTrailer = entry.arguments?.getString("urlTrailer"),
                 // navController = navHostController
             )
         }

@@ -101,23 +101,8 @@ class MovieRepositoryImpl @Inject constructor(
         searchDate: String,
         searchRating: String,
         searchType: String,
-        page: Int,
-//        sortTypRating: String,
-//        page: String,
-//        limit: String,
-
-
+        page: Int
     ) {
-        Log.d("4444", " MovieRepositoryImplNew updateMovies search_date=" + searchDate
-                + " searchRating=" + searchRating + " searchType=" + searchType + " page=" + page)
-
-
-        // тут сохранить в дата стор
-
-
-
-
-
         // если данных по сети нет
         val response = remoteDataSource.getData(
             selectFields = listOf(
@@ -134,12 +119,9 @@ class MovieRepositoryImpl @Inject constructor(
         ).body() ?: return // TODO: uncomment this line
 
         val movieDtos = response.movies //  uncomment this line
-        // val movieDtos = getData() //  delete this line
-        Log.d("4444", " MovieRepositoryImplNew movieDtos=" + movieDtos)
         movieDtos.forEach { dto ->
 
             try {
-                // Log.d("4444", " MovieRepositoryImplNew count")
                 val movie = dto.mapToDomain(response.page) //  uncomment this line
                 // val movie = dto.mapToDomain(1) //  delete this line
                 val releaseYears = dto.releaseYears?.map {
@@ -156,12 +138,7 @@ class MovieRepositoryImpl @Inject constructor(
                     it.mapToDomain(movieId = movie.id)
                 }
 
-                // val videos = dto.videos.trailers.map { it.mapToDomain(movieId = movie.id) }
                 val videos = dto.videos.mapToDomain(movieId = movie.id)
-
-
-                // val videos = dto.videos.mapToDomain(movieId = movie.id)
-                //  Log.d("4444", " MovieRepositoryImplNew videos=" + videos)
 
                 repositoryCoordinator.saveData(
                     movie,

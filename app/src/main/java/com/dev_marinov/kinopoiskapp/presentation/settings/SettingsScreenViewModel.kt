@@ -3,6 +3,7 @@ package com.dev_marinov.kinopoiskapp.presentation.settings
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dev_marinov.kinopoiskapp.ConnectivityObserver
 import com.dev_marinov.kinopoiskapp.domain.repository.DataStoreRepository
 import com.dev_marinov.kinopoiskapp.domain.repository.FavoriteRepository
 import com.dev_marinov.kinopoiskapp.domain.repository.MovieRepository
@@ -17,8 +18,10 @@ import javax.inject.Inject
 class SettingsScreenViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
     private val movieRepository: MovieRepository,
-    private val favoriteRepository: FavoriteRepository
+    private val favoriteRepository: FavoriteRepository,
+    connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
+    val connectivity = connectivityObserver.observe()
 
     val gradientColorsApp: Flow<List<List<Color>>> = dataStoreRepository.gradientColorsApp
     val getGradientColorApp: Flow<List<Color>> = dataStoreRepository.getGradientColorApp
@@ -65,7 +68,6 @@ class SettingsScreenViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             movieRepository.clearAllMovies()
             favoriteRepository.clearAllMovies()
-
         }
     }
 }

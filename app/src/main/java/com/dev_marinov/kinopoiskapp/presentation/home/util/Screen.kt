@@ -6,7 +6,7 @@ package com.dev_marinov.kinopoiskapp.presentation.home.util
 sealed class Screen(val route: String) {
     object HomeScreen : Screen("home")
     object DetailScreen : Screen("detail")
-    object PlayVideoScreen : Screen("play_video")
+    object PlayVideoScreen : Screen("play_video/{urlTrailer}")
 
     object FavoriteScreen : Screen("favorite")
     object SettingsScreen : Screen("settings")
@@ -20,5 +20,9 @@ sealed class Screen(val route: String) {
                 append("/$it")
             }
         }
+    }
+    fun withArgsUrlTrailer(vararg args: String) : String {
+        // возвращаем маршрут с аргументом
+        return "$route/${args.joinToString("/")}"
     }
 }

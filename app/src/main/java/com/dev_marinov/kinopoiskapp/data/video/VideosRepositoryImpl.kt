@@ -1,8 +1,5 @@
 package com.dev_marinov.kinopoiskapp.data.video
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
 import com.dev_marinov.kinopoiskapp.data.video.local.VideosDao
 import com.dev_marinov.kinopoiskapp.domain.model.Trailer
 import com.dev_marinov.kinopoiskapp.domain.model.Videos
@@ -14,13 +11,6 @@ import javax.inject.Singleton
 
 @Singleton
 class VideosRepositoryImpl @Inject constructor(private val videosDao: VideosDao) : VideosRepository {
-
-//    override val videos: LiveData<List<Videos>> = videosDao.getAllFlow().map {
-//        it.map { videosEntity ->
-//            Log.d("4444"," videosEntity=" + videosEntity)
-//            videosEntity.mapToDomain()
-//        }
-//    }
 
     override val videos: Flow<List<Videos>> = videosDao.getAllFlow().map {
 

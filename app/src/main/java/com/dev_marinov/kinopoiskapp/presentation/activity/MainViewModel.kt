@@ -92,7 +92,6 @@ class MainViewModel @Inject constructor(
         _ratingPickerTo.value = ratingPickerTo
     }
 
-    // сюда надо передать genre от топ бар (убираю из ботом бар список genres)
     fun bottomSheetParams(
         yearPickerFrom: Int,
         yearPickerTo: Int,
@@ -105,7 +104,7 @@ class MainViewModel @Inject constructor(
             numbersTransformation(pickerFrom = yearPickerFrom, pickerTo = yearPickerTo)
         val fromToRatings =
             numbersTransformation(pickerFrom = ratingPickerFrom, pickerTo = ratingPickerTo)
-        getData(
+        getMovies(
             fromToYears = fromToYears,
             fromToRatings = fromToRatings,
             genre = genre.lowercase(),
@@ -113,7 +112,7 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    private fun getData(fromToYears: String, fromToRatings: String, genre: String, page: Int) {
+    private fun getMovies(fromToYears: String, fromToRatings: String, genre: String, page: Int) {
         viewModelScope.launch {
             updateMoviesUseCase.invoke(
                 UpdateMoviesUseCase.UpdateMoviesParams(
@@ -122,7 +121,6 @@ class MainViewModel @Inject constructor(
                     genre = genre,
                     page = page
                 )
-//              UpdateMoviesUseCase.UpdateMoviesParams(page.toString(), "20")
             )
         }
     }
@@ -135,7 +133,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun isPlayingLottie(isPlaying: Boolean) {
+    fun setPlayingLottie(isPlaying: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             movieRepository.playingLottieAnimation(isPlaying = isPlaying)
         }

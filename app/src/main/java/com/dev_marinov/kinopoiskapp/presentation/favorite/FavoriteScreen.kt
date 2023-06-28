@@ -1,6 +1,5 @@
 package com.dev_marinov.kinopoiskapp.presentation.favorite
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,9 +10,7 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,9 +28,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.dev_marinov.kinopoiskapp.ConnectivityObserver
 import com.dev_marinov.kinopoiskapp.R
+import com.dev_marinov.kinopoiskapp.presentation.home.SetShimmer
+import com.dev_marinov.kinopoiskapp.presentation.home.StartSnackBar
 import com.dev_marinov.kinopoiskapp.presentation.home.util.Screen
 import com.dev_marinov.kinopoiskapp.presentation.model.SelectableFavoriteMovie
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -41,52 +43,63 @@ fun FavoriteScreen(
     viewModel: FavoriteScreenViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
+    val connectivity by viewModel.connectivity.collectAsStateWithLifecycle(initialValue = ConnectivityObserver.Status.UnAvailable)
 
     val favoriteMovies by viewModel.favoriteMovies.observeAsState()
     val gradientColorApp by viewModel.getGradientColorApp.collectAsState(listOf())
 
-    val favoriteMoviesForHome by viewModel.favoriteMoviesForHome.collectAsStateWithLifecycle(
-        initialValue = listOf()
-    )
-
-    Log.d("4444", " favoriteMoviesForHome="+ favoriteMoviesForHome)
-
-    if (gradientColorApp.isNotEmpty()) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = gradientColorApp,
-                        startY = 0f,
-                        endY = Float.POSITIVE_INFINITY
-                    )
-                )
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .statusBarsPadding()
-                    .background(Color.Transparent)
-            ) {
-
-                favoriteMovies?.let {
-                    FavoriteMovies(
-                        it,
-                        viewModel,
-                    navController,
-//                    nestedScrollConnection,
-//                    currentScrollPosition,
-//                    selectChipIndex,
-//                    selectGenres
-                    )
-                }
-
-            }
+    val coroutineScope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        coroutineScope.launch(Dispatchers.IO) {
+            viewModel.topBottomBarHide(isHide = false) // показать бар навигации
         }
     }
 
-
+    when (connectivity) {
+        ConnectivityObserver.Status.UnAvailable -> {
+            StartSnackBar("internet connection unavailable")
+            SetShimmer()
+        }
+        ConnectivityObserver.Status.Available -> {
+            // StartSnackBar("internet connection available")
+            if (gradientColorApp.isNotEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = gradientColorApp,
+                                startY = 0f,
+                                endY = Float.POSITIVE_INFINITY
+                            )
+                        )
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .statusBarsPadding()
+                            .background(Color.Transparent)
+                    ) {
+                        favoriteMovies?.let {
+                            FavoriteMovies(
+                                it,
+                                viewModel,
+                                navController
+                            )
+                        }
+                    }
+                }
+            }
+        }
+        ConnectivityObserver.Status.Losing -> {
+            StartSnackBar("internet connection losing")
+            SetShimmer()
+        }
+        ConnectivityObserver.Status.Lost -> {
+            StartSnackBar("internet connection lost")
+            SetShimmer()
+        }
+    }
 }
 
 
@@ -102,8 +115,6 @@ fun FavoriteMovies(
 ) {
 
     if (movieItems.isNotEmpty()) {
-//        if (movieItems[0].movie.type == selectGenres.lowercase()) {
-//            Log.d("4444", " movieItems=" + movieItems)
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopStart

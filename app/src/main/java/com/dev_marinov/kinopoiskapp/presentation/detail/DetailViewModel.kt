@@ -1,26 +1,25 @@
 package com.dev_marinov.kinopoiskapp.presentation.detail
 
 import android.graphics.BitmapFactory
-import android.util.Log
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.dev_marinov.kinopoiskapp.domain.model.*
 import com.dev_marinov.kinopoiskapp.domain.repository.*
-import com.dev_marinov.kinopoiskapp.domain.usecase.DeleteMovieUseCase
-import com.dev_marinov.kinopoiskapp.domain.usecase.UpdateMoviesUseCase
 import com.dev_marinov.kinopoiskapp.presentation.detail.model.MovieItemDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import java.net.URL
 import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val updateMoviesUseCase: UpdateMoviesUseCase,
-    private val deleteMovieUseCase: DeleteMovieUseCase,
     private val movieRepository: MovieRepository,
     private val posterRepository: PosterRepository,
     private val releaseYearRepository: ReleaseYearRepository,
@@ -34,12 +33,15 @@ class DetailViewModel @Inject constructor(
     private var _movie: MutableLiveData<MovieItemDetail> = MutableLiveData()
     val movie: LiveData<MovieItemDetail> = _movie
 
-    private var _heightPoster: MutableStateFlow<Int> = MutableStateFlow(0)
-    val heightPoster: StateFlow<Int> = _heightPoster
+    private var _youtubeUrlBody: MutableStateFlow<String> = MutableStateFlow("")
+    val youtubeUrlBody: StateFlow<String> = _youtubeUrlBody
+
+    private var _isClosedTransition: MutableStateFlow<Boolean> = MutableStateFlow(true)
+    val isClosedTransition: StateFlow<Boolean> = _isClosedTransition
+
+    private var playCount = 0
 
     fun getMovie(movieId: String) {
-
-        //Log.d("4444", " DetailViewModel movieId=" + movieId)
         viewModelScope.launch(Dispatchers.IO) {
 
             val jobMovie: Deferred<Movie> =
@@ -103,8 +105,45 @@ class DetailViewModel @Inject constructor(
                     inJustDecodeBounds = true
                 }
                 BitmapFactory.decodeStream(stream, null, options)
-                _heightPoster.value = options.outHeight
             }
+        }
+    }
+
+    fun getTrailers(movieId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val trailers = videosRepository.getTrailersForDetail(movieId = movieId)
+            trailers?.let {
+                getCycle(it)
+            }
+        }
+    }
+
+    private fun getCycle(trailers: List<Trailer>) {
+        val youtubeUrlsBodyTemp = mutableListOf<String>()
+        var youtubeTrailerBody = ""
+        for (i in trailers.indices) {
+            if (trailers[i].site == "youtube") {
+                val youtubeTrailerUrl: String = trailers[i].url
+                val containsEquals = youtubeTrailerUrl.contains("=")
+                youtubeTrailerBody = if (containsEquals) {
+                    youtubeTrailerUrl.split("=")[1]
+                } else {
+                    youtubeTrailerUrl.substringAfterLast('/')
+                }
+                youtubeUrlsBodyTemp.add(youtubeTrailerBody)
+            }
+        }
+
+        if (youtubeUrlsBodyTemp.isNotEmpty()) {
+            viewModelScope.launch(Dispatchers.Main) {
+                _youtubeUrlBody.value = youtubeUrlsBodyTemp[playCount]
+            }
+        }
+    }
+
+    fun closeTransition(isClosedTransition: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _isClosedTransition.value = isClosedTransition
         }
     }
 }

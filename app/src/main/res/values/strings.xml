@@ -11,6 +11,6 @@
         <item>Anime</item>
         <item>Animated-Series</item>
     </string-array>
-
-
+    <string name="trailer_not_available">Movie trailer not yet available</string>
+    ""
 </resources>

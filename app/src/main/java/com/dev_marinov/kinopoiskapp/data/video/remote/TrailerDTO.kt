@@ -15,7 +15,6 @@ data class TrailerDTO(
 ) {
     fun mapToDomain(movieId: Int): Trailer {
         return Trailer(
-           // id = id,
             url = url,
             name = name,
             site = site,

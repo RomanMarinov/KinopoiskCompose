@@ -53,9 +53,6 @@ fun TopBar(
         ) {
             ChipSection(
                 viewModel = viewModel,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
                 chips = listOf("Rating", "Year", "Abc")
             )
             FilterButton(Modifier.weight(1f), viewModel = viewModel)
@@ -71,7 +68,6 @@ fun TopBar(
 
 @Composable
 fun ChipSection(
-    modifier: Modifier = Modifier,
     chips: List<String>,
     viewModel: HomeViewModel,
 ) {
@@ -80,14 +76,13 @@ fun ChipSection(
     }
     viewModel.sortMoviesChipSelection(selectedChipIndex)
 
-    // ленивая строка которая прокручивается и загружает составные элементы которые поместим в нее
     LazyRow {
-        items(chips.size) { // кол-во элементов которое соответсвует размеру списка
+        items(chips.size) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .padding(start = 8.dp)
-                    .clip(RoundedCornerShape(50.dp)) // обрезаем поле применим закругленные углы
+                    .clip(RoundedCornerShape(50.dp))
                     .clickable {
                         selectedChipIndex = it
                     }
@@ -109,8 +104,8 @@ fun ChipSection(
                         .width(50.dp),
                     text = chips[it],
                     style = MaterialTheme.typography.subtitle1,
-                    fontWeight = if (selectedChipIndex == it) FontWeight.SemiBold // светлый выбранный
-                    else FontWeight.Normal, // полужирный
+                    fontWeight = if (selectedChipIndex == it) FontWeight.SemiBold
+                    else FontWeight.Normal,
                     color = if (selectedChipIndex == it) Color.Black else Color.Black,
                     textAlign = TextAlign.Center
                 )
@@ -155,13 +150,10 @@ fun GenresSection(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel
 ) {
-
     var genresSelection by remember { mutableStateOf("") }
 
-    //viewModel.getParams(genresSelection = genresSelection)
     LazyRow(
-        modifier = modifier.padding(start = 4.dp),
-       // contentPadding = PaddingValues(horizontal = 50.dp, vertical = 1.dp)
+        modifier = modifier.padding(start = 4.dp)
     ) {
         itemsIndexed(items = list) { index, item ->
             BoxWithConstraints {

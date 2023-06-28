@@ -1,6 +1,6 @@
 package com.dev_marinov.kinopoiskapp.presentation.detail
 
-import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Snackbar
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -23,8 +24,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -33,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
@@ -50,16 +54,47 @@ fun DetailScreen(
 ) {
     movieId?.let { viewModel.getMovie(it) }
     val movieItemDetail by viewModel.movie.observeAsState()
-    SetViews(movieItemDetail = movieItemDetail, navController = navController)
+    val context = LocalContext.current.applicationContext
+    val youtubeUrlBody by viewModel.youtubeUrlBody.collectAsState()
+    val isClosedTransition by viewModel.isClosedTransition.collectAsState()
+
+    if (!isClosedTransition) {
+        viewModel.closeTransition(true)
+        if (youtubeUrlBody.isNotEmpty()) {
+            navController.navigate(Screen.PlayVideoScreen.withArgsUrlTrailer(youtubeUrlBody))
+        } else {
+            Toast.makeText(
+                context,
+                stringResource(id = R.string.trailer_not_available),
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    SetViews(
+        movieItemDetail = movieItemDetail,
+        viewModel = viewModel
+    )
+}
+
+// не получилось использовать вместо toast Snackbar из-за перерендеренга
+@Composable
+fun ShowSnackBar() {
+    Snackbar(
+        modifier = Modifier
+            .padding(10.dp, 10.dp)
+            .zIndex(1f),
+        backgroundColor = Color.Gray
+    ) {
+        Text(text = stringResource(R.string.trailer_not_available), fontSize = 16.sp)
+    }
 }
 
 @Composable
 fun SetViews(
     movieItemDetail: MovieItemDetail?,
-    navController: NavController
+    viewModel: DetailViewModel
 ) {
-
-
     var imageHeight by remember {
         mutableStateOf(0)
     }
@@ -95,15 +130,8 @@ fun SetViews(
     }
 
     Column(
-        //verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxWidth()
-        //.height(300.dp)
-        //.background(colorResource(id = R.color.my_green)) // как установить свой цвет
-        //.padding(horizontal = 30.dp)
     ) {
-        // поле для центрирования текста
-
-        Log.d("4444", " detail movieItemDetail?.poster?.url=" + movieItemDetail?.poster?.url)
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -135,7 +163,7 @@ fun SetViews(
             DescriptionBlock(
                 movieItemDetail = movieItemDetail,
                 heightPoster = heightPoster,
-                navController = navController
+                viewModel = viewModel
             )
         }
     }
@@ -145,7 +173,7 @@ fun SetViews(
 fun DescriptionBlock(
     movieItemDetail: MovieItemDetail?,
     heightPoster: Dp,
-    navController: NavController
+    viewModel: DetailViewModel
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -387,13 +415,14 @@ fun DescriptionBlock(
                     style = TextStyle(fontWeight = Bold)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                //Log.d("4444", " movieItemDetail.movie.id="+    movieItemDetail.movie.id)
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(Color.Black)
                         .height(200.dp)
                 ) {
+
+                    val context = LocalContext.current.applicationContext
                     Image(
                         painter = painterResource(id = R.drawable.ic_play_video),
                         contentDescription = "contentDescription",
@@ -402,24 +431,15 @@ fun DescriptionBlock(
                             .align(Alignment.Center)
                             .size(70.dp)
                             .clickable(onClick = {
-                                navController.navigate(
-                                    Screen.PlayVideoScreen.withArgs(
-                                        movieItemDetail.movie.id
-                                    )
-                                )
+//                                navController.navigate(
+//                                    Screen.PlayVideoScreen.withArgs(
+//                                        movieItemDetail.movie.id
+//                                    )
+//                                )
+                                viewModel.getTrailers(movieItemDetail.movie.id)
+                                viewModel.closeTransition(false)
                             })
                     )
-
-//                movieItemDetail.videos?.let {
-//                   // VideoViewNew("https://youtu.be/poUq9ypynKs")
-//                }
-                    //https://youtu.be/poUq9ypynKs
-//                movieItemDetail.videos?.let {
-//                    VideoViewNew(videoUri = it[3].url)
-//                    Log.d("4444", "url=" + it[3].url)
-//                }
-
-
                 }
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -459,7 +479,6 @@ fun DescriptionBlock(
                                 } else {
                                     SetNamePerson(name = "неизвестно")
                                 }
-
                                 Spacer(modifier = Modifier.height(4.dp))
                             }
                         }

@@ -21,9 +21,7 @@ interface MovieRepository {
         searchDate: String,
         searchRating: String,
         searchType: String,
-        page: Int,
-        //page: String,
-       // limit: String
+        page: Int
     )
 
     suspend fun deleteMovie(movieNew: Movie)

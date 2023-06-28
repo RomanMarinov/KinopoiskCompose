@@ -1,6 +1,5 @@
 package com.dev_marinov.kinopoiskapp.presentation.home
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
@@ -77,13 +76,9 @@ class HomeViewModel @Inject constructor(
     init {
         initViewAction()
         setFirstGradient()
-        //  getData()
         viewModelScope.launch(Dispatchers.IO) {
-            topBottomBarHide(false) // показать бар навигации
+            topBottomBarHide(false)
         }
-//        viewModelScope.launch(Dispatchers.IO) {
-//            movieRepository.getMoviesMethod()
-//        }
         getParams("movie")
     }
 
@@ -155,7 +150,6 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getData(pagingParams: PagingParams) {
-        Log.d("4444", " HomeViewModel getData выполнился новый запрос + 20")
         viewModelScope.launch {
             val fromToYears = pagingParams.yearPickerFrom.plus("-").plus(pagingParams.yearPickerTo)
             val fromToRatings =
@@ -360,44 +354,6 @@ class HomeViewModel @Inject constructor(
             }
         }
 
-
-//
-//
-////    /**
-////     * When we click on [Movie], we delete it from database.
-////     * This should cause the removal of elements associated with this movie: [Rating], [ReleaseYear], [Poster] and [Votes].
-////     * Removal is launched through a [DeleteMovieUseCase]
-////     */
-////    fun onMovieClicked(movieItem: MovieItem) {
-////        viewModelScope.launch {
-////            deleteMovieUseCase(DeleteMovieUseCase.DeleteMovieParams(movieItem.movie))
-////        }
-////    }
-////
-////    private fun getData() {
-////        viewModelScope.launch {
-////            updateMoviesUseCase.invoke(
-////                UpdateMoviesUseCase.UpdateMoviesParams("", "")
-//////                UpdateMoviesUseCase.UpdateMoviesParams(page.toString(), "20")
-////            )
-////        }
-////    }
-////
-//////    TODO: maybe delete or edit
-//////    private fun getData() {
-//////        viewModelScope.launch(Dispatchers.IO) {
-//////            val response = movieRepository.updateMovies("7-10", "2017-2020", "2", "1", "-1")
-//////            Log.d("4444", " ListViewModel response=" + response)
-//////
-//////
-////////            response?.let {
-////////                _viewState.value = it
-////////            }
-//////        }
-//////    }
-//
-
-
     fun isPlayingLottie(isPlaying: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             movieRepository.playingLottieAnimation(isPlaying = isPlaying)
@@ -406,8 +362,6 @@ class HomeViewModel @Inject constructor(
 
     fun onClickFavorite(movie: SelectableFavoriteMovie) {
         viewModelScope.launch(Dispatchers.IO) {
-
-            Log.d("4444", " movie=" + movie)
             if (movie.isFavorite) {
                 favoriteRepository.saveFavoriteMovie(movie = movie)
             } else {
@@ -416,10 +370,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getParams(genresSelection: String) {
+    private fun getParams(genresSelection: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val pagingParams = dataStoreRepository.getPagingParams(key = genresSelection)
-            Log.d("4444", " getParams pagingParams=" + pagingParams)
             _pagingParams.value = pagingParams
         }
     }

@@ -7,5 +7,4 @@ interface RatingRepository {
 
     val ratings: Flow<List<Rating>>
    suspend fun getRating(movieId: Int): Rating?
-   // val sortingRating: Flow<List<Rating>>
 }
