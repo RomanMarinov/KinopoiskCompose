@@ -1,59 +1,6 @@
-1. доделать пагинацию
-остановился на передаче индекса загрузки
-надо еще сохранять текущий page для каждого текущего genre
-учитывая фильтр потока в homeViewModel
+1. modules
+2. test case
 
-6. modules
-7. test case
-8. scheme for diagram
-9. if i have not internet
-
-
-
-
-
-
-
-// скрыть бар
-https://stackoverflow.com/questions/69232738/how-to-hide-bottom-navigation-bar-while-scrolling-down-and-show-it-while-scrolli
-https://m2.material.io/components/bottom-navigation#behavior
-
-
-в Кадр есть pointerInput его можно функуию можно использовать для уладения элемента
-если если долгое нажатие/ посмотреть как можно это сделать со смахиванием
-или просто сделать на карточке фильма корзину нажатию на нее удалять элемент
-
- - написать условие если нет интернета и происходит запрос на получение данных
- то клиент получает тост что отстутвует интернет и данные взяты из бд
- и если в бд нет данных, то так же об этом сообщить в этом тосте
-
- - сделать пагинацию
- - установить иконку удаления в главном списке
- - установить функцию удаления элемента из списка по этой иконке
-
- - сделать показ только по типу жанра в топ бар
- - сделать навигацию с первым экраном анимации
- - сделать шимер для списка
- - свайп рефреш акомпанист ?
-
-
- сортировка https://www.youtube.com/watch?v=dd_Lv7AxqkY
-
- для клика на лайк чтобы не пересоздавать объект copy()
- https://kotlinlang.org/docs/data-classes.html#copying
-
- для шимера
- https://www.youtube.com/watch?v=SVY0qiMVIhc
-
- status bar
- https://semicolonspace.com/status-bar-jetpack-compose/
-
- material design
- https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary#outlinedbutton
-
-
-
-
-
-
-
+проблемы
+1. есть повторяющиеся функции
+например connectivity
