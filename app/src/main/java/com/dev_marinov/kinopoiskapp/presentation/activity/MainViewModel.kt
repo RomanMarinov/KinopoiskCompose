@@ -19,10 +19,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val movieRepository: MovieRepository,
-    private val dataStoreRepository: DataStoreRepository,
+    private val movieRepository: com.dev_marinov.kinopoiskapp.domain.repository.MovieRepository,
+    private val dataStoreRepository: com.dev_marinov.kinopoiskapp.domain.repository.DataStoreRepository,
     private val updateMoviesUseCase: UpdateMoviesUseCase,
-    favoriteRepository: FavoriteRepository
+    favoriteRepository: com.dev_marinov.kinopoiskapp.domain.repository.FavoriteRepository
 ) : ViewModel() {
 
     val getGradientColorApp: Flow<List<Color>> = dataStoreRepository.getGradientColorApp

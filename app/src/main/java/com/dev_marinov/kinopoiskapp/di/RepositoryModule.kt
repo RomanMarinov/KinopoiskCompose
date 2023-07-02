@@ -22,41 +22,41 @@ import javax.inject.Singleton
 abstract class RepositoryModule {
     @Binds
     @Singleton
-    abstract fun bindMovieRepository(movieRepositoryImpl: MovieRepositoryImpl): MovieRepository
+    abstract fun bindMovieRepository(movieRepositoryImpl: MovieRepositoryImpl): com.dev_marinov.kinopoiskapp.domain.repository.MovieRepository
 
     @Binds
     @Singleton
-    abstract fun bindPosterRepository(posterRepositoryImpl: PosterRepositoryImpl): PosterRepository
+    abstract fun bindPosterRepository(posterRepositoryImpl: PosterRepositoryImpl): com.dev_marinov.kinopoiskapp.domain.repository.PosterRepository
 
     @Binds
     @Singleton
-    abstract fun bindRatingRepository(ratingRepositoryImpl: RatingRepositoryImpl): RatingRepository
+    abstract fun bindRatingRepository(ratingRepositoryImpl: RatingRepositoryImpl): com.dev_marinov.kinopoiskapp.domain.repository.RatingRepository
 
     @Binds
     @Singleton
-    abstract fun bindReleaseYearRepository(releaseYearRepositoryImpl: ReleaseYearRepositoryImpl): ReleaseYearRepository
+    abstract fun bindReleaseYearRepository(releaseYearRepositoryImpl: ReleaseYearRepositoryImpl): com.dev_marinov.kinopoiskapp.domain.repository.ReleaseYearRepository
 
     @Binds
     @Singleton
-    abstract fun bindGenresRepository(genresRepositoryImpl: GenresRepositoryImpl): GenresRepository
+    abstract fun bindGenresRepository(genresRepositoryImpl: GenresRepositoryImpl): com.dev_marinov.kinopoiskapp.domain.repository.GenresRepository
 
     @Binds
     @Singleton
-    abstract fun bindVotesRepository(votesRepositoryImpl: VotesRepositoryImpl): VotesRepository
+    abstract fun bindVotesRepository(votesRepositoryImpl: VotesRepositoryImpl): com.dev_marinov.kinopoiskapp.domain.repository.VotesRepository
 
     @Binds
     @Singleton
-    abstract fun bindPersonsRepository(personsRepositoryImpl: PersonsRepositoryImpl): PersonsRepository
+    abstract fun bindPersonsRepository(personsRepositoryImpl: PersonsRepositoryImpl): com.dev_marinov.kinopoiskapp.domain.repository.PersonsRepository
 
     @Binds
     @Singleton
-    abstract fun bindVideosRepository(videosRepositoryImpl: VideosRepositoryImpl): VideosRepository
+    abstract fun bindVideosRepository(videosRepositoryImpl: VideosRepositoryImpl): com.dev_marinov.kinopoiskapp.domain.repository.VideosRepository
 
     @Binds
     @Singleton
-    abstract fun bindFavoriteRepository(favoriteRepositoryImpl: FavoriteRepositoryImpl): FavoriteRepository
+    abstract fun bindFavoriteRepository(favoriteRepositoryImpl: FavoriteRepositoryImpl): com.dev_marinov.kinopoiskapp.domain.repository.FavoriteRepository
 
     @Binds
     @Singleton
-    abstract fun bindCommonRepository(commonRepositoryImpl: RepositoryCoordinatorImpl): RepositoryCoordinator
+    abstract fun bindCommonRepository(commonRepositoryImpl: RepositoryCoordinatorImpl): com.dev_marinov.kinopoiskapp.domain.repository.RepositoryCoordinator
 }

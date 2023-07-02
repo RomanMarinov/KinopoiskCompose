@@ -17,8 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoriteScreenViewModel @Inject constructor(
-    private val favoriteRepository: FavoriteRepository,
-    private val dataStoreRepository: DataStoreRepository,
+    private val favoriteRepository: com.dev_marinov.kinopoiskapp.domain.repository.FavoriteRepository,
+    private val dataStoreRepository: com.dev_marinov.kinopoiskapp.domain.repository.DataStoreRepository,
     connectivityObserver: ConnectivityObserver
 ) :
     ViewModel() {

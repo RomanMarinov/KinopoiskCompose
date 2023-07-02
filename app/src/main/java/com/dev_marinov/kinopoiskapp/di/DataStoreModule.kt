@@ -16,6 +16,6 @@ class DataStoreModule {
 
     @Singleton
     @Provides
-    fun providePreferences(@ApplicationContext context: Context): DataStoreRepository =
+    fun providePreferences(@ApplicationContext context: Context): com.dev_marinov.kinopoiskapp.domain.repository.DataStoreRepository =
         DataStoreRepositoryImpl(context)
 }

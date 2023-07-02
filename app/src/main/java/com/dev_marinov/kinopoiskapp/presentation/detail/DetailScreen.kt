@@ -501,8 +501,8 @@ fun SetNamePerson(name: String) {
 }
 
 fun getToString(items: List<*>): String {
-    if (items.any { it is Genres }) {
-        val genres: List<Genres> = items.filterIsInstance<Genres>()
+    if (items.any { it is com.dev_marinov.kinopoiskapp.domain.model.Genres }) {
+        val genres: List<com.dev_marinov.kinopoiskapp.domain.model.Genres> = items.filterIsInstance<com.dev_marinov.kinopoiskapp.domain.model.Genres>()
         return genres.joinToString { genre ->
             "${genre.genres}"
         }

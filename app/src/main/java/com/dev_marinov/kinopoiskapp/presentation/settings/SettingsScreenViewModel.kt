@@ -16,9 +16,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsScreenViewModel @Inject constructor(
-    private val dataStoreRepository: DataStoreRepository,
-    private val movieRepository: MovieRepository,
-    private val favoriteRepository: FavoriteRepository,
+    private val dataStoreRepository: com.dev_marinov.kinopoiskapp.domain.repository.DataStoreRepository,
+    private val movieRepository: com.dev_marinov.kinopoiskapp.domain.repository.MovieRepository,
+    private val favoriteRepository: com.dev_marinov.kinopoiskapp.domain.repository.FavoriteRepository,
     connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
     val connectivity = connectivityObserver.observe()

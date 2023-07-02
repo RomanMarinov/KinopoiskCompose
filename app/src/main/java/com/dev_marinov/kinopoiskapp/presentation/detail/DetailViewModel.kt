@@ -20,14 +20,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val movieRepository: MovieRepository,
-    private val posterRepository: PosterRepository,
-    private val releaseYearRepository: ReleaseYearRepository,
-    private val ratingRepository: RatingRepository,
-    private val votesRepository: VotesRepository,
-    private val genresRepository: GenresRepository,
-    private val personsRepository: PersonsRepository,
-    private val videosRepository: VideosRepository
+    private val movieRepository: com.dev_marinov.kinopoiskapp.domain.repository.MovieRepository,
+    private val posterRepository: com.dev_marinov.kinopoiskapp.domain.repository.PosterRepository,
+    private val releaseYearRepository: com.dev_marinov.kinopoiskapp.domain.repository.ReleaseYearRepository,
+    private val ratingRepository: com.dev_marinov.kinopoiskapp.domain.repository.RatingRepository,
+    private val votesRepository: com.dev_marinov.kinopoiskapp.domain.repository.VotesRepository,
+    private val genresRepository: com.dev_marinov.kinopoiskapp.domain.repository.GenresRepository,
+    private val personsRepository: com.dev_marinov.kinopoiskapp.domain.repository.PersonsRepository,
+    private val videosRepository: com.dev_marinov.kinopoiskapp.domain.repository.VideosRepository
 ) : ViewModel() {
 
     private var _movie: MutableLiveData<MovieItemDetail> = MutableLiveData()
@@ -44,21 +44,21 @@ class DetailViewModel @Inject constructor(
     fun getMovie(movieId: String) {
         viewModelScope.launch(Dispatchers.IO) {
 
-            val jobMovie: Deferred<Movie> =
+            val jobMovie: Deferred<com.dev_marinov.kinopoiskapp.domain.model.Movie> =
                 async { movieRepository.getMovie(movieId = movieId) }
-            val jobPoster: Deferred<Poster?> =
+            val jobPoster: Deferred<com.dev_marinov.kinopoiskapp.domain.model.Poster?> =
                 async { posterRepository.getPoster(movieId = movieId.toInt()) }
-            val jobRating: Deferred<Rating?> =
+            val jobRating: Deferred<com.dev_marinov.kinopoiskapp.domain.model.Rating?> =
                 async { ratingRepository.getRating(movieId = movieId.toInt()) }
-            val jobReleaseYear: Deferred<ReleaseYear?> =
+            val jobReleaseYear: Deferred<com.dev_marinov.kinopoiskapp.domain.model.ReleaseYear?> =
                 async { releaseYearRepository.getReleaseYear(movieId = movieId.toInt()) }
-            val jobVote: Deferred<Votes?> =
+            val jobVote: Deferred<com.dev_marinov.kinopoiskapp.domain.model.Votes?> =
                 async { votesRepository.getVotes(movieId = movieId.toInt()) }
-            val jobGenres: Deferred<List<Genres>> =
+            val jobGenres: Deferred<List<com.dev_marinov.kinopoiskapp.domain.model.Genres>> =
                 async { genresRepository.getGenres(movieId = movieId.toInt()) }
-            val jobPerson: Deferred<List<Person>> =
+            val jobPerson: Deferred<List<com.dev_marinov.kinopoiskapp.domain.model.Person>> =
                 async { personsRepository.getPersons(movieId = movieId.toInt()) }
-            val jobVideos: Deferred<List<Trailer>?> =
+            val jobVideos: Deferred<List<com.dev_marinov.kinopoiskapp.domain.model.Trailer>?> =
                 async { videosRepository.getTrailersForDetail(movieId = movieId.toInt()) }
             _movie.postValue(
                 getMovieItemDetail(
@@ -78,14 +78,14 @@ class DetailViewModel @Inject constructor(
     }
 
     private fun getMovieItemDetail(
-        movie: Movie,
-        poster: Poster?,
-        rating: Rating?,
-        releaseYear: ReleaseYear?,
-        votes: Votes?,
-        genres: List<Genres>,
-        persons: List<Person>,
-        videos: List<Trailer>?
+        movie: com.dev_marinov.kinopoiskapp.domain.model.Movie,
+        poster: com.dev_marinov.kinopoiskapp.domain.model.Poster?,
+        rating: com.dev_marinov.kinopoiskapp.domain.model.Rating?,
+        releaseYear: com.dev_marinov.kinopoiskapp.domain.model.ReleaseYear?,
+        votes: com.dev_marinov.kinopoiskapp.domain.model.Votes?,
+        genres: List<com.dev_marinov.kinopoiskapp.domain.model.Genres>,
+        persons: List<com.dev_marinov.kinopoiskapp.domain.model.Person>,
+        videos: List<com.dev_marinov.kinopoiskapp.domain.model.Trailer>?
     ) = MovieItemDetail(
         movie = movie,
         poster = poster,
@@ -118,7 +118,7 @@ class DetailViewModel @Inject constructor(
         }
     }
 
-    private fun getCycle(trailers: List<Trailer>) {
+    private fun getCycle(trailers: List<com.dev_marinov.kinopoiskapp.domain.model.Trailer>) {
         val youtubeUrlsBodyTemp = mutableListOf<String>()
         var youtubeTrailerBody = ""
         for (i in trailers.indices) {
