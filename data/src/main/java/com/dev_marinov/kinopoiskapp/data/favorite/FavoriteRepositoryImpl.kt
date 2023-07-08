@@ -5,7 +5,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
 import com.dev_marinov.kinopoiskapp.domain.repository.FavoriteRepository
-import com.dev_marinov.kinopoiskapp.presentation.model.SelectableFavoriteMovie
+import com.dev_marinov.kinopoiskapp.domain.model.selectable_favorite.SelectableFavoriteMovie
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton

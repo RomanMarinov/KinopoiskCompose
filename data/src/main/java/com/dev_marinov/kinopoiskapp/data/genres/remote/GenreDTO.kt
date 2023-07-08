@@ -1,6 +1,6 @@
 package com.dev_marinov.kinopoiskapp.data.genres.remote
 
-import com.dev_marinov.kinopoiskapp.domain.model.Genre
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Genre
 import com.google.gson.annotations.SerializedName
 
 data class GenreDTO(

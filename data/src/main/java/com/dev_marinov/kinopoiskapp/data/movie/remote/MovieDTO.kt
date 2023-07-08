@@ -8,6 +8,7 @@ import com.dev_marinov.kinopoiskapp.data.releaseYear.remote.ReleaseYearDTO
 import com.dev_marinov.kinopoiskapp.data.video.remote.VideosDTO
 import com.dev_marinov.kinopoiskapp.data.votes.remote.VotesDTO
 import com.dev_marinov.kinopoiskapp.domain.model.*
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Movie
 import com.google.gson.annotations.SerializedName
 
 data class MovieDTO(

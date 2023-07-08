@@ -1,4 +1,4 @@
-package com.dev_marinov.kinopoiskapp.presentation.home.util
+package com.dev_marinov.kinopoiskapp.common
 
 class Constants {
     companion object {

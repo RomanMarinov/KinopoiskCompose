@@ -1,6 +1,6 @@
 package com.dev_marinov.kinopoiskapp.data.releaseYear.remote
 
-import com.dev_marinov.kinopoiskapp.domain.model.ReleaseYear
+import com.dev_marinov.kinopoiskapp.domain.model.movie.ReleaseYear
 import com.google.gson.annotations.SerializedName
 
 data class ReleaseYearDTO(

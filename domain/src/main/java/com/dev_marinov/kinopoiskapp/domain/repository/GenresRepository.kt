@@ -1,6 +1,6 @@
 package com.dev_marinov.kinopoiskapp.domain.repository
 
-import com.dev_marinov.kinopoiskapp.domain.model.Genres
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Genres
 import kotlinx.coroutines.flow.Flow
 
 interface GenresRepository {

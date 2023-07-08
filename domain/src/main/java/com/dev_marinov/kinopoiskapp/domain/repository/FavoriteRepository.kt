@@ -1,7 +1,7 @@
 package com.dev_marinov.kinopoiskapp.domain.repository
 
 import androidx.lifecycle.LiveData
-import com.dev_marinov.kinopoiskapp.presentation.model.SelectableFavoriteMovie
+import com.dev_marinov.kinopoiskapp.domain.model.selectable_favorite.SelectableFavoriteMovie
 import kotlinx.coroutines.flow.Flow
 
 interface FavoriteRepository {

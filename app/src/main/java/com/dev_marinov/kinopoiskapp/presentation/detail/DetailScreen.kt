@@ -41,7 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.dev_marinov.kinopoiskapp.R
-import com.dev_marinov.kinopoiskapp.domain.model.Genres
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Genres
 import com.dev_marinov.kinopoiskapp.presentation.detail.model.MovieItemDetail
 import com.dev_marinov.kinopoiskapp.presentation.home.util.Screen
 
@@ -420,8 +420,6 @@ fun DescriptionBlock(
                         .background(Color.Black)
                         .height(200.dp)
                 ) {
-
-                    val context = LocalContext.current.applicationContext
                     Image(
                         painter = painterResource(id = R.drawable.ic_play_video),
                         contentDescription = "contentDescription",
@@ -473,7 +471,7 @@ fun DescriptionBlock(
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 if (item.name != null) {
-                                    SetNamePerson(name = item.name)
+                                    SetNamePerson(name = item.name.toString())
                                 } else {
                                     SetNamePerson(name = "неизвестно")
                                 }
@@ -501,8 +499,8 @@ fun SetNamePerson(name: String) {
 }
 
 fun getToString(items: List<*>): String {
-    if (items.any { it is com.dev_marinov.kinopoiskapp.domain.model.Genres }) {
-        val genres: List<com.dev_marinov.kinopoiskapp.domain.model.Genres> = items.filterIsInstance<com.dev_marinov.kinopoiskapp.domain.model.Genres>()
+    if (items.any { it is Genres }) {
+        val genres: List<Genres> = items.filterIsInstance<Genres>()
         return genres.joinToString { genre ->
             "${genre.genres}"
         }

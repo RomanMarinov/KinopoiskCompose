@@ -6,14 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dev_marinov.kinopoiskapp.ConnectivityObserver
 import com.dev_marinov.kinopoiskapp.data.movie.local.MovieDao
-import com.dev_marinov.kinopoiskapp.domain.model.*
-import com.dev_marinov.kinopoiskapp.domain.repository.*
 import com.dev_marinov.kinopoiskapp.domain.usecase.UpdateMoviesUseCase
-import com.dev_marinov.kinopoiskapp.presentation.home.model.MovieItem
+import com.dev_marinov.kinopoiskapp.domain.model.movie_combine.MovieItemCombine
 import com.dev_marinov.kinopoiskapp.presentation.home.util.CombineFlows
-import com.dev_marinov.kinopoiskapp.presentation.home.util.Constants
-import com.dev_marinov.kinopoiskapp.presentation.model.PagingParams
-import com.dev_marinov.kinopoiskapp.presentation.model.SelectableFavoriteMovie
+import com.dev_marinov.kinopoiskapp.common.Constants
+import com.dev_marinov.kinopoiskapp.domain.model.pagination.PagingParams
+import com.dev_marinov.kinopoiskapp.domain.model.selectable_favorite.SelectableFavoriteMovie
+import com.dev_marinov.kinopoiskapp.domain.model.movie.*
 import com.dev_marinov.kinopoiskapp.presentation.util.SortingParamsChipSelection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +34,6 @@ class HomeViewModel @Inject constructor(
     private val videosRepository: com.dev_marinov.kinopoiskapp.domain.repository.VideosRepository,
     private val dataStoreRepository: com.dev_marinov.kinopoiskapp.domain.repository.DataStoreRepository,
     private val favoriteRepository: com.dev_marinov.kinopoiskapp.domain.repository.FavoriteRepository,
-    val movieDao: MovieDao,
     connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
 
@@ -52,16 +50,16 @@ class HomeViewModel @Inject constructor(
     private val _isHideTopBar: MutableStateFlow<Boolean> = MutableStateFlow(false)
     var isHideTopBar: StateFlow<Boolean> = _isHideTopBar
 
-    private var flowMovies: Flow<List<com.dev_marinov.kinopoiskapp.domain.model.Movie>> = getMovies()
+    private var flowMovies: Flow<List<Movie>> = getMovies()
     private val flowMoviesIds: Flow<Set<Int>> =
         flowMovies.map { it.map { movie -> movie.id }.toSet() }
-    private val flowPosters: Flow<List<com.dev_marinov.kinopoiskapp.domain.model.Poster>> = getPosters()
-    private var flowReleaseYears: Flow<List<com.dev_marinov.kinopoiskapp.domain.model.ReleaseYear>> = getReleaseYears()
-    private var flowRatings: Flow<List<com.dev_marinov.kinopoiskapp.domain.model.Rating>> = getRatings()
-    private val flowVotes: Flow<List<com.dev_marinov.kinopoiskapp.domain.model.Votes>> = getVotes()
-    private val flowGenres: Flow<List<com.dev_marinov.kinopoiskapp.domain.model.Genres>> = getGenres()
-    private val flowPersons: Flow<List<com.dev_marinov.kinopoiskapp.domain.model.Person>> = getPersons()
-    private val flowVideos: Flow<List<com.dev_marinov.kinopoiskapp.domain.model.Videos>> = getVideos()
+    private val flowPosters: Flow<List<Poster>> = getPosters()
+    private var flowReleaseYears: Flow<List<ReleaseYear>> = getReleaseYears()
+    private var flowRatings: Flow<List<Rating>> = getRatings()
+    private val flowVotes: Flow<List<Votes>> = getVotes()
+    private val flowGenres: Flow<List<Genres>> = getGenres()
+    private val flowPersons: Flow<List<Person>> = getPersons()
+    private val flowVideos: Flow<List<Videos>> = getVideos()
 
     private var _selectChipIndex: MutableStateFlow<Int> = MutableStateFlow(0)
     val selectChipIndex: StateFlow<Int> = _selectChipIndex
@@ -165,13 +163,13 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getMovies(): Flow<List<com.dev_marinov.kinopoiskapp.domain.model.Movie>> = movieRepository.movies.map { movies ->
+    private fun getMovies(): Flow<List<Movie>> = movieRepository.movies.map { movies ->
         movies.filter { movie ->
             movie.page == page
         }
     }
 
-    private fun getReleaseYears(): Flow<List<com.dev_marinov.kinopoiskapp.domain.model.ReleaseYear>> {
+    private fun getReleaseYears(): Flow<List<ReleaseYear>> {
         return releaseYearRepository.releaseYears.combine(flowMoviesIds) { years, ids ->
             years.filter {
                 it.movieId in ids
@@ -179,7 +177,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getPosters(): Flow<List<com.dev_marinov.kinopoiskapp.domain.model.Poster>> {
+    private fun getPosters(): Flow<List<Poster>> {
         return posterRepository.posters.combine(flowMoviesIds) { posters, ids ->
             posters.filter {
                 it.movieId in ids
@@ -187,7 +185,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getRatings(): Flow<List<com.dev_marinov.kinopoiskapp.domain.model.Rating>> {
+    private fun getRatings(): Flow<List<Rating>> {
         return ratingRepository.ratings.combine(flowMoviesIds) { ratings, ids ->
             ratings.filter {
                 it.movieId in ids
@@ -195,7 +193,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getVotes(): Flow<List<com.dev_marinov.kinopoiskapp.domain.model.Votes>> {
+    private fun getVotes(): Flow<List<Votes>> {
         return votesRepository.votes.combine(flowMoviesIds) { votes, ids ->
             votes.filter {
                 it.movieId in ids
@@ -203,7 +201,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getGenres(): Flow<List<com.dev_marinov.kinopoiskapp.domain.model.Genres>> {
+    private fun getGenres(): Flow<List<Genres>> {
         return genresRepository.genres.combine(flowMoviesIds) { genres, ids ->
             genres.filter {
                 it.movieId in ids
@@ -211,7 +209,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getPersons(): Flow<List<com.dev_marinov.kinopoiskapp.domain.model.Person>> {
+    private fun getPersons(): Flow<List<Person>> {
         return personsRepository.persons.combine(flowMoviesIds) { persons, ids ->
             persons.filter {
                 it.movieId in ids
@@ -219,7 +217,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getVideos(): Flow<List<com.dev_marinov.kinopoiskapp.domain.model.Videos>> {
+    private fun getVideos(): Flow<List<Videos>> {
         return videosRepository.videos.combine(flowMoviesIds) { videos, ids ->
             videos.filter {
                 it.movieId in ids
@@ -295,7 +293,7 @@ class HomeViewModel @Inject constructor(
         sortParamsChipSelection
     ) { listMovies, listReleaseYears, listPosters, listRatings, listVotes, listPersons, listGenres, listVideos, sortParams ->
         val movies = listMovies.map { movie ->
-            MovieItem(
+            MovieItemCombine(
                 movie = movie,
                 releaseYears = listReleaseYears.filter {
                     it.movieId == movie.id
@@ -325,14 +323,13 @@ class HomeViewModel @Inject constructor(
             SortingParamsChipSelection.YEAR -> movies.sortedBy { it.movie.year }
             SortingParamsChipSelection.NAME -> movies.sortedBy { it.movie.name }
         }
-
         // не получаю данные для all из за того что нет такого типа all
     }.map {
-        it.filter { movieItem ->
+        it.filter { movieItemCombine ->
             if (_selectGenres.value.lowercase() == "all") {
-                movieItem.movie == movieItem.movie // выбрать все фильмы
+                movieItemCombine.movie == movieItemCombine.movie // выбрать все фильмы
             } else {
-                movieItem.movie.type == _selectGenres.value.lowercase() // выбрать по genre
+                movieItemCombine.movie.type == _selectGenres.value.lowercase() // выбрать по genre
             }
         }
     }

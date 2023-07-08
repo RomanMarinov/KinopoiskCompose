@@ -1,7 +1,7 @@
 package com.dev_marinov.kinopoiskapp.data.persons.remote
 
 import com.dev_marinov.kinopoiskapp.data.persons.local.PersonsDao
-import com.dev_marinov.kinopoiskapp.domain.model.Person
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Person
 import com.dev_marinov.kinopoiskapp.domain.repository.PersonsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

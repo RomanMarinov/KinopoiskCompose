@@ -1,6 +1,6 @@
 package com.dev_marinov.kinopoiskapp.domain.repository
 
-import com.dev_marinov.kinopoiskapp.domain.model.Votes
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Votes
 import kotlinx.coroutines.flow.Flow
 
 interface VotesRepository {

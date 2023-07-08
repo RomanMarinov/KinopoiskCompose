@@ -1,7 +1,7 @@
 package com.dev_marinov.kinopoiskapp.data
 
 import androidx.room.TypeConverter
-import com.dev_marinov.kinopoiskapp.domain.model.*
+import com.dev_marinov.kinopoiskapp.domain.model.movie.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type

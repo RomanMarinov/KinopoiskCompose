@@ -1,6 +1,6 @@
 package com.dev_marinov.kinopoiskapp.data.video.remote
 
-import com.dev_marinov.kinopoiskapp.domain.model.Trailer
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Trailer
 import com.google.gson.annotations.SerializedName
 
 data class TrailerDTO(

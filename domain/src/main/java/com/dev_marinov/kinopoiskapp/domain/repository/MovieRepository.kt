@@ -1,6 +1,6 @@
 package com.dev_marinov.kinopoiskapp.domain.repository
 
-import com.dev_marinov.kinopoiskapp.domain.model.Movie
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Movie
 import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {

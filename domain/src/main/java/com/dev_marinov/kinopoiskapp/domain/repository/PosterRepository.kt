@@ -1,6 +1,6 @@
 package com.dev_marinov.kinopoiskapp.domain.repository
 
-import com.dev_marinov.kinopoiskapp.domain.model.Poster
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Poster
 import kotlinx.coroutines.flow.Flow
 
 interface PosterRepository {

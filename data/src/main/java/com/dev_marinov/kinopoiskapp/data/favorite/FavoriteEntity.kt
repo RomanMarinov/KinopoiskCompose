@@ -5,8 +5,9 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.dev_marinov.kinopoiskapp.data.DataConvertersForList
 import com.dev_marinov.kinopoiskapp.domain.model.*
-import com.dev_marinov.kinopoiskapp.presentation.home.model.MovieItem
-import com.dev_marinov.kinopoiskapp.presentation.model.SelectableFavoriteMovie
+import com.dev_marinov.kinopoiskapp.domain.model.selectable_favorite.SelectableFavoriteMovie
+import com.dev_marinov.kinopoiskapp.domain.model.movie.*
+import com.dev_marinov.kinopoiskapp.domain.model.movie_combine.MovieItemCombine
 
 @Entity(tableName = "favorite_movie")
 @TypeConverters(DataConvertersForList::class)
@@ -42,7 +43,7 @@ data class FavoriteEntity(
 
     fun mapToDomain(): SelectableFavoriteMovie {
         return SelectableFavoriteMovie(
-            movie = MovieItem(
+            movie = MovieItemCombine(
                 movie = movie,
                 releaseYears = releaseYears,
                 poster = poster,

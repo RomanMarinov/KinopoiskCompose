@@ -1,7 +1,7 @@
 package com.dev_marinov.kinopoiskapp.data.genres
 
 import com.dev_marinov.kinopoiskapp.data.genres.local.GenresDao
-import com.dev_marinov.kinopoiskapp.domain.model.Genres
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Genres
 import com.dev_marinov.kinopoiskapp.domain.repository.GenresRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

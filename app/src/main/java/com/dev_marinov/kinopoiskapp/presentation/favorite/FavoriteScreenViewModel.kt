@@ -5,10 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dev_marinov.kinopoiskapp.ConnectivityObserver
-import com.dev_marinov.kinopoiskapp.domain.repository.DataStoreRepository
-import com.dev_marinov.kinopoiskapp.domain.repository.FavoriteRepository
-import com.dev_marinov.kinopoiskapp.presentation.home.util.Constants
-import com.dev_marinov.kinopoiskapp.presentation.model.SelectableFavoriteMovie
+import com.dev_marinov.kinopoiskapp.common.Constants
+import com.dev_marinov.kinopoiskapp.domain.model.selectable_favorite.SelectableFavoriteMovie
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

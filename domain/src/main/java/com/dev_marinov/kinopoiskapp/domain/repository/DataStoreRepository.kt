@@ -1,8 +1,7 @@
 package com.dev_marinov.kinopoiskapp.domain.repository
 
-import android.graphics.Color
 import androidx.compose.ui.graphics.Color
-import com.dev_marinov.kinopoiskapp.presentation.model.PagingParams
+import com.dev_marinov.kinopoiskapp.domain.model.pagination.PagingParams
 import kotlinx.coroutines.flow.Flow
 
 interface DataStoreRepository {
@@ -15,9 +14,9 @@ interface DataStoreRepository {
     val getClickedTypeGenre: Flow<String>
     suspend fun saveGenreType(key: String, typeGenre: String)
 
-    val gradientColorsApp: Flow<List<List<android.graphics.Color>>>
+    val gradientColorsApp: Flow<List<List<Color>>>
 
-    val getGradientColorApp: Flow<List<android.graphics.Color>>
+    val getGradientColorApp: Flow<List<Color>>
     suspend fun setGradientColorApp(selectedBoxIndex: Int)
 
     val getGradientColorIndexApp: Flow<Int>

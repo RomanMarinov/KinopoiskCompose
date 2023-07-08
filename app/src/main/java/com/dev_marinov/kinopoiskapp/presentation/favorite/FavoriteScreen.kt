@@ -33,7 +33,7 @@ import com.dev_marinov.kinopoiskapp.R
 import com.dev_marinov.kinopoiskapp.presentation.home.SetShimmer
 import com.dev_marinov.kinopoiskapp.presentation.home.StartSnackBar
 import com.dev_marinov.kinopoiskapp.presentation.home.util.Screen
-import com.dev_marinov.kinopoiskapp.presentation.model.SelectableFavoriteMovie
+import com.dev_marinov.kinopoiskapp.domain.model.selectable_favorite.SelectableFavoriteMovie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

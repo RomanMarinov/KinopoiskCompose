@@ -6,7 +6,7 @@ import androidx.room.ForeignKey
 import androidx.room.ForeignKey.Companion.CASCADE
 import androidx.room.PrimaryKey
 import com.dev_marinov.kinopoiskapp.data.movie.local.MovieEntity
-import com.dev_marinov.kinopoiskapp.domain.model.ReleaseYear
+import com.dev_marinov.kinopoiskapp.domain.model.movie.ReleaseYear
 
 @Entity(
     tableName = "release_years",

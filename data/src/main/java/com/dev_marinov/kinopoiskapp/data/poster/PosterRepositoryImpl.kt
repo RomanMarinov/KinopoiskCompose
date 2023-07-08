@@ -1,7 +1,7 @@
 package com.dev_marinov.kinopoiskapp.data.poster
 
 import com.dev_marinov.kinopoiskapp.data.poster.local.PosterDao
-import com.dev_marinov.kinopoiskapp.domain.model.Poster
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Poster
 import com.dev_marinov.kinopoiskapp.domain.repository.PosterRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

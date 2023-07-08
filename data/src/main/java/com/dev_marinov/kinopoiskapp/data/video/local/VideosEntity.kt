@@ -4,8 +4,8 @@ import androidx.room.*
 import androidx.room.ForeignKey.Companion.CASCADE
 import com.dev_marinov.kinopoiskapp.data.DataConvertersForList
 import com.dev_marinov.kinopoiskapp.data.movie.local.MovieEntity
-import com.dev_marinov.kinopoiskapp.domain.model.Trailer
-import com.dev_marinov.kinopoiskapp.domain.model.Videos
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Trailer
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Videos
 
 @Entity(
     tableName = "videos",

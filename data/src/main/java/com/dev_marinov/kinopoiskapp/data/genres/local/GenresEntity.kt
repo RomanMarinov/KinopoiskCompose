@@ -3,8 +3,8 @@ package com.dev_marinov.kinopoiskapp.data.genres.local
 import androidx.room.*
 import androidx.room.ForeignKey.Companion.CASCADE
 import com.dev_marinov.kinopoiskapp.data.movie.local.MovieEntity
-import com.dev_marinov.kinopoiskapp.domain.model.Genre
-import com.dev_marinov.kinopoiskapp.domain.model.Genres
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Genre
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Genres
 
 // Указываем, что значения поля movieId (параметр childColumns) должно обязательно быть
 // равно какому-либо значению поля id (параметр parentColumns) в таблице MovieEntityNew (параметр entity).

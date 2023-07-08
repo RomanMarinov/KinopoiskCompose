@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.dev_marinov.kinopoiskapp.data.movie.local.MovieEntity
-import com.dev_marinov.kinopoiskapp.domain.model.Poster
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Poster
 
 @Entity(
     tableName = "posters",

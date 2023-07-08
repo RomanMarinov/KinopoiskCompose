@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.dev_marinov.kinopoiskapp.data.movie.local.MovieEntity
-import com.dev_marinov.kinopoiskapp.domain.model.Rating
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Rating
 
 @Entity(
     tableName = "ratings",

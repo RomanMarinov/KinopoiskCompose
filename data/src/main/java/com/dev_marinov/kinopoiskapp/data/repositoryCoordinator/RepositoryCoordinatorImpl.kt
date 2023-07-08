@@ -9,7 +9,7 @@ import com.dev_marinov.kinopoiskapp.data.releaseYear.local.ReleaseYearEntity
 import com.dev_marinov.kinopoiskapp.data.repositoryCoordinator.local.CoordinatorDao
 import com.dev_marinov.kinopoiskapp.data.video.local.VideosEntity
 import com.dev_marinov.kinopoiskapp.data.votes.local.VotesEntity
-import com.dev_marinov.kinopoiskapp.domain.model.*
+import com.dev_marinov.kinopoiskapp.domain.model.movie.*
 import com.dev_marinov.kinopoiskapp.domain.repository.RepositoryCoordinator
 import javax.inject.Inject
 

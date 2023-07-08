@@ -1,6 +1,6 @@
 package com.dev_marinov.kinopoiskapp.data.votes.remote
 
-import com.dev_marinov.kinopoiskapp.domain.model.Votes
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Votes
 import com.google.gson.annotations.SerializedName
 
 data class VotesDTO(

@@ -1,6 +1,6 @@
 package com.dev_marinov.kinopoiskapp.domain.repository
 
-import com.dev_marinov.kinopoiskapp.domain.model.Rating
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Rating
 import kotlinx.coroutines.flow.Flow
 
 interface RatingRepository {

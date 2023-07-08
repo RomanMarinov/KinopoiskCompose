@@ -1,6 +1,6 @@
 package com.dev_marinov.kinopoiskapp.domain.repository
 
-import com.dev_marinov.kinopoiskapp.domain.model.ReleaseYear
+import com.dev_marinov.kinopoiskapp.domain.model.movie.ReleaseYear
 import kotlinx.coroutines.flow.Flow
 
 interface ReleaseYearRepository {

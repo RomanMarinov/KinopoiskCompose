@@ -1,16 +1,17 @@
 package com.dev_marinov.kinopoiskapp.data.movie.local.datastore
 
 import android.content.Context
-import android.graphics.Color
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 
 import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
-import com.dev_marinov.kinopoiskapp.R
 import com.dev_marinov.kinopoiskapp.data.R
 import com.dev_marinov.kinopoiskapp.domain.repository.DataStoreRepository
-import com.dev_marinov.kinopoiskapp.presentation.home.util.Constants
-import com.dev_marinov.kinopoiskapp.presentation.model.PagingParams
+import com.dev_marinov.kinopoiskapp.common.Constants
+import com.dev_marinov.kinopoiskapp.data.pagination.PagingParamsDTO
+import com.dev_marinov.kinopoiskapp.domain.model.pagination.PagingParams
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
@@ -104,7 +105,8 @@ class DataStoreRepositoryImpl @Inject constructor(private val context: Context) 
     }
 
     override suspend fun savePagingParams(key: String, pagingParams: PagingParams) {
-        val jsonString = Gson().toJson(pagingParams)
+        val pagingParamsDTO = pagingMapFromDomain(pagingParams = pagingParams)
+        val jsonString = Gson().toJson(pagingParamsDTO)
         val preferenceKey = stringPreferencesKey(key)
         context.dataStore.edit {
             it[preferenceKey] = jsonString
@@ -118,5 +120,17 @@ class DataStoreRepositoryImpl @Inject constructor(private val context: Context) 
             jsonString,
             PagingParams::class.java
         ) else null
+    }
+
+    private fun pagingMapFromDomain(pagingParams: PagingParams) : PagingParamsDTO {
+        return PagingParamsDTO(
+            yearPickerFrom = pagingParams.yearPickerFrom,
+            yearPickerTo = pagingParams.yearPickerTo,
+            ratingPickerFrom = pagingParams.ratingPickerFrom,
+            ratingPickerTo = pagingParams.ratingPickerTo,
+            genre = pagingParams.genre,
+            page = pagingParams.page,
+            indexLoad = pagingParams.indexLoad
+        )
     }
 }

@@ -2,7 +2,7 @@ package com.dev_marinov.kinopoiskapp.data.movie.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.dev_marinov.kinopoiskapp.domain.model.Movie
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Movie
 
 @Entity(tableName = "movies")
 data class MovieEntity(

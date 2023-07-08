@@ -1,6 +1,6 @@
 package com.dev_marinov.kinopoiskapp.data.persons.remote
 
-import com.dev_marinov.kinopoiskapp.domain.model.Person
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Person
 
 data class PersonsDTO(
     val id: Int,

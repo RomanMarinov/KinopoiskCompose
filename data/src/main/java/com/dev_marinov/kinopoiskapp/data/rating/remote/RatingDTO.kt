@@ -1,6 +1,6 @@
 package com.dev_marinov.kinopoiskapp.data.rating.remote
 
-import com.dev_marinov.kinopoiskapp.domain.model.Rating
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Rating
 import com.google.gson.annotations.SerializedName
 
 data class RatingDTO(

@@ -1,7 +1,7 @@
 package com.dev_marinov.kinopoiskapp.data.votes
 
 import com.dev_marinov.kinopoiskapp.data.votes.local.VotesDao
-import com.dev_marinov.kinopoiskapp.domain.model.Votes
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Votes
 import com.dev_marinov.kinopoiskapp.domain.repository.VotesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

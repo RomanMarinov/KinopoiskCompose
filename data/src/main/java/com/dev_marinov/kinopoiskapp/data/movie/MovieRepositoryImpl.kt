@@ -4,7 +4,7 @@ import android.util.Log
 import com.dev_marinov.kinopoiskapp.data.movie.local.MovieDao
 import com.dev_marinov.kinopoiskapp.data.movie.local.MovieEntity
 import com.dev_marinov.kinopoiskapp.data.movie.remote.ApiService
-import com.dev_marinov.kinopoiskapp.domain.model.Movie
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Movie
 import com.dev_marinov.kinopoiskapp.domain.repository.MovieRepository
 import com.dev_marinov.kinopoiskapp.domain.repository.RepositoryCoordinator
 import kotlinx.coroutines.flow.Flow

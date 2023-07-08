@@ -1,6 +1,6 @@
-package com.dev_marinov.kinopoiskapp.presentation.model
+package com.dev_marinov.kinopoiskapp.data.pagination
 
-data class PagingParams(
+data class PagingParamsDTO(
     val yearPickerFrom: String,
     val yearPickerTo: String,
     val ratingPickerFrom: String,

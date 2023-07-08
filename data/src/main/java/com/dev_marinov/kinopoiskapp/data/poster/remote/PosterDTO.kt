@@ -1,6 +1,6 @@
 package com.dev_marinov.kinopoiskapp.data.poster.remote
 
-import com.dev_marinov.kinopoiskapp.domain.model.Poster
+import com.dev_marinov.kinopoiskapp.domain.model.movie.Poster
 import com.google.gson.annotations.SerializedName
 
 data class PosterDTO(

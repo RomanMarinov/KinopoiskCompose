@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterialApi::class)
-
 package com.dev_marinov.kinopoiskapp.presentation.home
 
 import android.annotation.SuppressLint
@@ -39,8 +37,8 @@ import com.airbnb.lottie.compose.*
 import com.dev_marinov.kinopoiskapp.ConnectivityObserver
 import com.dev_marinov.kinopoiskapp.R
 import com.dev_marinov.kinopoiskapp.presentation.home.util.Screen
-import com.dev_marinov.kinopoiskapp.presentation.model.PagingParams
-import com.dev_marinov.kinopoiskapp.presentation.model.SelectableFavoriteMovie
+import com.dev_marinov.kinopoiskapp.domain.model.pagination.PagingParams
+import com.dev_marinov.kinopoiskapp.domain.model.selectable_favorite.SelectableFavoriteMovie
 import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -376,6 +374,9 @@ fun MovieItem(
                     .padding(10.dp),
                 contentAlignment = Alignment.BottomStart
             ) {
+
+                movieItem.movie
+
                 movieItem.movie.movie.name?.let {
                     var movieName = ""
                     val indexMax = it.length

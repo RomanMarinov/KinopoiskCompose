@@ -1,6 +1,6 @@
 package com.dev_marinov.kinopoiskapp.domain.repository
 
-import com.dev_marinov.kinopoiskapp.domain.model.*
+import com.dev_marinov.kinopoiskapp.domain.model.movie.*
 
 interface RepositoryCoordinator {
 

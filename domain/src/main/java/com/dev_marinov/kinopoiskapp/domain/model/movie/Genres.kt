@@ -1,4 +1,4 @@
-package com.dev_marinov.kinopoiskapp.domain.model
+package com.dev_marinov.kinopoiskapp.domain.model.movie
 
 data class Genres(
     val id: Int,
