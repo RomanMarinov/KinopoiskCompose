@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
 class UpdateMoviesUseCase @Inject constructor(
-    private val movieRepository: com.dev_marinov.kinopoiskapp.domain.repository.MovieRepository
+    private val movieRepository: MovieRepository
 ) : UseCase<UpdateMoviesUseCase.UpdateMoviesParams, Unit>(Dispatchers.IO) {
 
     override suspend fun execute(parameters: UpdateMoviesParams) {

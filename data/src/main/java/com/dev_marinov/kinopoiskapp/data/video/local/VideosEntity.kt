@@ -23,7 +23,7 @@ import com.dev_marinov.kinopoiskapp.domain.model.movie.Videos
 data class VideosEntity(
     // @PrimaryKey(autoGenerate = false)
     // val id: Int?,
-    val trailers: List<Trailer>?,
+    val trailers: List<Trailer>,
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "movie_id")
     val movieId: Int,

@@ -14,7 +14,7 @@ class VotesRepositoryImpl @Inject constructor(private val localDataSource: Votes
         it.map { entity -> entity.mapToDomain() }
     }
 
-    override suspend fun getVotes(movieId: Int): Votes? {
-        return localDataSource.getVotesForDetail(movie_id = movieId)?.mapToDomain()
+    override suspend fun getVotes(movieId: Int): Votes {
+        return localDataSource.getVotesForDetail(movie_id = movieId).mapToDomain()
     }
 }

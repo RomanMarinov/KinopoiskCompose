@@ -2,6 +2,7 @@ package com.dev_marinov.kinopoiskapp.di
 
 import com.dev_marinov.kinopoiskapp.data.favorite.FavoriteRepositoryImpl
 import com.dev_marinov.kinopoiskapp.data.genres.GenresRepositoryImpl
+import com.dev_marinov.kinopoiskapp.data.lottie_animation.LottieAnimationRepositoryImpl
 import com.dev_marinov.kinopoiskapp.data.movie.MovieRepositoryImpl
 import com.dev_marinov.kinopoiskapp.data.persons.remote.PersonsRepositoryImpl
 import com.dev_marinov.kinopoiskapp.data.poster.PosterRepositoryImpl
@@ -11,8 +12,10 @@ import com.dev_marinov.kinopoiskapp.data.repositoryCoordinator.RepositoryCoordin
 import com.dev_marinov.kinopoiskapp.data.video.VideosRepositoryImpl
 import com.dev_marinov.kinopoiskapp.data.votes.VotesRepositoryImpl
 import com.dev_marinov.kinopoiskapp.domain.repository.*
+import com.dev_marinov.kinopoiskapp.domain.usecase.GetPersonsUseCase
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -22,41 +25,45 @@ import javax.inject.Singleton
 abstract class RepositoryModule {
     @Binds
     @Singleton
-    abstract fun bindMovieRepository(movieRepositoryImpl: MovieRepositoryImpl): com.dev_marinov.kinopoiskapp.domain.repository.MovieRepository
+    abstract fun bindMovieRepository(movieRepositoryImpl: MovieRepositoryImpl): MovieRepository
 
     @Binds
     @Singleton
-    abstract fun bindPosterRepository(posterRepositoryImpl: PosterRepositoryImpl): com.dev_marinov.kinopoiskapp.domain.repository.PosterRepository
+    abstract fun bindPosterRepository(posterRepositoryImpl: PosterRepositoryImpl): PosterRepository
 
     @Binds
     @Singleton
-    abstract fun bindRatingRepository(ratingRepositoryImpl: RatingRepositoryImpl): com.dev_marinov.kinopoiskapp.domain.repository.RatingRepository
+    abstract fun bindRatingRepository(ratingRepositoryImpl: RatingRepositoryImpl): RatingRepository
 
     @Binds
     @Singleton
-    abstract fun bindReleaseYearRepository(releaseYearRepositoryImpl: ReleaseYearRepositoryImpl): com.dev_marinov.kinopoiskapp.domain.repository.ReleaseYearRepository
+    abstract fun bindReleaseYearRepository(releaseYearRepositoryImpl: ReleaseYearRepositoryImpl): ReleaseYearRepository
 
     @Binds
     @Singleton
-    abstract fun bindGenresRepository(genresRepositoryImpl: GenresRepositoryImpl): com.dev_marinov.kinopoiskapp.domain.repository.GenresRepository
+    abstract fun bindGenresRepository(genresRepositoryImpl: GenresRepositoryImpl): GenresRepository
 
     @Binds
     @Singleton
-    abstract fun bindVotesRepository(votesRepositoryImpl: VotesRepositoryImpl): com.dev_marinov.kinopoiskapp.domain.repository.VotesRepository
+    abstract fun bindVotesRepository(votesRepositoryImpl: VotesRepositoryImpl): VotesRepository
 
     @Binds
     @Singleton
-    abstract fun bindPersonsRepository(personsRepositoryImpl: PersonsRepositoryImpl): com.dev_marinov.kinopoiskapp.domain.repository.PersonsRepository
+    abstract fun bindPersonsRepository(personsRepositoryImpl: PersonsRepositoryImpl): PersonsRepository
 
     @Binds
     @Singleton
-    abstract fun bindVideosRepository(videosRepositoryImpl: VideosRepositoryImpl): com.dev_marinov.kinopoiskapp.domain.repository.VideosRepository
+    abstract fun bindVideosRepository(videosRepositoryImpl: VideosRepositoryImpl): VideosRepository
 
     @Binds
     @Singleton
-    abstract fun bindFavoriteRepository(favoriteRepositoryImpl: FavoriteRepositoryImpl): com.dev_marinov.kinopoiskapp.domain.repository.FavoriteRepository
+    abstract fun bindFavoriteRepository(favoriteRepositoryImpl: FavoriteRepositoryImpl): FavoriteRepository
 
     @Binds
     @Singleton
-    abstract fun bindCommonRepository(commonRepositoryImpl: RepositoryCoordinatorImpl): com.dev_marinov.kinopoiskapp.domain.repository.RepositoryCoordinator
+    abstract fun bindLottieAnimationRepository(lottieAnimationRepositoryImpl: LottieAnimationRepositoryImpl): LottieAnimationRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindCommonRepository(commonRepositoryImpl: RepositoryCoordinatorImpl): RepositoryCoordinator
 }

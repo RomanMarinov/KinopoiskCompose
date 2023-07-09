@@ -19,7 +19,6 @@ class MovieRepositoryImpl @Inject constructor(
     private val remoteDataSource: ApiService,
     private val localDataSource: MovieDao,
     val repositoryCoordinator: RepositoryCoordinator,
-
 ) : MovieRepository {
 
     override val countStatAll: Flow<Int> = localDataSource.getCountStatAll()
@@ -30,7 +29,6 @@ class MovieRepositoryImpl @Inject constructor(
     override val countStatAnimatedSeries: Flow<Int> = localDataSource.getCountStatAnimatedSeries("animated-series")
 
     override val countSelectGenre: MutableStateFlow<Int> = MutableStateFlow(0)
-    override val isPlayingLottie: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     val filteredMoviesFlow: MutableStateFlow<List<Movie>> = MutableStateFlow(emptyList())
 
@@ -87,10 +85,6 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun clearAllMovies() {
         localDataSource.clearAllMovies()
-    }
-
-    override suspend fun playingLottieAnimation(isPlaying: Boolean) {
-        isPlayingLottie.value = isPlaying
     }
 
     //    TODO: uncomment search params

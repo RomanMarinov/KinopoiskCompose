@@ -15,7 +15,7 @@ class PosterRepositoryImpl @Inject constructor(private val localDataSource: Post
         it.map { entity -> entity.mapToDomain() }
     }
 
-    override suspend fun getPoster(movieId: Int): Poster? {
-        return localDataSource.getPosterForDetail(movieId)?.mapToDomain()
+    override suspend fun getPoster(movieId: Int): Poster {
+        return localDataSource.getPosterForDetail(movieId).mapToDomain()
     }
 }

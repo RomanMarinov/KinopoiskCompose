@@ -19,7 +19,7 @@ class VideosRepositoryImpl @Inject constructor(private val videosDao: VideosDao)
         }
     }
 
-    override suspend fun getTrailersForDetail(movieId: Int): List<Trailer>? {
+    override suspend fun getTrailersForDetail(movieId: Int): List<Trailer> {
         return videosDao.getTrailers(movie_id = movieId).trailers
     }
 }

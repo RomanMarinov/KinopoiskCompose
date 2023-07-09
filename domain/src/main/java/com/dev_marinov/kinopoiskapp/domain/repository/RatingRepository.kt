@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface RatingRepository {
 
     val ratings: Flow<List<Rating>>
-    suspend fun getRating(movieId: Int): Rating?
+    suspend fun getRating(movieId: Int): Rating
 }

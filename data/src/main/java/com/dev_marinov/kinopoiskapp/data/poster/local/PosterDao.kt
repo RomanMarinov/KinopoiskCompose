@@ -11,5 +11,5 @@ interface PosterDao {
     fun getAllFlow(): Flow<List<PosterEntity>>
 
     @Query("SELECT * FROM posters WHERE movie_id = :movie_id")
-    fun getPosterForDetail(movie_id: Int): PosterEntity?
+    fun getPosterForDetail(movie_id: Int): PosterEntity
 }

@@ -13,8 +13,8 @@ class RatingRepositoryImpl @Inject constructor(private val localDataSource: Rati
         it.map { entity -> entity.mapToDomain() }
     }
 
-    override suspend fun getRating(movieId: Int): Rating? {
-        return localDataSource.getRatingsForDetail(movieId)?.mapToDomain()
+    override suspend fun getRating(movieId: Int): Rating {
+        return localDataSource.getRatingsForDetail(movieId).mapToDomain()
     }
 
 //    override val sortingRating: Flow<List<Rating>> = localDataSource.sortingASCKp().map {

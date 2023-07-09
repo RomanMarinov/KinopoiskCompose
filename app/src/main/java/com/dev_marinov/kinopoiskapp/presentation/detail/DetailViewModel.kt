@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dev_marinov.kinopoiskapp.domain.model.movie.*
+import com.dev_marinov.kinopoiskapp.domain.repository.*
+import com.dev_marinov.kinopoiskapp.domain.usecase.*
 import com.dev_marinov.kinopoiskapp.presentation.detail.model.MovieItemDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
@@ -19,14 +21,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val movieRepository: com.dev_marinov.kinopoiskapp.domain.repository.MovieRepository,
-    private val posterRepository: com.dev_marinov.kinopoiskapp.domain.repository.PosterRepository,
-    private val releaseYearRepository: com.dev_marinov.kinopoiskapp.domain.repository.ReleaseYearRepository,
-    private val ratingRepository: com.dev_marinov.kinopoiskapp.domain.repository.RatingRepository,
-    private val votesRepository: com.dev_marinov.kinopoiskapp.domain.repository.VotesRepository,
-    private val genresRepository: com.dev_marinov.kinopoiskapp.domain.repository.GenresRepository,
-    private val personsRepository: com.dev_marinov.kinopoiskapp.domain.repository.PersonsRepository,
-    private val videosRepository: com.dev_marinov.kinopoiskapp.domain.repository.VideosRepository
+    private val movieRepository: MovieRepository,
+    private val posterRepository: PosterRepository,
+    private val getPostersUseCase: GetPostersUseCase,
+    private val releaseYearRepository: ReleaseYearRepository,
+    private val getReleaseYearUseCase: GetReleaseYearUseCase,
+    private val ratingRepository: RatingRepository,
+    private val getRatingUseCase: GetRatingUseCase,
+    private val votesRepository: VotesRepository,
+    private val getVotesUseCase: GetVotesUseCase,
+    private val genresRepository: GenresRepository,
+    private val getGenresUseCase: GetGenresUseCase,
+    // private val personsRepository: PersonsRepository,
+    private val videosRepository: VideosRepository,
+    private val getVideosUseCase: GetVideosUseCase,
+    private val getPersonsUseCase: GetPersonsUseCase
 ) : ViewModel() {
 
     private var _movie: MutableLiveData<MovieItemDetail> = MutableLiveData()
@@ -45,30 +54,38 @@ class DetailViewModel @Inject constructor(
 
             val jobMovie: Deferred<Movie> =
                 async { movieRepository.getMovie(movieId = movieId) }
-            val jobPoster: Deferred<Poster?> =
-                async { posterRepository.getPoster(movieId = movieId.toInt()) }
-            val jobRating: Deferred<Rating?> =
-                async { ratingRepository.getRating(movieId = movieId.toInt()) }
-            val jobReleaseYear: Deferred<ReleaseYear?> =
-                async { releaseYearRepository.getReleaseYear(movieId = movieId.toInt()) }
-            val jobVote: Deferred<Votes?> =
-                async { votesRepository.getVotes(movieId = movieId.toInt()) }
-            val jobGenres: Deferred<List<Genres>> =
-                async { genresRepository.getGenres(movieId = movieId.toInt()) }
-            val jobPerson: Deferred<List<Person>> =
-                async { personsRepository.getPersons(movieId = movieId.toInt()) }
-            val jobVideos: Deferred<List<Trailer>?> =
-                async { videosRepository.getTrailersForDetail(movieId = movieId.toInt()) }
+            val jobPoster: Deferred<Result<Poster?>> =
+                async { getPostersUseCase.invoke(GetPostersUseCase.GetPostersParams(movieId = movieId.toInt())) }
+            val jobRating: Deferred<Result<Rating?>> =
+                async { getRatingUseCase.invoke(GetRatingUseCase.GetRatingParams(movieId = movieId.toInt())) }
+
+//////////////////
+            val jobReleaseYear: Deferred<Result<ReleaseYear?>> =
+                async { getReleaseYearUseCase.invoke(GetReleaseYearUseCase.GetReleaseYearParams(movieId = movieId.toInt())) }
+            val jobVote: Deferred<Result<Votes?>> =
+                async { getVotesUseCase.invoke(GetVotesUseCase.GetVotesParams(movieId = movieId.toInt())) }
+////////////////
+
+
+            val jobGenres: Deferred<Result<List<Genres>>> =
+                async { getGenresUseCase.invoke(GetGenresUseCase.GetGenresParams(movieId = movieId.toInt())) }
+/////////////////
+            val jobPerson: Deferred<Result<List<Person>>> =
+                async { getPersonsUseCase.invoke(GetPersonsUseCase.GetPersonsParams(movieId = movieId.toInt())) }
+            val jobVideos: Deferred<Result<List<Trailer>?>> =
+                async { getVideosUseCase.invoke(GetVideosUseCase.GetVideosParams(movieId = movieId.toInt())) }
+//////////////////
+
             _movie.postValue(
                 getMovieItemDetail(
                     jobMovie.await(),
-                    jobPoster.await(),
-                    jobRating.await(),
-                    jobReleaseYear.await(),
-                    jobVote.await(),
-                    jobGenres.await(),
-                    jobPerson.await(),
-                    jobVideos.await()
+                    jobPoster.await().getOrNull(),
+                    jobRating.await().getOrNull(),
+                    jobReleaseYear.await().getOrNull(),
+                    jobVote.await().getOrNull(),
+                    jobGenres.await().getOrNull()?: listOf(),
+                    jobPerson.await().getOrNull() ?: listOf(),
+                    jobVideos.await().getOrNull() ?: listOf()
                 )
             )
 

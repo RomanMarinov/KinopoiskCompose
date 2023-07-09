@@ -15,7 +15,7 @@ class ReleaseYearRepositoryImpl @Inject constructor(
         it.map { entity -> entity.mapToDomain() }
     }
 
-    override suspend fun getReleaseYear(movieId: Int): ReleaseYear? {
-        return localDataSource.getReleaseYearForDetail(movie_id = movieId)?.mapToDomain()
+    override suspend fun getReleaseYear(movieId: Int): ReleaseYear {
+        return localDataSource.getReleaseYearForDetail(movie_id = movieId).mapToDomain()
     }
 }

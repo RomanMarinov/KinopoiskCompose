@@ -8,7 +8,6 @@ interface MovieRepository {
     val movies: Flow<List<Movie>>
     val countMovies: Flow<Int>
     val countSelectGenre: Flow<Int>
-    val isPlayingLottie: Flow<Boolean>
 
     val countStatAll: Flow<Int>
     val countStatMovies: Flow<Int>
@@ -33,6 +32,4 @@ interface MovieRepository {
     suspend fun hasGenreDataForBottomSheet(selectGenres: String): Flow<Int>
     suspend fun hasGenreDataForBottomNavigationBar(selectGenres: String)
     suspend fun clearAllMovies()
-
-    suspend fun playingLottieAnimation(isPlaying: Boolean)
 }

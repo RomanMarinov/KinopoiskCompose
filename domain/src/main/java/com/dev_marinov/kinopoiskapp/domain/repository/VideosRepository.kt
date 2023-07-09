@@ -7,5 +7,5 @@ import kotlinx.coroutines.flow.Flow
 interface VideosRepository {
 
     val videos: Flow<List<Videos>>
-    suspend fun getTrailersForDetail(movieId: Int): List<Trailer>?
+    suspend fun getTrailersForDetail(movieId: Int): List<Trailer>
 }

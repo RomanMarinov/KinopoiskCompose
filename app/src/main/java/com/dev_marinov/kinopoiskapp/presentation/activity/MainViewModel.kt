@@ -6,6 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.dev_marinov.kinopoiskapp.domain.usecase.UpdateMoviesUseCase
 import com.dev_marinov.kinopoiskapp.common.Constants
 import com.dev_marinov.kinopoiskapp.domain.model.pagination.PagingParams
+import com.dev_marinov.kinopoiskapp.domain.repository.DataStoreRepository
+import com.dev_marinov.kinopoiskapp.domain.repository.MovieRepository
+import com.dev_marinov.kinopoiskapp.domain.usecase.GetLottieAnimationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -16,9 +19,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val movieRepository: com.dev_marinov.kinopoiskapp.domain.repository.MovieRepository,
-    private val dataStoreRepository: com.dev_marinov.kinopoiskapp.domain.repository.DataStoreRepository,
+    private val movieRepository: MovieRepository,
+    private val dataStoreRepository: DataStoreRepository,
     private val updateMoviesUseCase: UpdateMoviesUseCase,
+    private val lottieAnimationUseCase: GetLottieAnimationUseCase,
     favoriteRepository: com.dev_marinov.kinopoiskapp.domain.repository.FavoriteRepository
 ) : ViewModel() {
 
@@ -132,7 +136,8 @@ class MainViewModel @Inject constructor(
 
     fun setPlayingLottie(isPlaying: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            movieRepository.playingLottieAnimation(isPlaying = isPlaying)
+            lottieAnimationUseCase.executeAnimation(GetLottieAnimationUseCase.GetLottieAnimationParam(isPlaying = isPlaying))
+//            movieRepository.playingLottieAnimation(isPlaying = isPlaying)
         }
     }
 

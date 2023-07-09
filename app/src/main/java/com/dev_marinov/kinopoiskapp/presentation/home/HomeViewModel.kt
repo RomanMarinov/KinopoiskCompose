@@ -6,13 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dev_marinov.kinopoiskapp.ConnectivityObserver
 import com.dev_marinov.kinopoiskapp.data.movie.local.MovieDao
-import com.dev_marinov.kinopoiskapp.domain.usecase.UpdateMoviesUseCase
 import com.dev_marinov.kinopoiskapp.domain.model.movie_combine.MovieItemCombine
 import com.dev_marinov.kinopoiskapp.presentation.home.util.CombineFlows
 import com.dev_marinov.kinopoiskapp.common.Constants
 import com.dev_marinov.kinopoiskapp.domain.model.pagination.PagingParams
 import com.dev_marinov.kinopoiskapp.domain.model.selectable_favorite.SelectableFavoriteMovie
 import com.dev_marinov.kinopoiskapp.domain.model.movie.*
+import com.dev_marinov.kinopoiskapp.domain.repository.*
+import com.dev_marinov.kinopoiskapp.domain.usecase.*
 import com.dev_marinov.kinopoiskapp.presentation.util.SortingParamsChipSelection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -24,22 +25,24 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val updateMoviesUseCase: UpdateMoviesUseCase,
-    private val movieRepository: com.dev_marinov.kinopoiskapp.domain.repository.MovieRepository,
-    private val posterRepository: com.dev_marinov.kinopoiskapp.domain.repository.PosterRepository,
-    private val releaseYearRepository: com.dev_marinov.kinopoiskapp.domain.repository.ReleaseYearRepository,
-    private val ratingRepository: com.dev_marinov.kinopoiskapp.domain.repository.RatingRepository,
-    private val votesRepository: com.dev_marinov.kinopoiskapp.domain.repository.VotesRepository,
-    private val genresRepository: com.dev_marinov.kinopoiskapp.domain.repository.GenresRepository,
-    private val personsRepository: com.dev_marinov.kinopoiskapp.domain.repository.PersonsRepository,
-    private val videosRepository: com.dev_marinov.kinopoiskapp.domain.repository.VideosRepository,
-    private val dataStoreRepository: com.dev_marinov.kinopoiskapp.domain.repository.DataStoreRepository,
-    private val favoriteRepository: com.dev_marinov.kinopoiskapp.domain.repository.FavoriteRepository,
+    private val movieRepository: MovieRepository,
+    private val dataStoreRepository: DataStoreRepository,
+    private val getPostersUseCase: GetPostersUseCase,
+    private val getReleaseYearUseCase: GetReleaseYearUseCase,
+    private val getRatingUseCase: GetRatingUseCase,
+    private val getVotesUseCase: GetVotesUseCase,
+    private val getGenresUseCase: GetGenresUseCase,
+    private val getPersonsUseCase: GetPersonsUseCase,
+    private val getVideosUseCase: GetVideosUseCase,
+    private val getFavoriteUseCase: GetFavoriteUseCase,
+    private val getLottieAnimationUseCase: GetLottieAnimationUseCase,
     connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
 
     val connectivity = connectivityObserver.observe()
 
-    val isPlayingLottie: Flow<Boolean> = movieRepository.isPlayingLottie
+//    val isPlayingLottie: Flow<Boolean> = movieRepository.isPlayingLottie
+    val isPlayingLottie: Flow<Boolean> = getLottieAnimationUseCase.getPlayingLottieFlow()
 
     val getGradientColorApp: Flow<List<Color>> = dataStoreRepository.getGradientColorApp
     private val getGradientColorIndexApp: Flow<Int> = dataStoreRepository.getGradientColorIndexApp
@@ -158,7 +161,6 @@ class HomeViewModel @Inject constructor(
                     genre = pagingParams.genre.lowercase(),
                     page = pagingParams.page
                 )
-//              UpdateMoviesUseCase.UpdateMoviesParams(page.toString(), "20")
             )
         }
     }
@@ -170,7 +172,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getReleaseYears(): Flow<List<ReleaseYear>> {
-        return releaseYearRepository.releaseYears.combine(flowMoviesIds) { years, ids ->
+        return getReleaseYearUseCase.getReleaseYearFlow().combine(flowMoviesIds) { years, ids ->
             years.filter {
                 it.movieId in ids
             }
@@ -178,7 +180,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getPosters(): Flow<List<Poster>> {
-        return posterRepository.posters.combine(flowMoviesIds) { posters, ids ->
+        return getPostersUseCase.getPostersFlow().combine(flowMoviesIds) { posters, ids ->
             posters.filter {
                 it.movieId in ids
             }
@@ -186,7 +188,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getRatings(): Flow<List<Rating>> {
-        return ratingRepository.ratings.combine(flowMoviesIds) { ratings, ids ->
+        return getRatingUseCase.getRatingsFlow().combine(flowMoviesIds) { ratings, ids ->
             ratings.filter {
                 it.movieId in ids
             }
@@ -194,7 +196,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getVotes(): Flow<List<Votes>> {
-        return votesRepository.votes.combine(flowMoviesIds) { votes, ids ->
+        return getVotesUseCase.getVotesFlow().combine(flowMoviesIds) { votes, ids ->
             votes.filter {
                 it.movieId in ids
             }
@@ -202,7 +204,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getGenres(): Flow<List<Genres>> {
-        return genresRepository.genres.combine(flowMoviesIds) { genres, ids ->
+        return getGenresUseCase.getGenresFlow().combine(flowMoviesIds) { genres, ids ->
             genres.filter {
                 it.movieId in ids
             }
@@ -210,7 +212,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getPersons(): Flow<List<Person>> {
-        return personsRepository.persons.combine(flowMoviesIds) { persons, ids ->
+        return getPersonsUseCase.getPersonsFlow().combine(flowMoviesIds) { persons, ids ->
             persons.filter {
                 it.movieId in ids
             }
@@ -218,7 +220,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getVideos(): Flow<List<Videos>> {
-        return videosRepository.videos.combine(flowMoviesIds) { videos, ids ->
+        return getVideosUseCase.getVideosFlow().combine(flowMoviesIds) { videos, ids ->
             videos.filter {
                 it.movieId in ids
             }
@@ -278,9 +280,8 @@ class HomeViewModel @Inject constructor(
             )
         }
     }
-
-    val favoriteMovies: Flow<List<SelectableFavoriteMovie>> =
-        favoriteRepository.favoriteMoviesForHome
+    val favoriteMovies: Flow<List<SelectableFavoriteMovie>> = getFavoriteUseCase.getFavoriteMoviesForHomeFlow()
+//    val favoriteMovies: Flow<List<SelectableFavoriteMovie>> = favoriteRepository.favoriteMoviesForHome
     val movie = CombineFlows.combine(
         flowMovies,
         flowReleaseYears,
@@ -351,16 +352,17 @@ class HomeViewModel @Inject constructor(
 
     fun isPlayingLottie(isPlaying: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            movieRepository.playingLottieAnimation(isPlaying = isPlaying)
+            getLottieAnimationUseCase.executeAnimation(GetLottieAnimationUseCase.GetLottieAnimationParam(isPlaying = isPlaying))
+//            movieRepository.playingLottieAnimation(isPlaying = isPlaying)
         }
     }
 
     fun onClickFavorite(movie: SelectableFavoriteMovie) {
         viewModelScope.launch(Dispatchers.IO) {
             if (movie.isFavorite) {
-                favoriteRepository.saveFavoriteMovie(movie = movie)
+                getFavoriteUseCase.executeSave(GetFavoriteUseCase.GetFavoriteMovieParams(movie = movie))
             } else {
-                favoriteRepository.deleteFavoriteMovie(movie = movie)
+                getFavoriteUseCase.executeDelete(GetFavoriteUseCase.GetFavoriteMovieParams(movie = movie))
             }
         }
     }

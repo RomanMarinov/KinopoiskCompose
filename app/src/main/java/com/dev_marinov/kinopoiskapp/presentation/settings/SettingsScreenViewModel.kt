@@ -5,6 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dev_marinov.kinopoiskapp.ConnectivityObserver
 import com.dev_marinov.kinopoiskapp.common.Constants
+import com.dev_marinov.kinopoiskapp.domain.repository.DataStoreRepository
+import com.dev_marinov.kinopoiskapp.domain.repository.FavoriteRepository
+import com.dev_marinov.kinopoiskapp.domain.repository.MovieRepository
+import com.dev_marinov.kinopoiskapp.domain.usecase.GetFavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -13,9 +17,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsScreenViewModel @Inject constructor(
-    private val dataStoreRepository: com.dev_marinov.kinopoiskapp.domain.repository.DataStoreRepository,
-    private val movieRepository: com.dev_marinov.kinopoiskapp.domain.repository.MovieRepository,
-    private val favoriteRepository: com.dev_marinov.kinopoiskapp.domain.repository.FavoriteRepository,
+    private val dataStoreRepository: DataStoreRepository,
+    private val movieRepository: MovieRepository,
+//    private val favoriteRepository: FavoriteRepository,
+    private val getFavoriteUseCase: GetFavoriteUseCase,
     connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
     val connectivity = connectivityObserver.observe()
@@ -30,7 +35,8 @@ class SettingsScreenViewModel @Inject constructor(
     val getCountStatCartoon: Flow<Int> = movieRepository.countStatCartoon
     val getCountStatAnime: Flow<Int> = movieRepository.countStatAnime
     val getCountStatAnimatedSeries: Flow<Int> = movieRepository.countStatAnimatedSeries
-    val countFavorite: Flow<Int> = favoriteRepository.countFavorite
+    val countFavorite: Flow<Int> = getFavoriteUseCase.getCountFavoriteFlow()
+//    val countFavorite: Flow<Int> = favoriteRepository.countFavorite
 
     init {
         setFirstGradient()
@@ -64,7 +70,8 @@ class SettingsScreenViewModel @Inject constructor(
     fun onClearMoviesClicked() {
         viewModelScope.launch(Dispatchers.IO) {
             movieRepository.clearAllMovies()
-            favoriteRepository.clearAllMovies()
+            getFavoriteUseCase.executeClear()
+//            favoriteRepository.clearAllMovies()
         }
     }
 }

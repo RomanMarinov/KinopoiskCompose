@@ -11,5 +11,5 @@ interface VotesDao {
     fun getAllFlow(): Flow<List<VotesEntity>>
 
     @Query("SELECT * FROM votes WHERE movie_id = :movie_id")
-    fun getVotesForDetail(movie_id: Int): VotesEntity?
+    fun getVotesForDetail(movie_id: Int): VotesEntity
 }

@@ -35,7 +35,7 @@ import com.dev_marinov.kinopoiskapp.data.votes.local.VotesEntity
         VideosEntity::class,
         FavoriteEntity::class
     ],
-    version = 1
+    version = 2
 )
 
 @TypeConverters(DataConvertersForList::class)
