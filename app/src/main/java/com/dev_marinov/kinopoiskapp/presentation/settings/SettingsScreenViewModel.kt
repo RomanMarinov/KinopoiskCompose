@@ -8,6 +8,7 @@ import com.dev_marinov.kinopoiskapp.common.Constants
 import com.dev_marinov.kinopoiskapp.domain.repository.DataStoreRepository
 import com.dev_marinov.kinopoiskapp.domain.repository.FavoriteRepository
 import com.dev_marinov.kinopoiskapp.domain.repository.MovieRepository
+import com.dev_marinov.kinopoiskapp.domain.usecase.GetDataStoreUseCase
 import com.dev_marinov.kinopoiskapp.domain.usecase.GetFavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -21,13 +22,16 @@ class SettingsScreenViewModel @Inject constructor(
     private val movieRepository: MovieRepository,
 //    private val favoriteRepository: FavoriteRepository,
     private val getFavoriteUseCase: GetFavoriteUseCase,
+    private val getDataStoreUseCase: GetDataStoreUseCase,
     connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
     val connectivity = connectivityObserver.observe()
-
-    val gradientColorsApp: Flow<List<List<Color>>> = dataStoreRepository.gradientColorsApp
-    val getGradientColorApp: Flow<List<Color>> = dataStoreRepository.getGradientColorApp
-    val getGradientColorIndexApp: Flow<Int> = dataStoreRepository.getGradientColorIndexApp
+    val gradientColorsApp: Flow<List<List<Color>>> = getDataStoreUseCase.gradientColorsAppFlow
+   // val gradientColorsApp: Flow<List<List<Color>>> = dataStoreRepository.gradientColorsApp
+   val getGradientColorApp: Flow<List<Color>> = getDataStoreUseCase.gradientColorAppFlow
+//    val getGradientColorApp: Flow<List<Color>> = dataStoreRepository.getGradientColorApp
+    val getGradientColorIndexApp: Flow<Int> = getDataStoreUseCase.gradientColorIndexAppFlow
+//    val getGradientColorIndexApp: Flow<Int> = dataStoreRepository.getGradientColorIndexApp
 
     val getCountStatAll: Flow<Int> = movieRepository.countStatAll
     val getCountStatMovies: Flow<Int> = movieRepository.countStatMovies
@@ -52,17 +56,22 @@ class SettingsScreenViewModel @Inject constructor(
 
     fun setGradientColorApp(selectedBoxIndex: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            dataStoreRepository.setGradientColorApp(selectedBoxIndex = selectedBoxIndex)
+            getDataStoreUseCase.setGradientColorApp(selectedBoxIndex = selectedBoxIndex)
+//            dataStoreRepository.setGradientColorApp(selectedBoxIndex = selectedBoxIndex)
         }
         saveGradientColorIndexApp(selectedBoxIndex = selectedBoxIndex)
     }
 
     private fun saveGradientColorIndexApp(selectedBoxIndex: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            dataStoreRepository.saveGradientColorIndexApp(
+            getDataStoreUseCase.saveGradientColorIndexApp(
                 Constants.CLICKED_GRADIENT_INDEX,
                 selectedBoxIndex
             )
+//            dataStoreRepository.saveGradientColorIndexApp(
+//                Constants.CLICKED_GRADIENT_INDEX,
+//                selectedBoxIndex
+//            )
         }
     }
 

@@ -6,6 +6,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Singleton
 
 @Module
@@ -63,6 +64,12 @@ class UseCaseModule {
     @Singleton
     fun provideGetLottieAnimationUseCase(lottieAnimationRepository: LottieAnimationRepository): GetLottieAnimationUseCase {
         return GetLottieAnimationUseCase(lottieAnimationRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetDataStoreUseCase(dataStoreRepository: DataStoreRepository, dispatcher: CoroutineDispatcher): GetDataStoreUseCase {
+        return GetDataStoreUseCase(dataStoreRepository, dispatcher)
     }
 
 }

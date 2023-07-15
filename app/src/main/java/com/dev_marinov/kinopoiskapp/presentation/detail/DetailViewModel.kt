@@ -127,10 +127,14 @@ class DetailViewModel @Inject constructor(
 
     fun getTrailers(movieId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val trailers = videosRepository.getTrailersForDetail(movieId = movieId)
-            trailers?.let {
-                getCycle(it)
-            }
+
+            val trailers = getVideosUseCase.invoke(GetVideosUseCase.GetVideosParams(movieId = movieId))
+            getCycle(trailers.getOrNull()?: listOf())
+
+           // val trailers = videosRepository.getTrailersForDetail(movieId = movieId)
+//            trailers?.let {
+//                getCycle(it)
+//            }
         }
     }
 

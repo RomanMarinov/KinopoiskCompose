@@ -36,6 +36,7 @@ class HomeViewModel @Inject constructor(
     private val getVideosUseCase: GetVideosUseCase,
     private val getFavoriteUseCase: GetFavoriteUseCase,
     private val getLottieAnimationUseCase: GetLottieAnimationUseCase,
+    private val getDataStoreUseCase: GetDataStoreUseCase,
     connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
 
@@ -44,8 +45,10 @@ class HomeViewModel @Inject constructor(
 //    val isPlayingLottie: Flow<Boolean> = movieRepository.isPlayingLottie
     val isPlayingLottie: Flow<Boolean> = getLottieAnimationUseCase.getPlayingLottieFlow()
 
-    val getGradientColorApp: Flow<List<Color>> = dataStoreRepository.getGradientColorApp
-    private val getGradientColorIndexApp: Flow<Int> = dataStoreRepository.getGradientColorIndexApp
+    val getGradientColorApp: Flow<List<Color>> = getDataStoreUseCase.gradientColorAppFlow
+//    val getGradientColorApp: Flow<List<Color>> = dataStoreRepository.getGradientColorApp
+    private val getGradientColorIndexApp: Flow<Int> = getDataStoreUseCase.gradientColorIndexAppFlow
+//    private val getGradientColorIndexApp: Flow<Int> = dataStoreRepository.getGradientColorIndexApp
 
     var page = 1
     private var previousScrollPosition = 0
@@ -93,17 +96,22 @@ class HomeViewModel @Inject constructor(
 
     private fun setGradientColorApp(selectedBoxIndex: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            dataStoreRepository.setGradientColorApp(selectedBoxIndex = selectedBoxIndex)
+            getDataStoreUseCase.setGradientColorApp(selectedBoxIndex = selectedBoxIndex)
+//            dataStoreRepository.setGradientColorApp(selectedBoxIndex = selectedBoxIndex)
         }
         saveGradientColorIndexApp(selectedBoxIndex = selectedBoxIndex)
     }
 
     private fun saveGradientColorIndexApp(selectedBoxIndex: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            dataStoreRepository.saveGradientColorIndexApp(
+            getDataStoreUseCase.saveGradientColorIndexApp(
                 Constants.CLICKED_GRADIENT_INDEX,
                 selectedBoxIndex
             )
+//            dataStoreRepository.saveGradientColorIndexApp(
+//                Constants.CLICKED_GRADIENT_INDEX,
+//                selectedBoxIndex
+//            )
         }
     }
 
@@ -126,7 +134,8 @@ class HomeViewModel @Inject constructor(
 
     suspend fun topBottomBarHide(isHide: Boolean?) {
         isHide?.let {
-            dataStoreRepository.saveScroll(Constants.SCROLL_DOWN_KEY, isHide = isHide)
+            getDataStoreUseCase.saveScroll(Constants.SCROLL_DOWN_KEY, isHide = isHide)
+//            dataStoreRepository.saveScroll(Constants.SCROLL_DOWN_KEY, isHide = isHide)
         }
     }
 
@@ -143,9 +152,11 @@ class HomeViewModel @Inject constructor(
 
     fun onClickedShowBottomSheet() {
         viewModelScope.launch {
-            dataStoreRepository.saveClickedFilter(Constants.SHOW_BOTTOM_SHEET_KEY, true)
+            getDataStoreUseCase.saveClickedFilter(Constants.SHOW_BOTTOM_SHEET_KEY, true)
+//            dataStoreRepository.saveClickedFilter(Constants.SHOW_BOTTOM_SHEET_KEY, true)
             delay(1000L)
-            dataStoreRepository.saveClickedFilter(Constants.SHOW_BOTTOM_SHEET_KEY, false)
+            getDataStoreUseCase.saveClickedFilter(Constants.SHOW_BOTTOM_SHEET_KEY, false)
+//            dataStoreRepository.saveClickedFilter(Constants.SHOW_BOTTOM_SHEET_KEY, false)
         }
     }
 
@@ -274,10 +285,13 @@ class HomeViewModel @Inject constructor(
 
     private fun saveClickedGenreType(typeGenre: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            dataStoreRepository.saveGenreType(
-                Constants.CLICKED_GENRE_TYPE_KEY,
+            getDataStoreUseCase.saveGenreType(Constants.CLICKED_GENRE_TYPE_KEY,
                 typeGenre = typeGenre
             )
+//            dataStoreRepository.saveGenreType(
+//                Constants.CLICKED_GENRE_TYPE_KEY,
+//                typeGenre = typeGenre
+//            )
         }
     }
     val favoriteMovies: Flow<List<SelectableFavoriteMovie>> = getFavoriteUseCase.getFavoriteMoviesForHomeFlow()
@@ -369,7 +383,8 @@ class HomeViewModel @Inject constructor(
 
     private fun getParams(genresSelection: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val pagingParams = dataStoreRepository.getPagingParams(key = genresSelection)
+            val pagingParams = getDataStoreUseCase.getPagingParams(key = genresSelection)
+//            val pagingParams = dataStoreRepository.getPagingParams(key = genresSelection)
             _pagingParams.value = pagingParams
         }
     }
