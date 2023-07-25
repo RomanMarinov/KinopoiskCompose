@@ -21,19 +21,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val movieRepository: MovieRepository,
-    private val posterRepository: PosterRepository,
+    private val getMovieUseCase: GetMovieUseCase,
     private val getPostersUseCase: GetPostersUseCase,
-    private val releaseYearRepository: ReleaseYearRepository,
     private val getReleaseYearUseCase: GetReleaseYearUseCase,
-    private val ratingRepository: RatingRepository,
     private val getRatingUseCase: GetRatingUseCase,
-    private val votesRepository: VotesRepository,
     private val getVotesUseCase: GetVotesUseCase,
-    private val genresRepository: GenresRepository,
     private val getGenresUseCase: GetGenresUseCase,
-    // private val personsRepository: PersonsRepository,
-    private val videosRepository: VideosRepository,
     private val getVideosUseCase: GetVideosUseCase,
     private val getPersonsUseCase: GetPersonsUseCase
 ) : ViewModel() {
@@ -53,28 +46,21 @@ class DetailViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
 
             val jobMovie: Deferred<Movie> =
-                async { movieRepository.getMovie(movieId = movieId) }
+                async { getMovieUseCase.getMovie(movieId = movieId) }
             val jobPoster: Deferred<Result<Poster?>> =
                 async { getPostersUseCase.invoke(GetPostersUseCase.GetPostersParams(movieId = movieId.toInt())) }
             val jobRating: Deferred<Result<Rating?>> =
                 async { getRatingUseCase.invoke(GetRatingUseCase.GetRatingParams(movieId = movieId.toInt())) }
-
-//////////////////
             val jobReleaseYear: Deferred<Result<ReleaseYear?>> =
                 async { getReleaseYearUseCase.invoke(GetReleaseYearUseCase.GetReleaseYearParams(movieId = movieId.toInt())) }
             val jobVote: Deferred<Result<Votes?>> =
                 async { getVotesUseCase.invoke(GetVotesUseCase.GetVotesParams(movieId = movieId.toInt())) }
-////////////////
-
-
             val jobGenres: Deferred<Result<List<Genres>>> =
                 async { getGenresUseCase.invoke(GetGenresUseCase.GetGenresParams(movieId = movieId.toInt())) }
-/////////////////
             val jobPerson: Deferred<Result<List<Person>>> =
                 async { getPersonsUseCase.invoke(GetPersonsUseCase.GetPersonsParams(movieId = movieId.toInt())) }
             val jobVideos: Deferred<Result<List<Trailer>?>> =
                 async { getVideosUseCase.invoke(GetVideosUseCase.GetVideosParams(movieId = movieId.toInt())) }
-//////////////////
 
             _movie.postValue(
                 getMovieItemDetail(
@@ -83,7 +69,7 @@ class DetailViewModel @Inject constructor(
                     jobRating.await().getOrNull(),
                     jobReleaseYear.await().getOrNull(),
                     jobVote.await().getOrNull(),
-                    jobGenres.await().getOrNull()?: listOf(),
+                    jobGenres.await().getOrNull() ?: listOf(),
                     jobPerson.await().getOrNull() ?: listOf(),
                     jobVideos.await().getOrNull() ?: listOf()
                 )
@@ -127,14 +113,9 @@ class DetailViewModel @Inject constructor(
 
     fun getTrailers(movieId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-
-            val trailers = getVideosUseCase.invoke(GetVideosUseCase.GetVideosParams(movieId = movieId))
-            getCycle(trailers.getOrNull()?: listOf())
-
-           // val trailers = videosRepository.getTrailersForDetail(movieId = movieId)
-//            trailers?.let {
-//                getCycle(it)
-//            }
+            val trailers =
+                getVideosUseCase.invoke(GetVideosUseCase.GetVideosParams(movieId = movieId))
+            getCycle(trailers.getOrNull() ?: listOf())
         }
     }
 

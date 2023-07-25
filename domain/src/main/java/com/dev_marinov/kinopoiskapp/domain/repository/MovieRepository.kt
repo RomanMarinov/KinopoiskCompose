@@ -2,6 +2,7 @@ package com.dev_marinov.kinopoiskapp.domain.repository
 
 import com.dev_marinov.kinopoiskapp.domain.model.movie.Movie
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 
 interface MovieRepository {
 
@@ -16,6 +17,8 @@ interface MovieRepository {
     val countStatAnime: Flow<Int>
     val countStatAnimatedSeries: Flow<Int>
 
+    val responseCodeAllMovies: MutableStateFlow<Int>
+
     suspend fun updateMovies(
         searchDate: String,
         searchRating: String,
@@ -23,7 +26,7 @@ interface MovieRepository {
         page: Int
     )
 
-    suspend fun deleteMovie(movieNew: Movie)
+//    suspend fun deleteMovie(movieNew: Movie)
 
     suspend fun getMovie(movieId: String?): Movie
 

@@ -5,15 +5,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dev_marinov.kinopoiskapp.ConnectivityObserver
-import com.dev_marinov.kinopoiskapp.data.movie.local.MovieDao
-import com.dev_marinov.kinopoiskapp.domain.model.movie_combine.MovieItemCombine
-import com.dev_marinov.kinopoiskapp.presentation.home.util.CombineFlows
 import com.dev_marinov.kinopoiskapp.common.Constants
+import com.dev_marinov.kinopoiskapp.domain.model.movie.*
+import com.dev_marinov.kinopoiskapp.domain.model.movie_combine.MovieItemCombine
 import com.dev_marinov.kinopoiskapp.domain.model.pagination.PagingParams
 import com.dev_marinov.kinopoiskapp.domain.model.selectable_favorite.SelectableFavoriteMovie
-import com.dev_marinov.kinopoiskapp.domain.model.movie.*
-import com.dev_marinov.kinopoiskapp.domain.repository.*
 import com.dev_marinov.kinopoiskapp.domain.usecase.*
+import com.dev_marinov.kinopoiskapp.presentation.home.util.CombineFlows
 import com.dev_marinov.kinopoiskapp.presentation.util.SortingParamsChipSelection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -25,8 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val updateMoviesUseCase: UpdateMoviesUseCase,
-    private val movieRepository: MovieRepository,
-    private val dataStoreRepository: DataStoreRepository,
+    private val getMovieUseCase: GetMovieUseCase,
     private val getPostersUseCase: GetPostersUseCase,
     private val getReleaseYearUseCase: GetReleaseYearUseCase,
     private val getRatingUseCase: GetRatingUseCase,
@@ -42,13 +39,12 @@ class HomeViewModel @Inject constructor(
 
     val connectivity = connectivityObserver.observe()
 
-//    val isPlayingLottie: Flow<Boolean> = movieRepository.isPlayingLottie
     val isPlayingLottie: Flow<Boolean> = getLottieAnimationUseCase.getPlayingLottieFlow()
 
     val getGradientColorApp: Flow<List<Color>> = getDataStoreUseCase.gradientColorAppFlow
-//    val getGradientColorApp: Flow<List<Color>> = dataStoreRepository.getGradientColorApp
     private val getGradientColorIndexApp: Flow<Int> = getDataStoreUseCase.gradientColorIndexAppFlow
-//    private val getGradientColorIndexApp: Flow<Int> = dataStoreRepository.getGradientColorIndexApp
+
+    val responseCodeAllMovies = getMovieUseCase.responseCodeAllMovies
 
     var page = 1
     private var previousScrollPosition = 0
@@ -97,7 +93,6 @@ class HomeViewModel @Inject constructor(
     private fun setGradientColorApp(selectedBoxIndex: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             getDataStoreUseCase.setGradientColorApp(selectedBoxIndex = selectedBoxIndex)
-//            dataStoreRepository.setGradientColorApp(selectedBoxIndex = selectedBoxIndex)
         }
         saveGradientColorIndexApp(selectedBoxIndex = selectedBoxIndex)
     }
@@ -108,10 +103,6 @@ class HomeViewModel @Inject constructor(
                 Constants.CLICKED_GRADIENT_INDEX,
                 selectedBoxIndex
             )
-//            dataStoreRepository.saveGradientColorIndexApp(
-//                Constants.CLICKED_GRADIENT_INDEX,
-//                selectedBoxIndex
-//            )
         }
     }
 
@@ -135,15 +126,9 @@ class HomeViewModel @Inject constructor(
     suspend fun topBottomBarHide(isHide: Boolean?) {
         isHide?.let {
             getDataStoreUseCase.saveScroll(Constants.SCROLL_DOWN_KEY, isHide = isHide)
-//            dataStoreRepository.saveScroll(Constants.SCROLL_DOWN_KEY, isHide = isHide)
         }
     }
 
-    //    /**
-//     * When we click on [Movie], we delete it from database.
-//     * This should cause the removal of elements associated with this movie: [Rating], [ReleaseYear], [Poster] and [Votes].
-//     * Removal is launched through a [DeleteMovieUseCase]
-//     */
     fun onMovieClickedHideNavigationBar(isHide: Boolean) {
         viewModelScope.launch {
             topBottomBarHide(isHide = isHide)
@@ -153,10 +138,8 @@ class HomeViewModel @Inject constructor(
     fun onClickedShowBottomSheet() {
         viewModelScope.launch {
             getDataStoreUseCase.saveClickedFilter(Constants.SHOW_BOTTOM_SHEET_KEY, true)
-//            dataStoreRepository.saveClickedFilter(Constants.SHOW_BOTTOM_SHEET_KEY, true)
             delay(1000L)
             getDataStoreUseCase.saveClickedFilter(Constants.SHOW_BOTTOM_SHEET_KEY, false)
-//            dataStoreRepository.saveClickedFilter(Constants.SHOW_BOTTOM_SHEET_KEY, false)
         }
     }
 
@@ -176,7 +159,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getMovies(): Flow<List<Movie>> = movieRepository.movies.map { movies ->
+    private fun getMovies(): Flow<List<Movie>> = getMovieUseCase.movies.map { movies ->
         movies.filter { movie ->
             movie.page == page
         }
@@ -256,8 +239,7 @@ class HomeViewModel @Inject constructor(
     fun sortMoviesGenresSelection(genresSelection: String) {
         viewModelScope.launch(Dispatchers.IO) {
             _selectGenres.value = genresSelection
-            movieRepository.sortByGenres(genre = genresSelection.lowercase())
-
+            getMovieUseCase.getSortByGenres(genre = genresSelection.lowercase())
             // getParams(selectGenres = genresSelection) // пока не нужно
         }
     }
@@ -267,7 +249,7 @@ class HomeViewModel @Inject constructor(
         flagTempClosure = true
         saveClickedGenreType(typeGenre)
         viewModelScope.launch(Dispatchers.IO) {
-            val res: Flow<Int> = movieRepository.hasGenreDataForBottomSheet(selectGenres = typeGenre)
+            val res: Flow<Int> = getMovieUseCase.getHasGenreDataForBottomSheet(selectGenres = typeGenre)
             res.collect {
                 if (it == 0 && flagTempClosure) {
                     onClickedShowBottomSheet()
@@ -279,7 +261,7 @@ class HomeViewModel @Inject constructor(
 
     fun getCountGenreTypeForBottomNavigationBar(typeGenre: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            movieRepository.hasGenreDataForBottomNavigationBar(selectGenres = typeGenre)
+            getMovieUseCase.getHasGenreDataForBottomNavigationBar(selectGenres = typeGenre)
         }
     }
 
@@ -288,14 +270,9 @@ class HomeViewModel @Inject constructor(
             getDataStoreUseCase.saveGenreType(Constants.CLICKED_GENRE_TYPE_KEY,
                 typeGenre = typeGenre
             )
-//            dataStoreRepository.saveGenreType(
-//                Constants.CLICKED_GENRE_TYPE_KEY,
-//                typeGenre = typeGenre
-//            )
         }
     }
-    val favoriteMovies: Flow<List<SelectableFavoriteMovie>> = getFavoriteUseCase.getFavoriteMoviesForHomeFlow()
-//    val favoriteMovies: Flow<List<SelectableFavoriteMovie>> = favoriteRepository.favoriteMoviesForHome
+    private val favoriteMovies: Flow<List<SelectableFavoriteMovie>> = getFavoriteUseCase.getFavoriteMoviesForHomeFlow()
     val movie = CombineFlows.combine(
         flowMovies,
         flowReleaseYears,
@@ -384,7 +361,6 @@ class HomeViewModel @Inject constructor(
     private fun getParams(genresSelection: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val pagingParams = getDataStoreUseCase.getPagingParams(key = genresSelection)
-//            val pagingParams = dataStoreRepository.getPagingParams(key = genresSelection)
             _pagingParams.value = pagingParams
         }
     }

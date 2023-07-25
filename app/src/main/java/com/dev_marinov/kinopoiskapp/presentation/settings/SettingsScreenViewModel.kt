@@ -5,11 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dev_marinov.kinopoiskapp.ConnectivityObserver
 import com.dev_marinov.kinopoiskapp.common.Constants
-import com.dev_marinov.kinopoiskapp.domain.repository.DataStoreRepository
-import com.dev_marinov.kinopoiskapp.domain.repository.FavoriteRepository
-import com.dev_marinov.kinopoiskapp.domain.repository.MovieRepository
 import com.dev_marinov.kinopoiskapp.domain.usecase.GetDataStoreUseCase
 import com.dev_marinov.kinopoiskapp.domain.usecase.GetFavoriteUseCase
+import com.dev_marinov.kinopoiskapp.domain.usecase.GetMovieUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -18,29 +16,23 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsScreenViewModel @Inject constructor(
-    private val dataStoreRepository: DataStoreRepository,
-    private val movieRepository: MovieRepository,
-//    private val favoriteRepository: FavoriteRepository,
+    private val getMovieUseCase: GetMovieUseCase,
     private val getFavoriteUseCase: GetFavoriteUseCase,
     private val getDataStoreUseCase: GetDataStoreUseCase,
     connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
     val connectivity = connectivityObserver.observe()
     val gradientColorsApp: Flow<List<List<Color>>> = getDataStoreUseCase.gradientColorsAppFlow
-   // val gradientColorsApp: Flow<List<List<Color>>> = dataStoreRepository.gradientColorsApp
    val getGradientColorApp: Flow<List<Color>> = getDataStoreUseCase.gradientColorAppFlow
-//    val getGradientColorApp: Flow<List<Color>> = dataStoreRepository.getGradientColorApp
     val getGradientColorIndexApp: Flow<Int> = getDataStoreUseCase.gradientColorIndexAppFlow
-//    val getGradientColorIndexApp: Flow<Int> = dataStoreRepository.getGradientColorIndexApp
 
-    val getCountStatAll: Flow<Int> = movieRepository.countStatAll
-    val getCountStatMovies: Flow<Int> = movieRepository.countStatMovies
-    val getCountStatTvSeries: Flow<Int> = movieRepository.countStatTvSeries
-    val getCountStatCartoon: Flow<Int> = movieRepository.countStatCartoon
-    val getCountStatAnime: Flow<Int> = movieRepository.countStatAnime
-    val getCountStatAnimatedSeries: Flow<Int> = movieRepository.countStatAnimatedSeries
+    val getCountStatAll: Flow<Int> = getMovieUseCase.countStatAll
+    val getCountStatMovies: Flow<Int> = getMovieUseCase.countStatMovies
+    val getCountStatTvSeries: Flow<Int> = getMovieUseCase.countStatTvSeries
+    val getCountStatCartoon: Flow<Int> = getMovieUseCase.countStatCartoon
+    val getCountStatAnime: Flow<Int> = getMovieUseCase.countStatAnime
+    val getCountStatAnimatedSeries: Flow<Int> = getMovieUseCase.countStatAnimatedSeries
     val countFavorite: Flow<Int> = getFavoriteUseCase.getCountFavoriteFlow()
-//    val countFavorite: Flow<Int> = favoriteRepository.countFavorite
 
     init {
         setFirstGradient()
@@ -57,7 +49,6 @@ class SettingsScreenViewModel @Inject constructor(
     fun setGradientColorApp(selectedBoxIndex: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             getDataStoreUseCase.setGradientColorApp(selectedBoxIndex = selectedBoxIndex)
-//            dataStoreRepository.setGradientColorApp(selectedBoxIndex = selectedBoxIndex)
         }
         saveGradientColorIndexApp(selectedBoxIndex = selectedBoxIndex)
     }
@@ -68,19 +59,13 @@ class SettingsScreenViewModel @Inject constructor(
                 Constants.CLICKED_GRADIENT_INDEX,
                 selectedBoxIndex
             )
-//            dataStoreRepository.saveGradientColorIndexApp(
-//                Constants.CLICKED_GRADIENT_INDEX,
-//                selectedBoxIndex
-//            )
         }
     }
 
-    // потом для удаления пользовать или для лайка
     fun onClearMoviesClicked() {
         viewModelScope.launch(Dispatchers.IO) {
-            movieRepository.clearAllMovies()
+            getMovieUseCase.getClearAllMovies()
             getFavoriteUseCase.executeClear()
-//            favoriteRepository.clearAllMovies()
         }
     }
 }

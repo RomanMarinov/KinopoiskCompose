@@ -12,5 +12,6 @@
         <item>Animated-Series</item>
     </string-array>
     <string name="trailer_not_available">Movie trailer not yet available</string>
-    ""
+    <string name="movie_requests_exceeded_200_times">Movie requests exceeded 200 times</string>
+
 </resources>

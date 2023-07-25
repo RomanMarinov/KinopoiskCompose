@@ -1,6 +1,7 @@
 package com.dev_marinov.kinopoiskapp.presentation.home
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,8 +22,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Velocity
@@ -52,7 +55,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val coroutineScope = rememberCoroutineScope()
-
+    val context = LocalContext.current
     val connectivity by viewModel.connectivity.collectAsStateWithLifecycle(initialValue = ConnectivityObserver.Status.UnAvailable)
 
     val currentScrollPosition = remember {
@@ -66,6 +69,16 @@ fun HomeScreen(
     val getPagingParams by viewModel.pagingParams.collectAsStateWithLifecycle()
 
     val movies by viewModel.newFavoriteMovies.collectAsStateWithLifecycle(initialValue = listOf())
+
+    val responseCodeAllMovies by viewModel.responseCodeAllMovies.collectAsStateWithLifecycle()
+
+    if (responseCodeAllMovies == 403) {
+        Toast.makeText(
+            context,
+            stringResource(id = R.string.movie_requests_exceeded_200_times),
+            Toast.LENGTH_LONG
+        ).show()
+    }
 
     if (isPlayingLottie && movies.isEmpty()) {
         LottieExample(isPlaying = true)
