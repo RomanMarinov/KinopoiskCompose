@@ -15,24 +15,30 @@
 ## Источник данных 
 https://kinopoisk.dev/
 
-## Технологии 
+## Фреймворки, компоненты, библиотеки, архитектура и прочие технологии 
 Kotlin, Jectpack Compose
 
-- clean,<br/>
-- viewModel,<br/>
+- clean architecture,<br/>
 - mvvm, <br/>
-- di hilt, <br/>
+- dagger hilt, <br/>
 - navigation, <br/>
 - liveData, <br/>
 - flow, <br/>
 - room, <br/>
+- datastore, <br/>
 - coroutine, <br/>
 - singleLiveEvent, <br/>
 - databinding, <br/>
 - animation,<br/>
-- recyclerViews,<br/>
 - toast,<br/>
 - retrofit<br/>
+- ktlint<br/>
+
+## Многомодульность
+3 модуля
+
+## Тестирование
+Unit Tests
 
 ## Демонстрация  
 
