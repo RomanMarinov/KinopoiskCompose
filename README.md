@@ -42,4 +42,4 @@ Kotlin, Jectpack Compose
 Unit Tests
 
 ## Демонстрация  
-
+https://github.com/RomanMarinov/KinopoiskCompose/assets/61028366/b8f11fcc-7db8-45e5-94af-a898de441b9d
