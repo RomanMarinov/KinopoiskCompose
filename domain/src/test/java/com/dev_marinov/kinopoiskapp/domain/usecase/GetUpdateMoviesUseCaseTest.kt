@@ -3,6 +3,7 @@ package com.dev_marinov.kinopoiskapp.domain.usecase
 import com.dev_marinov.kinopoiskapp.domain.repository.MovieRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,6 +25,11 @@ class GetUpdateMoviesUseCaseTest {
     @Before
     fun setup() {
         getUpdateMoviesUseCase = UpdateMoviesUseCase(movieRepository = mockMovieRepository)
+    }
+
+    @After
+    fun after() {
+        Mockito.reset(mockMovieRepository)
     }
 
     @Test

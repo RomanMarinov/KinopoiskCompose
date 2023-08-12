@@ -4,6 +4,7 @@ import com.dev_marinov.kinopoiskapp.domain.repository.LottieAnimationRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -24,6 +25,11 @@ class GetLottieAnimationUseCaseTest {
     @Before
     fun setup() {
         getLottieAnimationUseCase = GetLottieAnimationUseCase(mockLottieAnimationRepository)
+    }
+
+    @After
+    fun after() {
+        Mockito.reset(mockLottieAnimationRepository)
     }
 
     @Test

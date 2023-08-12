@@ -10,16 +10,21 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.reset
 import org.mockito.kotlin.verify
+import org.mockito.quality.Strictness
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(MockitoJUnitRunner::class)
@@ -32,6 +37,11 @@ class GetDataStoreUseCaseTest {
     @Before
     fun setup() {
         getDataStoreUseCase = GetDataStoreUseCase(dataStoreRepository = mockDataStoreRepository)
+    }
+
+    @After
+    fun after() {
+        Mockito.reset(mockDataStoreRepository)
     }
 
     @Test

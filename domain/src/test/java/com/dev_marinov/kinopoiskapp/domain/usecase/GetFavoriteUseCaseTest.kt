@@ -21,6 +21,7 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.whenever
@@ -117,15 +118,10 @@ class GetFavoriteUseCaseTest {
 
     }
 
-
-
-//    val favoriteMoviesForHome: Flow<List<SelectableFavoriteMovie>>
-//    val favoriteMoviesForDetail: LiveData<List<SelectableFavoriteMovie>>
-//    val countFavorite: Flow<Int>
-//
-//    suspend fun deleteFavoriteMovie(movie: SelectableFavoriteMovie)
-//    suspend fun saveFavoriteMovie(movie: SelectableFavoriteMovie)
-//    suspend fun clearAllMovies()
+    @After
+    fun after() {
+        Mockito.reset(mockFavoriteRepository)
+    }
 
     @Test
     fun `execute return selectableFavoriteMovie list flow from repository`() = runTest {

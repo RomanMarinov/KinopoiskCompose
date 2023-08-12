@@ -8,10 +8,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -29,8 +31,10 @@ class GetPosterUseCaseTest {
         getPostersUseCase = GetPostersUseCase(posterRepository = mockPosterRepository)
     }
 
-//    val posters: Flow<List<Poster>>
-//    suspend fun getPoster(movieId: Int): Poster
+    @After
+    fun after() {
+        Mockito.reset(mockPosterRepository)
+    }
 
     @Test
     fun `execute return poster list flow from repository`() = runTest {

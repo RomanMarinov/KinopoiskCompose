@@ -7,11 +7,13 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -25,6 +27,11 @@ class GetVotesUseCaseTest {
     @Before
     fun setup() {
         getVotesUseCase = GetVotesUseCase(repositoryVotes = mockVotesRepository)
+    }
+
+    @After
+    fun after() {
+        Mockito.reset(mockVotesRepository)
     }
 
     @Test

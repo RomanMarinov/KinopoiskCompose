@@ -8,10 +8,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -28,8 +30,10 @@ class GetGenresUseCaseTest {
         getGenresUseCase = GetGenresUseCase(genresRepository = mockGenresRepository)
     }
 
-//    val genres: Flow<List<Genres>>
-//    suspend fun getGenres(movieId: Int): List<Genres>
+    @After
+    fun after() {
+        Mockito.reset(mockGenresRepository)
+    }
 
     @Test
     fun `execute return list genre flow from repository`() = runTest {

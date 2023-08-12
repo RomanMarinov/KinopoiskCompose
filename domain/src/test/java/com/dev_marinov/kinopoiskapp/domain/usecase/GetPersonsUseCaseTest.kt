@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,8 +30,10 @@ class GetPersonsUseCaseTest {
         getPersonsUseCase = GetPersonsUseCase(personsRepository = mockPersonsRepository)
     }
 
-//    val persons: Flow<List<Person>>
-//    suspend fun getPersons(movieId: Int): List<Person>
+    @After
+    fun after() {
+        Mockito.reset(mockPersonsRepository)
+    }
 
     @Test
     fun `execute return list persons flow from repository`() = runTest {
