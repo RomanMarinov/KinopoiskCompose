@@ -11,12 +11,6 @@ abstract class UseCaseLottieAnimation <in P>(
     // r возращаемый рез (в моем слу список)
     private val TAG = "UseCase"
 
-    /** Executes the use case asynchronously and returns a [Result].
-     *
-     * @return a [Result].
-     *
-     * @param parameters the input parameters to run the use case with
-     */
     suspend fun executeAnimation(parameters: P) {
         kotlin.runCatching {
             try {
@@ -30,10 +24,6 @@ abstract class UseCaseLottieAnimation <in P>(
         }
     }
 
-    /**
-     * Override this to set the code to be executed.
-     */
     @Throws(RuntimeException::class)
     protected abstract suspend fun lottieAnimation(parameters: P)
-
 }

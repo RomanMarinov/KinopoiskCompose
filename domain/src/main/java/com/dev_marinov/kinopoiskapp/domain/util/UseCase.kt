@@ -11,12 +11,6 @@ abstract class UseCase<in P, R>(
     // r возращаемый рез (в моем слу список)
     private val TAG = "UseCase"
 
-    /** Executes the use case asynchronously and returns a [Result].
-     *
-     * @return a [Result].
-     *
-     * @param parameters the input parameters to run the use case with
-     */
     suspend operator fun invoke(parameters: P): Result<R> {
         return kotlin.runCatching {
             try {
@@ -30,9 +24,6 @@ abstract class UseCase<in P, R>(
         }
     }
 
-    /**
-     * Override this to set the code to be executed.
-     */
     @Throws(RuntimeException::class)
     protected abstract suspend fun execute(parameters: P): R
 }

@@ -11,12 +11,6 @@ abstract class UseCaseFavorite<in P>(
     // r возращаемый рез (в моем слу список)
     private val TAG = "UseCase"
 
-    /** Executes the use case asynchronously and returns a [Result].
-     *
-     * @return a [Result].
-     *
-     * @param parameters the input parameters to run the use case with
-     */
      suspend fun executeSave(parameters: P) {
         kotlin.runCatching {
             try {
