@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -279,27 +280,32 @@ fun MovieItem(
                 // //////////
                 Box(
                     modifier = Modifier
-                        .offset(x = (150).dp)
+                        .fillMaxWidth()
+//                        .offset(x = (150).dp)
                         .size(40.dp)
                         .clip(RoundedCornerShape(30))
                         .background(Color.Transparent)
-                        .clickable {
-                            if (movieItem.isFavorite) {
-                                viewModel.onClickFavorite(
-                                    SelectableFavoriteMovie(
-                                        movie = movieItem.movie,
-                                        isFavorite = false
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = {
+                                if (movieItem.isFavorite) {
+                                    viewModel.onClickFavorite(
+                                        SelectableFavoriteMovie(
+                                            movie = movieItem.movie,
+                                            isFavorite = false
+                                        )
                                     )
-                                )
-                            } else {
-                                viewModel.onClickFavorite(
-                                    SelectableFavoriteMovie(
-                                        movie = movieItem.movie,
-                                        isFavorite = true
+                                } else {
+                                    viewModel.onClickFavorite(
+                                        SelectableFavoriteMovie(
+                                            movie = movieItem.movie,
+                                            isFavorite = true
+                                        )
                                     )
-                                )
+                                }
                             }
-                        },
+                        ),
                     contentAlignment = Alignment.TopEnd,
                 ) {
                     Box(

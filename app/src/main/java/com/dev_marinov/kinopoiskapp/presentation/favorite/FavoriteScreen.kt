@@ -3,6 +3,7 @@ package com.dev_marinov.kinopoiskapp.presentation.favorite
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -184,21 +185,25 @@ fun FavoriteMovieItem(
                 // //////////
                 Box(
                     modifier = Modifier
-                        .offset(x = (150).dp)
+                        .fillMaxWidth()
+//                        .offset(x = (150).dp)
                         .size(40.dp)
                         .clip(RoundedCornerShape(30))
                         .background(Color.Transparent)
-                        .clickable {
-
-                            viewModel.onClickFavorite(
-                                SelectableFavoriteMovie(
-                                    movie = movieItem.movie,
-                                    isFavorite = false
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = {
+                                viewModel.onClickFavorite(
+                                    SelectableFavoriteMovie(
+                                        movie = movieItem.movie,
+                                        isFavorite = false
+                                    )
                                 )
-                            )
-                        },
-                    contentAlignment = Alignment.TopEnd,
 
+                            }
+                        ),
+                    contentAlignment = Alignment.TopEnd,
                 ) {
                     Box(
                         modifier = Modifier
