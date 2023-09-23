@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">KinopoiskApp</string>
+    <string name="clear_all_movies">You can delete all movie data from your device\'s internal memory. It\'s not critical.</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string-array name="genresTopBar">
+        <item>All</item>
+        <item>Movie</item>
+        <item>TV-Series</item>
+        <item>Cartoon</item>
+        <item>Anime</item>
+        <item>Animated-Series</item>
+    </string-array>
+    <string name="trailer_not_available">Movie trailer not yet available</string>
+    <string name="movie_requests_exceeded_200_times">Movie requests exceeded 200 times</string>
+
 </resources>
