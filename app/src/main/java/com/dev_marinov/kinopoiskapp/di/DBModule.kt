@@ -26,52 +26,52 @@ class DBModule {
 
     @Provides
     @Singleton
-    fun provideMovieDao(appDatabase: com.dev_marinov.kinopoiskapp.data.AppDatabase): MovieDao = appDatabase.movieDao()
+    fun provideMovieDao(appDatabase: AppDatabase): MovieDao = appDatabase.movieDao()
 
     @Provides
     @Singleton
-    fun provideReleaseYearDao(appDatabase: com.dev_marinov.kinopoiskapp.data.AppDatabase): ReleaseYearDao =
+    fun provideReleaseYearDao(appDatabase: AppDatabase): ReleaseYearDao =
         appDatabase.releaseYearDao()
 
     @Provides
     @Singleton
-    fun provideVotesDao(appDatabase: com.dev_marinov.kinopoiskapp.data.AppDatabase): VotesDao = appDatabase.votesDao()
+    fun provideVotesDao(appDatabase: AppDatabase): VotesDao = appDatabase.votesDao()
 
     @Provides
     @Singleton
-    fun provideRatingDao(appDatabase: com.dev_marinov.kinopoiskapp.data.AppDatabase): RatingDao = appDatabase.ratingDao()
+    fun provideRatingDao(appDatabase: AppDatabase): RatingDao = appDatabase.ratingDao()
 
     @Provides
     @Singleton
-    fun providePosterDao(appDatabase: com.dev_marinov.kinopoiskapp.data.AppDatabase): PosterDao = appDatabase.posterDao()
+    fun providePosterDao(appDatabase: AppDatabase): PosterDao = appDatabase.posterDao()
 
     @Provides
     @Singleton
-    fun provideGenresDao(appDatabase: com.dev_marinov.kinopoiskapp.data.AppDatabase): GenresDao = appDatabase.genresDao()
+    fun provideGenresDao(appDatabase: AppDatabase): GenresDao = appDatabase.genresDao()
 
     @Provides
     @Singleton
-    fun providePersonsDao(appDatabase: com.dev_marinov.kinopoiskapp.data.AppDatabase): PersonsDao = appDatabase.personsDao()
+    fun providePersonsDao(appDatabase: AppDatabase): PersonsDao = appDatabase.personsDao()
 
     @Provides
     @Singleton
-    fun provideVideosDao(appDatabase: com.dev_marinov.kinopoiskapp.data.AppDatabase): VideosDao = appDatabase.videosDao()
+    fun provideVideosDao(appDatabase: AppDatabase): VideosDao = appDatabase.videosDao()
 
     @Provides
     @Singleton
-    fun provideCommonDao(appDatabase: com.dev_marinov.kinopoiskapp.data.AppDatabase): CoordinatorDao = appDatabase.commonDao()
+    fun provideCommonDao(appDatabase: AppDatabase): CoordinatorDao = appDatabase.commonDao()
 
     @Provides
     @Singleton
-    fun provideFavoriteDao(appDatabase: com.dev_marinov.kinopoiskapp.data.AppDatabase): FavoriteDao = appDatabase.favoriteDao()
+    fun provideFavoriteDao(appDatabase: AppDatabase): FavoriteDao = appDatabase.favoriteDao()
 
     @Provides
     @Singleton
-    fun provideDataBase(@ApplicationContext context: Context): com.dev_marinov.kinopoiskapp.data.AppDatabase {
+    fun provideDataBase(@ApplicationContext context: Context): AppDatabase {
         return databaseBuilder(
             context,
-            com.dev_marinov.kinopoiskapp.data.AppDatabase::class.java,
-            com.dev_marinov.kinopoiskapp.data.AppDatabase.NAME
+            AppDatabase::class.java,
+            AppDatabase.NAME
         ).fallbackToDestructiveMigration().build()
     }
 }
